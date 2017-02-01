@@ -1,8 +1,10 @@
 'use strict';
 
 const defaultOptions = {
+    damping: undefined,
     dampingIncrease: 10e-2,
     dampingDecrease: 10e-2,
+    initialValues: undefined,
     maxIterations: 100,
     errorTolerance: 10e-3
 };
@@ -10,16 +12,16 @@ const defaultOptions = {
 /**
  * Curve fitting algorithm
  * @param {Array<Array<number>>} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
- * @param {Array<number>} initialValues - Array of initial parameter values
- * @param {number} damping - Levenberg-Marquardt parameter
  * @param {function} parameterizedFunction - the parameters and returns a function with the independent variable as a parameter
  * @param {object} [options] - Options object
+ * @param {number} [options.damping = undefined] - Levenberg-Marquardt parameter
  * @param {number} [options.dampingIncrease = 10e-2] - Adjustment for increase the damping parameter
  * @param {number} [options.dampingDecrease = 10e-2] - Adjustment for decrease the damping parameter
+ * @param {Array<number>} [options.initialValues = undefined] - Array of initial parameter values
  * @param {number} [options.maxIterations = 100] - Maximum of allowed iterations
  * @param {number|Array<number>} [options.errorTolerance = 10e-3] - Minimum uncertainty allowed for each point
  */
-function levenbergMarquardt(data, initialValues, damping, parameterizedFunction, options) {
+function levenbergMarquardt(data, parameterizedFunction, options) {
     options = Object.assign({}, defaultOptions, options);
 
     // check that the data has the correct format
