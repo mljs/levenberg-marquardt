@@ -16,8 +16,12 @@ describe('levenberg-marquardt test', function () {
             data[0][i] = i;
             data[1][i] = sampleFunction(i);
         }
+        const options = {
+            damping: 0.1,
+            initialValues: [1, 1]
+        };
 
-        let params = levenbergMarquardt(data, [1, 1], 0.1, sinFunction);
+        let params = levenbergMarquardt(data, sinFunction, options);
         params[0].should.be.approximately(2, 10e-3);
         params[1].should.be.approximately(2, 10e-3);
     });

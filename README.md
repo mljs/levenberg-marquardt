@@ -37,15 +37,15 @@ let data = [ /* [x1, x2, ... ], [y1, y2, ... ] */ ];
 let initialValues = [ /* a, b, c, ... */ ];
 
 const options = {
+  damping: 1.5,
+  initialValues: initialValues,
   dampingIncrease: 10e-3,
   dampingDecrease: 10e-3,
   maxIterations: 100,
   errorTolerance: 10e-3
 };
 
-let damping = 2;
-
-let fittedParams = LM(data, initialValues, damping, sinFunction, options);
+let fittedParams = LM(data, sinFunction, options);
 ```
 
 Or test it in [Runkit](https://runkit.com/npm/ml-levenberg-marquardt)
