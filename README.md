@@ -31,7 +31,7 @@ function sinFunction (a, b) {
 }
 
 // array of points to fit
-let data = [ /* [x1, y1], [x2, y2], ... */ ];
+let data = [ /* [x1, x2, ... ], [y1, y2, ... ] */ ];
 
 // array of initial parameter values
 let initialValues = [ /* a, b, c, ... */ ];
@@ -39,7 +39,8 @@ let initialValues = [ /* a, b, c, ... */ ];
 const options = {
   dampingIncrease: 10e-3,
   dampingDecrease: 10e-3,
-  maxIterations: 100
+  maxIterations: 100,
+  errorTolerance: 10e-3
 };
 
 let damping = 2;

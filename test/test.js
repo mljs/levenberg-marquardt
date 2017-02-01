@@ -10,10 +10,11 @@ describe('levenberg-marquardt test', function () {
         }
 
         const len = 20;
-        let data = new Array(len);
+        let data = [new Array(len), new Array(len)];
         let sampleFunction = sinFunction(2, 2);
         for (let i = 0; i < len; i++) {
-            data[i] = [i, sampleFunction(i)];
+            data[0][i] = i;
+            data[1][i] = sampleFunction(i);
         }
 
         let params = levenbergMarquardt(data, [1, 1], 0.1, sinFunction);
