@@ -57,7 +57,7 @@ function levenbergMarquardt(data, parameterizedFunction, options) {
     }
 
     // initial evaluations
-    let residuals = residualCalculation();
+    let residuals = residualCalculation(options.initialValues, data, options.errorTolerance, parameterizedFunction);
     let jacobian = jacobianCalculation();
 
     // return example
