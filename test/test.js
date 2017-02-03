@@ -21,8 +21,10 @@ describe('levenberg-marquardt test', function () {
             initialValues: [1, 1]
         };
 
-        let params = levenbergMarquardt(data, sinFunction, options);
-        params[0].should.be.approximately(2, 10e-3);
-        params[1].should.be.approximately(2, 10e-3);
+        let ans = levenbergMarquardt(data, sinFunction, options);
+        ans.parameterValues[0].should.be.approximately(2, 10e-3);
+        ans.parameterValues[1].should.be.approximately(2, 10e-3);
+        ans.parameterError.should.be.approximately(0, 10e-3);
+        ans.iterations.should.be.approximately(10, 10);
     });
 });
