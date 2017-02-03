@@ -19,10 +19,25 @@ const defaultOptions = {
  * @param {number} [options.dampingDecrease = 10e-2] - Adjustment for decrease the damping parameter
  * @param {Array<number>} [options.initialValues = undefined] - Array of initial parameter values
  * @param {number} [options.maxIterations = 100] - Maximum of allowed iterations
- * @param {number|Array<number>} [options.errorTolerance = 10e-3] - Minimum uncertainty allowed for each point
+ * @param {number} [options.errorTolerance = 10e-3] - Minimum uncertainty allowed for each point
  */
 function levenbergMarquardt(data, parameterizedFunction, options) {
+    // verify that damping is not undefined
+    if ((!options.damping) || (!Number.isInteger(options.damping)) ||(options.damping <= 0)) {
+        throw new TypeError('The damping option should be a positive number');
+    }
+
+    // assign default values
     options = Object.assign({}, defaultOptions, options);
+
+    // fill with default value for initialValues
+    if (!options.initialValues) {
+        options.initialValues = new Array(parameterizedFunction.length);
+
+        for (var i = 0; i < parameterizedFunction.length; i++) {
+            options.initialValues[i] = 1;
+        }
+    }
 
     // check that the data has the correct format
     if ((data.constructor !== Array) || (data.length !== 2)) {
@@ -35,17 +50,6 @@ function levenbergMarquardt(data, parameterizedFunction, options) {
     const dataLen = data[0].length;
     if (dataLen !== data[1].length) {
         throw new RangeError('The data parameter elements should have the same size');
-    }
-
-    // change errorTolerance to array
-    let errorTolerance;
-    if (options.errorTolerance.constructor !== Array) {
-        errorTolerance = new Array(dataLen);
-        for (var i = 0; i < dataLen; i++) {
-            errorTolerance[i] = options.errorTolerance;
-        }
-    } else {
-        errorTolerance = options.errorTolerance;
     }
 }
 
