@@ -11,8 +11,8 @@
     "eslint": "eslint src test",
     "eslint-fix": "npm run eslint -- --fix",
     "test": "npm run test-mocha && npm run eslint",
-    "test-cov": "istanbul cover node_modules/.bin/_mocha -- --require should --reporter dot --recursive",
-    "test-travis": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --require should --reporter dot --recursive",
+    "test-cov": "istanbul cover node_modules/.bin/_mocha -- --require should --reporter dot --recursive && codecov",
+    "test-travis": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --require should --reporter dot --recursive && codecov",
     "test-mocha": "mocha --require should --reporter mocha-better-spec-reporter"
   },
   "repository": {
