@@ -13,7 +13,7 @@ const defaultOptions = {
 
 /**
  * Curve fitting algorithm
- * @param {Array<Array<number>>} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
+ * @param {{x:Array<number>, y:Array<number>}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
  * @param {function} parameterizedFunction - The parameters and returns a function with the independent variable as a parameter
  * @param {object} [options] - Options object
  * @param {number} [options.damping = undefined] - Levenberg-Marquardt parameter
@@ -26,7 +26,7 @@ const defaultOptions = {
  */
 function levenbergMarquardt(data, parameterizedFunction, options) {
     // verify that damping is not undefined
-    if ((!options.damping) || (!Number.isInteger(options.damping)) ||(options.damping <= 0)) {
+    if ((!options.damping) || (options.damping <= 0)) {
         throw new TypeError('The damping option should be a positive number');
     }
 
@@ -43,15 +43,15 @@ function levenbergMarquardt(data, parameterizedFunction, options) {
     }
 
     // check that the data has the correct format
-    if ((data.constructor !== Array) || (data.length !== 2)) {
-        throw new TypeError('The data parameter should be an array of size 2');
-    } else if ((data[0].constructor !== Array) || (data[0].length < 2) ||
-               (data[1].constructor !== Array) || (data[1].length < 2)) {
+    if (!data.x || !data.y) {
+        throw new TypeError('The data parameter should have a x and y elements');
+    } else if ((data.x.constructor !== Array) || (data.x.length < 2) ||
+               (data.y.constructor !== Array) || (data.y.length < 2)) {
         throw new TypeError('The data parameter elements should be an array with more than 2 points');
     }
 
-    const dataLen = data[0].length;
-    if (dataLen !== data[1].length) {
+    const dataLen = data.x.length;
+    if (dataLen !== data.y.length) {
         throw new RangeError('The data parameter elements should have the same size');
     }
 
@@ -59,7 +59,7 @@ function levenbergMarquardt(data, parameterizedFunction, options) {
     var parameters = options.initialValues;
 
     // check errorCalculation
-    var error = errorCalculation();
+    var error = errorCalculation(data, parameters, parameterizedFunction);
     var converged = error <= options.errorTolerance;
 
     for (var iteration = 0; (iteration < options.maxIterations) && !converged; iteration++) {
@@ -67,7 +67,7 @@ function levenbergMarquardt(data, parameterizedFunction, options) {
         parameters = step(parameters);
 
         // reevaluate errorCalculation
-        error = errorCalculation();
+        error = errorCalculation(data, parameters, parameterizedFunction);
         converged = error <= options.errorTolerance;
     }
 

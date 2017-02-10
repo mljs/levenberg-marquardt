@@ -10,11 +10,14 @@ describe('levenberg-marquardt test', function () {
         }
 
         const len = 20;
-        let data = [new Array(len), new Array(len)];
+        let data = {
+            x: new Array(len),
+            y: new Array(len)
+        };
         let sampleFunction = sinFunction(2, 2);
         for (let i = 0; i < len; i++) {
-            data[0][i] = i;
-            data[1][i] = sampleFunction(i);
+            data.x[i] = i;
+            data.y[i] = sampleFunction(i);
         }
         const options = {
             damping: 0.1,

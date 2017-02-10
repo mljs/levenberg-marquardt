@@ -31,7 +31,10 @@ function sinFunction (a, b) {
 }
 
 // array of points to fit
-let data = [ /* [x1, x2, ... ], [y1, y2, ... ] */ ];
+let data = {/*
+    x: [x1, x2, ... ],
+    y: [y1, y2, ... ]
+*/};
 
 // array of initial parameter values
 let initialValues = [ /* a, b, c, ... */ ];
