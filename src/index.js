@@ -1,12 +1,11 @@
 'use strict';
 
-const residualCalculation = require('./residual');
-const jacobianCalculation = require('./jacobian');
+const errorCalculation = require('./errorCalculation');
+const step = require('./step');
 
 const defaultOptions = {
     damping: undefined,
-    dampingIncrease: 10,
-    dampingDecrease: 10,
+    gradientDifference: 10e-2,
     initialValues: undefined,
     maxIterations: 100,
     errorTolerance: 10e-3
@@ -56,15 +55,28 @@ function levenbergMarquardt(data, parameterizedFunction, options) {
         throw new RangeError('The data parameter elements should have the same size');
     }
 
-    // initial evaluations
-    let residuals = residualCalculation(options.initialValues, data, options.errorTolerance, parameterizedFunction);
-    let jacobian = jacobianCalculation();
+    // initial parameters
+    var parameters = options.initialValues;
+
+    // check errorCalculation
+    var error = errorCalculation();
+    var converged = error <= options.errorTolerance;
+
+    for (var iteration = 0; (iteration < options.maxIterations) && !converged; iteration++) {
+        // step function
+        parameters = step(parameters);
+
+        // reevaluate errorCalculation
+        error = errorCalculation();
+        converged = error <= options.errorTolerance;
+    }
+
 
     // return example
     return {
-        parameterValues: [1, 2],
-        parameterError: 0,
-        iterations: 10
+        parameterValues: parameters,
+        parameterError: error,
+        iterations: iteration
     };
 }
 
