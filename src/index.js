@@ -17,8 +17,7 @@ const defaultOptions = {
  * @param {function} parameterizedFunction - The parameters and returns a function with the independent variable as a parameter
  * @param {object} [options] - Options object
  * @param {number} [options.damping = undefined] - Levenberg-Marquardt parameter
- * @param {number} [options.dampingIncrease = 10] - Adjustment for increase the damping parameter
- * @param {number} [options.dampingDecrease = 10] - Adjustment for decrease the damping parameter
+ * @param {number} [options.gradientDifference = 10e-2] - Adjustment for decrease the damping parameter
  * @param {Array<number>} [options.initialValues = undefined] - Array of initial parameter values
  * @param {number} [options.maxIterations = 100] - Maximum of allowed iterations
  * @param {number} [options.errorTolerance = 10e-3] - Minimum uncertainty allowed for each point
@@ -64,7 +63,7 @@ function levenbergMarquardt(data, parameterizedFunction, options) {
 
     for (var iteration = 0; (iteration < options.maxIterations) && !converged; iteration++) {
         // step function
-        parameters = step(parameters);
+        parameters = step(data, parameters, options.damping, options.gradientDifference, parameterizedFunction);
 
         // reevaluate errorCalculation
         error = errorCalculation(data, parameters, parameterizedFunction);
