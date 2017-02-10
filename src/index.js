@@ -25,7 +25,7 @@ const defaultOptions = {
  */
 function levenbergMarquardt(data, parameterizedFunction, options) {
     // verify that damping is not undefined
-    if ((!options.damping) || (options.damping <= 0)) {
+    if ((!options) || (!options.damping) || (options.damping <= 0)) {
         throw new TypeError('The damping option should be a positive number');
     }
 

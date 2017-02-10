@@ -21,7 +21,7 @@ describe('levenberg-marquardt test', function () {
         }
         const options = {
             damping: 0.1,
-            initialValues: [1, 1]
+            initialValues: [3, 3]
         };
 
         let ans = levenbergMarquardt(data, sinFunction, options);
@@ -29,5 +29,24 @@ describe('levenberg-marquardt test', function () {
         ans.parameterValues[1].should.be.approximately(2, 10e-3);
         ans.parameterError.should.be.approximately(0, 10e-3);
         ans.iterations.should.be.approximately(10, 10);
+    });
+
+    it('Exceptions', function () {
+        function sinFunction(a, b) {
+            return (t) => (a * Math.sin(b * t));
+        }
+
+        const options = {
+            damping: 0.1,
+            initialValues: [3, 3]
+        };
+
+        levenbergMarquardt.bind(null).should.throw('The damping option should be a positive number');
+        levenbergMarquardt.bind(null, [1, 2], sinFunction, options)
+            .should.throw('The data parameter should have a x and y elements');
+        levenbergMarquardt.bind(null, {x:1, y:2}, sinFunction, options)
+            .should.throw('The data parameter elements should be an array with more than 2 points');
+        levenbergMarquardt.bind(null, {x:[1,2], y:[1,2,3]}, sinFunction, options)
+            .should.throw('The data parameter elements should have the same size');
     });
 });

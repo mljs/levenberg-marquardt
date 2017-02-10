@@ -17,8 +17,8 @@ for (var i = 0; i < len; i++) {
     data.y[i] = sampleFunction(i);
 }
 const options = {
-    damping: 0.1,
-    initialValues: [1, 1]
+    damping: 0.001,
+    initialValues: [3, 3]
 };
 
 var ans = levenbergMarquardt(data, sinFunction, options);
