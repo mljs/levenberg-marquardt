@@ -14,7 +14,7 @@ Curve fitting method in javascript
 
 ## [API Documentation](https://mljs.github.io/levenberg-marquardt/)
 
-This algorithm is based on the article [Transtrum, Mark K., Benjamin B. Machta, and James P. Sethna. "Geometry of nonlinear least squares with applications to sloppy models and optimization." Physical Review E 83.3 (2011): 036701.](https://doi.org/10.1103/PhysRevE.83.036701)
+This algorithm is based on the article [Brown, Kenneth M., and J. E. Dennis. "Derivative free analogues of the Levenberg-Marquardt and Gauss algorithms for nonlinear least squares approximation." Numerische Mathematik 18.4 (1971): 289-297.](https://doi.org/10.1007/BF01404679)
 
 In order to get a general idea of the problem you could also check the [Wikipedia article](https://en.wikipedia.org/wiki/Levenberg%E2%80%93Marquardt_algorithm).
 
@@ -31,7 +31,10 @@ function sinFunction (a, b) {
 }
 
 // array of points to fit
-let data = [ /* [x1, x2, ... ], [y1, y2, ... ] */ ];
+let data = {/*
+    x: [x1, x2, ... ],
+    y: [y1, y2, ... ]
+*/};
 
 // array of initial parameter values
 let initialValues = [ /* a, b, c, ... */ ];
@@ -39,8 +42,7 @@ let initialValues = [ /* a, b, c, ... */ ];
 const options = {
   damping: 1.5,
   initialValues: initialValues,
-  dampingIncrease: 10e-3,
-  dampingDecrease: 10e-3,
+  gradientDifference: 10e-2,
   maxIterations: 100,
   errorTolerance: 10e-3
 };
