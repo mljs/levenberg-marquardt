@@ -12,7 +12,7 @@ const Matrix = require('ml-matrix');
  * @return {Matrix}
  */
 function gradientFunction(data, params, gradientDifference, paramFunction) {
-    const n = paramFunction.length;
+    const n = params.length;
     const m = data.x.length;
 
     var ans = new Array(n);
@@ -65,7 +65,7 @@ function matrixFunction(data, params, paramFunction) {
  * @return {Array<number>}
  */
 function step(data, params, damping, gradientDifference, parameterizedFunction) {
-    var identity = Matrix.eye(parameterizedFunction.length)
+    var identity = Matrix.eye(params.length)
         .mul(damping * gradientDifference * gradientDifference);
     var gradientFunc = gradientFunction(data, params, gradientDifference, parameterizedFunction);
     var matrixFunc = matrixFunction(data, params, parameterizedFunction).transpose();
