@@ -3,12 +3,7 @@
 const levenbergMarquardt = require('..');
 
 describe('levenberg-marquardt test', function () {
-
     it('Base example', function () {
-        function sinFunction(a, b) {
-            return (t) => (a * Math.sin(b * t));
-        }
-
         const len = 20;
         let data = {
             x: new Array(len),
@@ -32,10 +27,6 @@ describe('levenberg-marquardt test', function () {
     });
 
     it('Exceptions', function () {
-        function sinFunction(a, b) {
-            return (t) => (a * Math.sin(b * t));
-        }
-
         const options = {
             damping: 0.1,
             initialValues: [3, 3]
@@ -48,13 +39,13 @@ describe('levenberg-marquardt test', function () {
             .should.throw('The data parameter elements should be an array with more than 2 points');
         levenbergMarquardt.bind(null, {x: [1, 2], y: [1, 2, 3]}, sinFunction, options)
             .should.throw('The data parameter elements should have the same size');
+        levenbergMarquardt.bind(null, {x: [1, 2], y: [1, 2]}, sumOfLorentzians, options)
+            .should.throw('The number of initialValues and parameters not match');
+        levenbergMarquardt.bind(null, {x: [1, 2], y: [1, 2]}, sumOfLorentzians, {damping: 0.1})
+            .should.throw('The initialValues is not an Array and parameters is cero');
     });
 
     it('Sigmoid example', function () {
-        function sigmoidFunction(a, b, c) {
-            return (t) => (a / (b + Math.exp(-t * c)));
-        }
-
         const len = 20;
         let data = {
             x: new Array(len),
@@ -78,4 +69,53 @@ describe('levenberg-marquardt test', function () {
         ans.parameterError.should.be.approximately(0, 10e-2);
         ans.iterations.should.be.belowOrEqual(200);
     });
+
+    it('Sum of lorentzians example', function () {
+        const len = 100;
+        const pTrue = [1, 0.1, 0.3, 4, 0.15, 0.30];
+        let data = {
+            x: new Array(len),
+            y: new Array(len)
+        };
+
+        let sampleFunction = sumOfLorentzians(...pTrue);
+        for (let i = 0; i < len; i++) {
+            data.x[i] = i;
+            data.y[i] = sampleFunction(i);
+        }
+
+        let ans = levenbergMarquardt(data, sumOfLorentzians, {
+            damping: 0.01,
+            initialValues: [1.1, 0.15, 0.29, 4.05, 0.17, 0.28],
+            maxIterations: 500,
+            errorTolerance: 10e-5});
+
+        for (let i = 0; i < pTrue.length; i++) {
+            ans.parameterValues[i].should.be.approximately(pTrue[i], 10e-2);
+        }
+        ans.iterations.should.be.belowOrEqual(500);
+    });
 });
+
+
+function sinFunction(a, b) {
+    return (t) => (a * Math.sin(b * t));
+}
+
+function sigmoidFunction(a, b, c) {
+    return (t) => (a / (b + Math.exp(-t * c)));
+}
+
+function sumOfLorentzians() {
+    var p = arguments;
+    return (t) => {
+        var nL = p.length, factor, p2;
+        var result = 0;
+        for (var i = 0; i < nL; i += 3) {
+            p2 = Math.pow(p[i + 2] / 2, 2);
+            factor = p[i + 1] * p2;
+            result += factor / (Math.pow(t - p[i], 2) + p2);
+        }
+        return result;
+    };
+}
