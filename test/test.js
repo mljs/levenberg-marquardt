@@ -109,7 +109,8 @@ function sigmoidFunction(a, b, c) {
 function sumOfLorentzians() {
     var p = arguments;
     return (t) => {
-        var nL = p.length, factor, p2;
+        var nL = p.length;
+        var factor, p2;
         var result = 0;
         for (var i = 0; i < nL; i += 3) {
             p2 = Math.pow(p[i + 2] / 2, 2);

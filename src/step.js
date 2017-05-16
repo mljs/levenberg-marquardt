@@ -1,6 +1,8 @@
 'use strict';
 
-const Matrix = require('ml-matrix');
+const matrixLib = require('ml-matrix');
+const Matrix = matrixLib.default;
+const inv = matrixLib.inverse;
 
 /**
  * Difference of the matrix function over the parameters
@@ -71,7 +73,7 @@ function step(data, params, damping, gradientDifference, parameterizedFunction) 
     var matrixFunc = matrixFunction(data, params, parameterizedFunction).transpose();
     params = new Matrix([params]);
 
-    var inverse = Matrix.inv(identity.add(gradientFunc.mmul(gradientFunc.transposeView())));
+    var inverse = inv(identity.add(gradientFunc.mmul(gradientFunc.transposeView())));
     params = params.sub(
         ((inverse.mmul(gradientFunc)).mmul(matrixFunc).mul(gradientDifference)).transposeView()
     );
