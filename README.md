@@ -26,15 +26,15 @@ const LM = require('ml-levenberg-marquardt');
 
 // function that receives the parameters and returns
 // a function with the independent variable as a parameter
-function sinFunction (a, b) {
+function sinFunction ([a, b]) {
   return (t) => (a * Math.sin(b * t));
 }
 
 // array of points to fit
-let data = {/*
-    x: [x1, x2, ... ],
-    y: [y1, y2, ... ]
-*/};
+let data = {
+    x: [ /* x1, x2, ... */ ],
+    y: [ /* y1, y2, ... */ ]
+};
 
 // array of initial parameter values
 let initialValues = [ /* a, b, c, ... */ ];
