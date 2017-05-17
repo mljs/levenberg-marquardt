@@ -9,7 +9,7 @@ describe('levenberg-marquardt test', function () {
             x: new Array(len),
             y: new Array(len)
         };
-        let sampleFunction = sinFunction(2, 2);
+        let sampleFunction = sinFunction([2, 2]);
         for (let i = 0; i < len; i++) {
             data.x[i] = i;
             data.y[i] = sampleFunction(i);
@@ -39,10 +39,8 @@ describe('levenberg-marquardt test', function () {
             .should.throw('The data parameter elements must be an array with more than 2 points');
         levenbergMarquardt.bind(null, {x: [1, 2], y: [1, 2, 3]}, sinFunction, options)
             .should.throw('The data parameter elements must have the same size');
-        levenbergMarquardt.bind(null, {x: [1, 2], y: [1, 2]}, sumOfLorentzians, options)
-            .should.throw('The number of initialValues and parameters do not match');
         levenbergMarquardt.bind(null, {x: [1, 2], y: [1, 2]}, sumOfLorentzians, {damping: 0.1})
-            .should.throw('The initialValues is not an Array and parameters is zero');
+            .should.throw('initialValues must be an array');
     });
 
     it('Sigmoid example', function () {
@@ -51,7 +49,7 @@ describe('levenberg-marquardt test', function () {
             x: new Array(len),
             y: new Array(len)
         };
-        let sampleFunction = sigmoidFunction(2, 2, 2);
+        let sampleFunction = sigmoidFunction([2, 2, 2]);
         for (let i = 0; i < len; i++) {
             data.x[i] = i;
             data.y[i] = sampleFunction(i);
@@ -78,7 +76,7 @@ describe('levenberg-marquardt test', function () {
             y: new Array(len)
         };
 
-        let sampleFunction = sumOfLorentzians(...pTrue);
+        let sampleFunction = sumOfLorentzians(pTrue);
         for (let i = 0; i < len; i++) {
             data.x[i] = i;
             data.y[i] = sampleFunction(i);
@@ -98,16 +96,15 @@ describe('levenberg-marquardt test', function () {
 });
 
 
-function sinFunction(a, b) {
+function sinFunction([a, b]) {
     return (t) => (a * Math.sin(b * t));
 }
 
-function sigmoidFunction(a, b, c) {
+function sigmoidFunction([a, b, c]) {
     return (t) => (a / (b + Math.exp(-t * c)));
 }
 
-function sumOfLorentzians() {
-    var p = arguments;
+function sumOfLorentzians(p) {
     return (t) => {
         var nL = p.length;
         var factor, p2;
