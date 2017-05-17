@@ -14,19 +14,9 @@ module.exports = function checkArguments(data, parameterizedFunction, options) {
         let parameters = options.initialValues;
         if (dataLen !== data.y.length) {
             msg = 'The data parameter elements must have the same size';
-        } else if (parameterizedFunction.length === 0) {
-            if (parameters !== undefined && Array.isArray(parameters)) {
-                let sampleFunction = parameterizedFunction(...parameters);
-                if (isNaN(sampleFunction(1))) {
-                    msg = 'The number of initialValues and parameters do not match';
-                }
-            } else {
-                msg = 'The initialValues is not an Array and parameters is zero';
-            }
-        } else if (parameters !== undefined && Array.isArray(parameters)) {
-            if (parameters.length !== parameterizedFunction.length) {
-                msg = 'The number of initialValues and parameters do not match';
-            }
+        }
+        if (!Array.isArray(parameters)) {
+            throw new Error('initialValues must be an array');
         }
     }
     return msg;

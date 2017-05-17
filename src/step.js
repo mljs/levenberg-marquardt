@@ -24,7 +24,7 @@ function gradientFunction(data, evaluatedData, params, gradientDifference, param
         ans[param] = new Array(m);
         var auxParams = params.concat();
         auxParams[param] += gradientDifference;
-        var funcParam = paramFunction(...auxParams);
+        var funcParam = paramFunction(auxParams);
 
         for (var point = 0; point < m; point++) {
             ans[param][point] = evaluatedData[point] - funcParam(data.x[point]);
@@ -68,9 +68,9 @@ function step(data, params, damping, gradientDifference, parameterizedFunction) 
 
     var l = data.x.length;
     var evaluatedData = new Array(l);
-    const func = parameterizedFunction(...params);
-    while (l--) {
-        evaluatedData[l] = func(data.x[l]);
+    const func = parameterizedFunction(params);
+    for (var i = 0; i < l; i++) {
+        evaluatedData[i] = func(data.x[i]);
     }
     var gradientFunc = gradientFunction(data, evaluatedData, params, gradientDifference, parameterizedFunction);
     var matrixFunc = matrixFunction(data, evaluatedData).transpose();

@@ -5,7 +5,7 @@ const errorCalculation = require('../src/errorCalculation');
 describe('errorCalculation test', function () {
 
     it('Simple case', function () {
-        function sinFunction(a, b) {
+        function sinFunction([a, b]) {
             return (t) => (a * Math.sin(b * t));
         }
 
@@ -14,7 +14,7 @@ describe('errorCalculation test', function () {
             x: new Array(len),
             y: new Array(len)
         };
-        let sampleFunction = sinFunction(2, 2);
+        let sampleFunction = sinFunction([2, 2]);
         for (let i = 0; i < len; i++) {
             data.x[i] = i;
             data.y[i] = sampleFunction(i);
