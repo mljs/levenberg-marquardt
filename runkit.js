@@ -2,7 +2,7 @@
 
 var levenbergMarquardt = require('ml-levenberg-marquardt');
 
-function sinFunction(a, b) {
+function sinFunction([a, b]) {
     return (t) => (a * Math.sin(b * t));
 }
 
