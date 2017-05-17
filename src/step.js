@@ -73,7 +73,7 @@ function step(data, params, damping, gradientDifference, parameterizedFunction) 
         evaluatedData[i] = func(data.x[i]);
     }
     var gradientFunc = gradientFunction(data, evaluatedData, params, gradientDifference, parameterizedFunction);
-    var matrixFunc = matrixFunction(data, evaluatedData).transpose();
+    var matrixFunc = matrixFunction(data, evaluatedData).transposeView();
     var inverse = inv(identity.add(gradientFunc.mmul(gradientFunc.transposeView())));
     params = new Matrix([params]);
     params = params.sub(
