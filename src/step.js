@@ -1,7 +1,7 @@
 'use strict';
 
 const matrixLib = require('ml-matrix');
-const Matrix = matrixLib.default;
+const Matrix = matrixLib.Matrix;
 const inv = matrixLib.inverse;
 
 /**

@@ -35,15 +35,15 @@
   "homepage": "https://github.com/mljs/levenberg-marquardt#readme",
   "devDependencies": {
     "codecov": "^2.2.0",
-    "eslint": "^3.12.2",
+    "eslint": "^4.2.0",
     "eslint-config-cheminfo": "^1.6.0",
-    "eslint-plugin-no-only-tests": "^1.1.0",
+    "eslint-plugin-no-only-tests": "^2.0.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "mocha-better-spec-reporter": "^3.1.0",
     "should": "^11.1.2"
   },
   "dependencies": {
-    "ml-matrix": "^3.0.0"
+    "ml-matrix": "^5.0.0"
   }
 }
