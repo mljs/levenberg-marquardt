@@ -1,6 +1,6 @@
 {
   "name": "ml-levenberg-marquardt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Curve fitting method in javascript",
   "main": "./src/index.js",
   "files": [
