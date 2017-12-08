@@ -35,12 +35,13 @@ function levenbergMarquardt(data, parameterizedFunction, options = {}) {
         if (dataLen !== data.y.length) {
             throw new Error('The data parameter elements must have the same size');
         }
-        if (!Array.isArray(initialValues)) {
-            throw new Error('initialValues must be an array');
-        }
     }
 
     var parameters = initialValues || new Array(parameterizedFunction.length).fill(1);
+
+    if (!Array.isArray(parameters)) {
+        throw new Error('initialValues must be an array');
+    }
 
     var error = errorCalculation(data, parameters, parameterizedFunction);
 
