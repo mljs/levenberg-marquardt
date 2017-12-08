@@ -1,6 +1,4 @@
-'use strict';
-
-var levenbergMarquardt = require('ml-levenberg-marquardt');
+const levenbergMarquardt = require('ml-levenberg-marquardt');
 
 function sinFunction([a, b]) {
     return (t) => (a * Math.sin(b * t));
@@ -11,7 +9,7 @@ var data = {
     x: new Array(len),
     y: new Array(len)
 };
-var sampleFunction = sinFunction(2, 2);
+var sampleFunction = sinFunction([2, 2]);
 for (var i = 0; i < len; i++) {
     data.x[i] = i;
     data.y[i] = sampleFunction(i);
