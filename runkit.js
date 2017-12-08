@@ -11,7 +11,7 @@ var data = {
     x: new Array(len),
     y: new Array(len)
 };
-var sampleFunction = sinFunction(2, 2);
+var sampleFunction = sinFunction([2, 2]);
 for (var i = 0; i < len; i++) {
     data.x[i] = i;
     data.y[i] = sampleFunction(i);
