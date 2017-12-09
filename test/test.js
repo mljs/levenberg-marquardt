@@ -39,7 +39,7 @@ describe('levenberg-marquardt test', function () {
             .should.throw('The data parameter elements must be an array with more than 2 points');
         levenbergMarquardt.bind(null, {x: [1, 2], y: [1, 2, 3]}, sinFunction, options)
             .should.throw('The data parameter elements must have the same size');
-        levenbergMarquardt.bind(null, {x: [1, 2], y: [1, 2]}, sumOfLorentzians, {damping: 0.1})
+        levenbergMarquardt.bind(null, {x: [1, 2], y: [1, 2]}, sumOfLorentzians, {damping: 0.1, initialValues: 2})
             .should.throw('initialValues must be an array');
     });
 
