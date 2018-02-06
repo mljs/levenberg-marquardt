@@ -1,9 +1,4 @@
-'use strict';
-
-const matrixLib = require('ml-matrix');
-
-const Matrix = matrixLib.Matrix;
-const inv = matrixLib.inverse;
+import { inverse, Matrix } from 'ml-matrix';
 
 /**
  * Difference of the matrix function over the parameters
@@ -15,7 +10,13 @@ const inv = matrixLib.inverse;
  * @param {function} paramFunction - The parameters and returns a function with the independent variable as a parameter
  * @return {Matrix}
  */
-function gradientFunction(data, evaluatedData, params, gradientDifference, paramFunction) {
+function gradientFunction(
+  data,
+  evaluatedData,
+  params,
+  gradientDifference,
+  paramFunction
+) {
   const n = params.length;
   const m = data.x.length;
 
@@ -63,9 +64,16 @@ function matrixFunction(data, evaluatedData) {
  * @param {function} parameterizedFunction - The parameters and returns a function with the independent variable as a parameter
  * @return {Array<number>}
  */
-function step(data, params, damping, gradientDifference, parameterizedFunction) {
-  var identity = Matrix.eye(params.length)
-    .mul(damping * gradientDifference * gradientDifference);
+export default function step(
+  data,
+  params,
+  damping,
+  gradientDifference,
+  parameterizedFunction
+) {
+  var identity = Matrix.eye(params.length).mul(
+    damping * gradientDifference * gradientDifference
+  );
 
   var l = data.x.length;
   var evaluatedData = new Array(l);
@@ -73,15 +81,25 @@ function step(data, params, damping, gradientDifference, parameterizedFunction) 
   for (var i = 0; i < l; i++) {
     evaluatedData[i] = func(data.x[i]);
   }
-  var gradientFunc = gradientFunction(data, evaluatedData, params, gradientDifference, parameterizedFunction);
+  var gradientFunc = gradientFunction(
+    data,
+    evaluatedData,
+    params,
+    gradientDifference,
+    parameterizedFunction
+  );
   var matrixFunc = matrixFunction(data, evaluatedData).transposeView();
-  var inverse = inv(identity.add(gradientFunc.mmul(gradientFunc.transposeView())));
+  var inverseMatrix = inverse(
+    identity.add(gradientFunc.mmul(gradientFunc.transposeView()))
+  );
   params = new Matrix([params]);
   params = params.sub(
-    ((inverse.mmul(gradientFunc)).mmul(matrixFunc).mul(gradientDifference)).transposeView()
+    inverseMatrix
+      .mmul(gradientFunc)
+      .mmul(matrixFunc)
+      .mul(gradientDifference)
+      .transposeView()
   );
 
   return params.to1DArray();
 }
-
-module.exports = step;

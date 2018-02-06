@@ -5,15 +5,16 @@
   "main": "./src/index.js",
   "files": [
     "runkit.js",
-    "src"
+    "src",
+    "lib"
   ],
   "scripts": {
-    "eslint": "eslint src test",
+    "eslint": "eslint src",
     "eslint-fix": "npm run eslint -- --fix",
-    "test": "npm run test-mocha && npm run eslint",
-    "test-cov": "istanbul cover node_modules/.bin/_mocha -- --require should --reporter dot --recursive && codecov",
-    "test-travis": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --require should --reporter dot --recursive && codecov",
-    "test-mocha": "mocha --require should --reporter mocha-better-spec-reporter"
+    "prepublish": "rollup -c",
+    "test": "npm run test-simple && npm run eslint",
+    "test-travis": "jest --coverage && codecov",
+    "test-simple": "jest"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,7 @@
     "mining",
     "datamining"
   ],
-  "author": "Miguel Asencio <maasencioh@gmail.com> (https://github.com/Miguel Asencio)",
+  "author": "Miguel Asencio <maasencioh@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mljs/levenberg-marquardt/issues"
@@ -34,16 +35,20 @@
   "runkitExampleFilename": "./runkit.js",
   "homepage": "https://github.com/mljs/levenberg-marquardt#readme",
   "devDependencies": {
+    "babel-jest": "^22.1.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "codecov": "^2.3.1",
     "eslint": "^4.17.0",
     "eslint-config-cheminfo": "^1.15.1",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jest": "^21.7.0",
     "eslint-plugin-no-only-tests": "^2.0.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.5.3",
+    "jest": "^22.1.4",
+    "jest-matcher-deep-close-to": "^1.1.0",
     "mocha-better-spec-reporter": "^3.1.0",
-    "should": "^11.1.2"
+    "rollup": "^0.55.3"
   },
   "dependencies": {
     "ml-matrix": "^5.0.1"
