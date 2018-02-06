@@ -15,49 +15,66 @@ const step = require('./step');
  * @return {{parameterValues: Array<number>, parameterError: number, iterations: number}}
  */
 function levenbergMarquardt(data, parameterizedFunction, options = {}) {
-    let {
-        maxIterations = 100,
-        gradientDifference = 10e-2,
-        damping = 0,
-        errorTolerance = 10e-3,
-        initialValues
-    } = options;
+  let {
+    maxIterations = 100,
+    gradientDifference = 10e-2,
+    damping = 0,
+    errorTolerance = 10e-3,
+    initialValues
+  } = options;
 
-    if (damping <= 0) {
-        throw new Error('The damping option must be a positive number');
-    } else if (!data.x || !data.y) {
-        throw new Error('The data parameter must have x and y elements');
-    } else if (!Array.isArray(data.x) || (data.x.length < 2) ||
-               !Array.isArray(data.y) || (data.y.length < 2)) {
-        throw new Error('The data parameter elements must be an array with more than 2 points');
-    } else {
-        let dataLen = data.x.length;
-        if (dataLen !== data.y.length) {
-            throw new Error('The data parameter elements must have the same size');
-        }
+  if (damping <= 0) {
+    throw new Error('The damping option must be a positive number');
+  } else if (!data.x || !data.y) {
+    throw new Error('The data parameter must have x and y elements');
+  } else if (
+    !Array.isArray(data.x) ||
+    data.x.length < 2 ||
+    !Array.isArray(data.y) ||
+    data.y.length < 2
+  ) {
+    throw new Error(
+      'The data parameter elements must be an array with more than 2 points'
+    );
+  } else {
+    let dataLen = data.x.length;
+    if (dataLen !== data.y.length) {
+      throw new Error('The data parameter elements must have the same size');
     }
+  }
 
-    var parameters = initialValues || new Array(parameterizedFunction.length).fill(1);
+  var parameters =
+    initialValues || new Array(parameterizedFunction.length).fill(1);
 
-    if (!Array.isArray(parameters)) {
-        throw new Error('initialValues must be an array');
-    }
+  if (!Array.isArray(parameters)) {
+    throw new Error('initialValues must be an array');
+  }
 
-    var error = errorCalculation(data, parameters, parameterizedFunction);
+  var error = errorCalculation(data, parameters, parameterizedFunction);
 
-    var converged = error <= errorTolerance;
+  var converged = error <= errorTolerance;
 
-    for (var iteration = 0; (iteration < maxIterations) && !converged; iteration++) {
-        parameters = step(data, parameters, damping, gradientDifference, parameterizedFunction);
-        error = errorCalculation(data, parameters, parameterizedFunction);
-        converged = error <= errorTolerance;
-    }
+  for (
+    var iteration = 0;
+    iteration < maxIterations && !converged;
+    iteration++
+  ) {
+    parameters = step(
+      data,
+      parameters,
+      damping,
+      gradientDifference,
+      parameterizedFunction
+    );
+    error = errorCalculation(data, parameters, parameterizedFunction);
+    converged = error <= errorTolerance;
+  }
 
-    return {
-        parameterValues: parameters,
-        parameterError: error,
-        iterations: iteration
-    };
+  return {
+    parameterValues: parameters,
+    parameterError: error,
+    iterations: iteration
+  };
 }
 
 module.exports = levenbergMarquardt;

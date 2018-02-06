@@ -1,6 +1,7 @@
 'use strict';
 
 const matrixLib = require('ml-matrix');
+
 const Matrix = matrixLib.Matrix;
 const inv = matrixLib.inverse;
 
@@ -15,22 +16,22 @@ const inv = matrixLib.inverse;
  * @return {Matrix}
  */
 function gradientFunction(data, evaluatedData, params, gradientDifference, paramFunction) {
-    const n = params.length;
-    const m = data.x.length;
+  const n = params.length;
+  const m = data.x.length;
 
-    var ans = new Array(n);
+  var ans = new Array(n);
 
-    for (var param = 0; param < n; param++) {
-        ans[param] = new Array(m);
-        var auxParams = params.concat();
-        auxParams[param] += gradientDifference;
-        var funcParam = paramFunction(auxParams);
+  for (var param = 0; param < n; param++) {
+    ans[param] = new Array(m);
+    var auxParams = params.concat();
+    auxParams[param] += gradientDifference;
+    var funcParam = paramFunction(auxParams);
 
-        for (var point = 0; point < m; point++) {
-            ans[param][point] = evaluatedData[point] - funcParam(data.x[point]);
-        }
+    for (var point = 0; point < m; point++) {
+      ans[param][point] = evaluatedData[point] - funcParam(data.x[point]);
     }
-    return new Matrix(ans);
+  }
+  return new Matrix(ans);
 }
 
 /**
@@ -41,15 +42,15 @@ function gradientFunction(data, evaluatedData, params, gradientDifference, param
  * @return {Matrix}
  */
 function matrixFunction(data, evaluatedData) {
-    const m = data.x.length;
+  const m = data.x.length;
 
-    var ans = new Array(m);
+  var ans = new Array(m);
 
-    for (var point = 0; point < m; point++) {
-        ans[point] = data.y[point] - evaluatedData[point];
-    }
+  for (var point = 0; point < m; point++) {
+    ans[point] = data.y[point] - evaluatedData[point];
+  }
 
-    return new Matrix([ans]);
+  return new Matrix([ans]);
 }
 
 /**
@@ -63,24 +64,24 @@ function matrixFunction(data, evaluatedData) {
  * @return {Array<number>}
  */
 function step(data, params, damping, gradientDifference, parameterizedFunction) {
-    var identity = Matrix.eye(params.length)
-        .mul(damping * gradientDifference * gradientDifference);
+  var identity = Matrix.eye(params.length)
+    .mul(damping * gradientDifference * gradientDifference);
 
-    var l = data.x.length;
-    var evaluatedData = new Array(l);
-    const func = parameterizedFunction(params);
-    for (var i = 0; i < l; i++) {
-        evaluatedData[i] = func(data.x[i]);
-    }
-    var gradientFunc = gradientFunction(data, evaluatedData, params, gradientDifference, parameterizedFunction);
-    var matrixFunc = matrixFunction(data, evaluatedData).transposeView();
-    var inverse = inv(identity.add(gradientFunc.mmul(gradientFunc.transposeView())));
-    params = new Matrix([params]);
-    params = params.sub(
-        ((inverse.mmul(gradientFunc)).mmul(matrixFunc).mul(gradientDifference)).transposeView()
-    );
+  var l = data.x.length;
+  var evaluatedData = new Array(l);
+  const func = parameterizedFunction(params);
+  for (var i = 0; i < l; i++) {
+    evaluatedData[i] = func(data.x[i]);
+  }
+  var gradientFunc = gradientFunction(data, evaluatedData, params, gradientDifference, parameterizedFunction);
+  var matrixFunc = matrixFunction(data, evaluatedData).transposeView();
+  var inverse = inv(identity.add(gradientFunc.mmul(gradientFunc.transposeView())));
+  params = new Matrix([params]);
+  params = params.sub(
+    ((inverse.mmul(gradientFunc)).mmul(matrixFunc).mul(gradientDifference)).transposeView()
+  );
 
-    return params.to1DArray();
+  return params.to1DArray();
 }
 
 module.exports = step;

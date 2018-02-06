@@ -34,16 +34,18 @@
   "runkitExampleFilename": "./runkit.js",
   "homepage": "https://github.com/mljs/levenberg-marquardt#readme",
   "devDependencies": {
-    "codecov": "^2.2.0",
-    "eslint": "^4.2.0",
-    "eslint-config-cheminfo": "^1.6.0",
+    "codecov": "^2.3.1",
+    "eslint": "^4.17.0",
+    "eslint-config-cheminfo": "^1.15.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jest": "^21.7.0",
     "eslint-plugin-no-only-tests": "^2.0.0",
     "istanbul": "^0.4.5",
-    "mocha": "^3.2.0",
+    "mocha": "^3.5.3",
     "mocha-better-spec-reporter": "^3.1.0",
     "should": "^11.1.2"
   },
   "dependencies": {
-    "ml-matrix": "^5.0.0"
+    "ml-matrix": "^5.0.1"
   }
 }
