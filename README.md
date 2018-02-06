@@ -1,10 +1,10 @@
 # levenberg-marquardt
 
-  [![NPM version][npm-image]][npm-url]
-  [![build status][travis-image]][travis-url]
-  [![Test coverage][codecov-image]][codecov-url]
-  [![David deps][david-image]][david-url]
-  [![npm download][download-image]][download-url]
+[![NPM version][npm-image]][npm-url]
+[![build status][travis-image]][travis-url]
+[![Test coverage][codecov-image]][codecov-url]
+[![David deps][david-image]][david-url]
+[![npm download][download-image]][download-url]
 
 Curve fitting method in javascript
 
@@ -22,22 +22,29 @@ In order to get a general idea of the problem you could also check the [Wikipedi
 
 ```js
 // import library
-const LM = require('ml-levenberg-marquardt');
+import LM from 'ml-levenberg-marquardt';
+// const LM = require('ml-levenberg-marquardt').default;
 
 // function that receives the parameters and returns
 // a function with the independent variable as a parameter
-function sinFunction ([a, b]) {
-  return (t) => (a * Math.sin(b * t));
+function sinFunction([a, b]) {
+  return (t) => a * Math.sin(b * t);
 }
 
 // array of points to fit
 let data = {
-    x: [ /* x1, x2, ... */ ],
-    y: [ /* y1, y2, ... */ ]
+  x: [
+    /* x1, x2, ... */
+  ],
+  y: [
+    /* y1, y2, ... */
+  ]
 };
 
 // array of initial parameter values
-let initialValues = [ /* a, b, c, ... */ ];
+let initialValues = [
+  /* a, b, c, ... */
+];
 
 const options = {
   damping: 1.5,
