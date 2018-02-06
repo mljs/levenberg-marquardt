@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Calculate current error
  * @ignore
@@ -8,7 +6,11 @@
  * @param {function} parameterizedFunction - The parameters and returns a function with the independent variable as a parameter
  * @return {number}
  */
-function errorCalculation(data, parameters, parameterizedFunction) {
+export default function errorCalculation(
+  data,
+  parameters,
+  parameterizedFunction
+) {
   var error = 0;
   const func = parameterizedFunction(parameters);
 
@@ -18,5 +20,3 @@ function errorCalculation(data, parameters, parameterizedFunction) {
 
   return error;
 }
-
-module.exports = errorCalculation;

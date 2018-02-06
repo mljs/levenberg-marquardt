@@ -1,6 +1,5 @@
-'use strict';
-const errorCalculation = require('./errorCalculation');
-const step = require('./step');
+import errorCalculation from './errorCalculation';
+import step from './step';
 
 /**
  * Curve fitting algorithm
@@ -14,7 +13,11 @@ const step = require('./step');
  * @param {number} [options.errorTolerance = 10e-3] - Minimum uncertainty allowed for each point
  * @return {{parameterValues: Array<number>, parameterError: number, iterations: number}}
  */
-function levenbergMarquardt(data, parameterizedFunction, options = {}) {
+export default function levenbergMarquardt(
+  data,
+  parameterizedFunction,
+  options = {}
+) {
   let {
     maxIterations = 100,
     gradientDifference = 10e-2,
@@ -76,5 +79,3 @@ function levenbergMarquardt(data, parameterizedFunction, options = {}) {
     iterations: iteration
   };
 }
-
-module.exports = levenbergMarquardt;
