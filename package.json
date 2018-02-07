@@ -2,12 +2,8 @@
   "name": "ml-levenberg-marquardt",
   "version": "1.0.2",
   "description": "Curve fitting method in javascript",
-  "main": "./src/index.js",
-  "files": [
-    "runkit.js",
-    "src",
-    "lib"
-  ],
+  "main": "./lib/index.js",
+  "files": ["runkit.js", "src", "lib"],
   "scripts": {
     "eslint": "eslint src",
     "eslint-fix": "npm run eslint -- --fix",
@@ -20,13 +16,7 @@
     "type": "git",
     "url": "https://github.com/mljs/levenberg-marquardt.git"
   },
-  "keywords": [
-    "machine",
-    "learning",
-    "data",
-    "mining",
-    "datamining"
-  ],
+  "keywords": ["machine", "learning", "data", "mining", "datamining"],
   "author": "Miguel Asencio <maasencioh@gmail.com>",
   "license": "MIT",
   "bugs": {
