@@ -2,19 +2,19 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>ml-levenberg-marquardt 1.0.1 | Documentation</title>
+  <title>ml-levenberg-marquardt 1.0.2 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
   <link href='assets/github.css' type='text/css' rel='stylesheet' />
+  <link href='assets/split.css' type='text/css' rel='stylesheet' />
 </head>
-<body class='documentation'>
-  <div class='max-width-4 mx-auto'>
-    <div class='clearfix md-mxn2'>
-      <div class='fixed xs-hide fix-3 overflow-auto max-height-100'>
+<body class='documentation m0'>
+    <div class='flex'>
+      <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>ml-levenberg-marquardt</h3>
-          <div class='mb1'><code>1.0.1</code></div>
+          <div class='mb1'><code>1.0.2</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -40,7 +40,7 @@
           </div>
         </div>
       </div>
-      <div class='fix-margin-3'>
+      <div id='split-right' class='relative overflow-auto height-viewport-100'>
         
           
             <section class='p2 mb2 clearfix bg-white minishadow'>
@@ -53,7 +53,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mljs/levenberg-marquardt/blob/b13fa5da62a15174ef4a2ca10864f9357d770696/src/index.js#L27-L54'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/mljs/levenberg-marquardt/blob/b64abe3f52401f421456234e05447714754b9721/src/index.js#L16-L81'>
       <span>src/index.js</span>
       </a>
     
@@ -63,7 +63,7 @@
   <p>Curve fitting algorithm</p>
 
 
-  <div class='pre p1 fill-light mt0'>levenbergMarquardt(data: {x: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>, y: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>}, parameterizedFunction: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>, options: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): {parameterValues: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>, parameterError: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, iterations: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}</div>
+  <div class='pre p1 fill-light mt0'>levenbergMarquardt(data: {x: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>, y: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>}, parameterizedFunction: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): {parameterValues: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>, parameterError: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, iterations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}</div>
   
   
 
@@ -80,7 +80,7 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>data</span> <code class='quiet'>({x: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>, y: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>})</code>
+            <span class='code bold'>data</span> <code class='quiet'>({x: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>, y: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>})</code>
 	    Array of points to fit in the format 
 [
 x1, x2, ... 
@@ -96,7 +96,7 @@ y1, y2, ...
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>parameterizedFunction</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+            <span class='code bold'>parameterizedFunction</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
 	    The parameters and returns a function with the independent variable as a parameter
 
           </div>
@@ -105,7 +105,8 @@ y1, y2, ...
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?
+            = <code>{}</code>)</code>
 	    Options object
 
           </div>
@@ -124,49 +125,55 @@ y1, y2, ...
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>options.damping</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
-                  
-                    (default <code>undefined</code>)
-                  </td>
-                  <td class='break-word'><span>Levenberg-Marquardt parameter
+  <td class='break-word'><span class='code bold'>options.damping</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?</code>
+  </td>
+  <td class='break-word'><span>Levenberg-Marquardt parameter
 </span></td>
-                </tr>
+</tr>
+
+
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>options.gradientDifference</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
-                  
-                    (default <code>10e-2</code>)
-                  </td>
-                  <td class='break-word'><span>Adjustment for decrease the damping parameter
+  <td class='break-word'><span class='code bold'>options.gradientDifference</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
+  
+    (default <code>10e-2</code>)
+  </td>
+  <td class='break-word'><span>Adjustment for decrease the damping parameter
 </span></td>
-                </tr>
+</tr>
+
+
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>options.initialValues</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>></code>
-                  
-                    (default <code>undefined</code>)
-                  </td>
-                  <td class='break-word'><span>Array of initial parameter values
+  <td class='break-word'><span class='code bold'>options.initialValues</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?</code>
+  </td>
+  <td class='break-word'><span>Array of initial parameter values
 </span></td>
-                </tr>
+</tr>
+
+
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>options.maxIterations</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
-                  
-                    (default <code>100</code>)
-                  </td>
-                  <td class='break-word'><span>Maximum of allowed iterations
+  <td class='break-word'><span class='code bold'>options.maxIterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
+  
+    (default <code>100</code>)
+  </td>
+  <td class='break-word'><span>Maximum of allowed iterations
 </span></td>
-                </tr>
+</tr>
+
+
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>options.errorTolerance</span> <code class='quiet'><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
-                  
-                    (default <code>10e-3</code>)
-                  </td>
-                  <td class='break-word'><span>Minimum uncertainty allowed for each point
+  <td class='break-word'><span class='code bold'>options.errorTolerance</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
+  
+    (default <code>10e-3</code>)
+  </td>
+  <td class='break-word'><span>Minimum uncertainty allowed for each point
 </span></td>
-                </tr>
+</tr>
+
+
               
             </tbody>
           </table>
@@ -181,7 +188,7 @@ y1, y2, ...
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>{parameterValues: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>, parameterError: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, iterations: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}</code>:
+      <code>{parameterValues: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>, parameterError: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, iterations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}</code>:
         
 
       
@@ -203,8 +210,8 @@ y1, y2, ...
         
       </div>
     </div>
-  </div>
   <script src='assets/anchor.js'></script>
+  <script src='assets/split.js'></script>
   <script src='assets/site.js'></script>
 </body>
 </html>
