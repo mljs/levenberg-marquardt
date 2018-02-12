@@ -70,6 +70,7 @@ export default function levenbergMarquardt(
       parameterizedFunction
     );
     error = errorCalculation(data, parameters, parameterizedFunction);
+    if (isNaN(error)) break;
     converged = error <= errorTolerance;
   }
 
