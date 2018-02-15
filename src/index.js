@@ -1,4 +1,5 @@
 import errorCalculation from './errorCalculation';
+import goodnessOfFitCalculation from './goodnessOfFitCalculation';
 import step from './step';
 
 /**
@@ -74,9 +75,12 @@ export default function levenbergMarquardt(
     converged = error <= errorTolerance;
   }
 
+  var goodnessOfFit = goodnessOfFitCalculation(data, parameters, parameterizedFunction);
+
   return {
     parameterValues: parameters,
     parameterError: error,
-    iterations: iteration
+    iterations: iteration,
+    goodnessOfFit: goodnessOfFit
   };
 }
