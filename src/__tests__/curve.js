@@ -24,7 +24,7 @@ test('fourParamEq', () => {
     iterations: 200,
     parameterError: 374.6448,
     parameterValues: [-16.7697, 43.4549, 1018.8938, -4.3514],
-    goodnessOfFit: 370,
+    goodnessOfFit: 0.8163,
   }, 3);
 });
 
@@ -39,6 +39,6 @@ test('error is NaN', () => {
     iterations: 0,
     parameterError: NaN,
     parameterValues: [-64.298, 117.4022, -47.0851, -0.06148],
-    goodnessOfFit: 0.0,
+    goodnessOfFit: 0.051,
   }, 3);
 });

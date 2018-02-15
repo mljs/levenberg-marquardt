@@ -17,7 +17,7 @@ describe('goodnessOfFitCalculation test', () => {
       data.y[i] = sampleFunction(i);
     }
 
-    expect(goodnessOfFitCalculation(data, [2, 2], sinFunction)).toBeCloseTo(-110, 3);
-    expect(goodnessOfFitCalculation(data, [4, 4], sinFunction)).toBeCloseTo(-116, 1);
+    expect(goodnessOfFitCalculation(data, [2, 2], sinFunction)).toBeCloseTo(1, 3);
+    expect(goodnessOfFitCalculation(data, [4, 4], sinFunction)).toBeCloseTo(0.5, 3);
   });
 });

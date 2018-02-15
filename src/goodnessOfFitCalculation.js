@@ -1,5 +1,6 @@
 /**
  * Calculate goodness Of Fit
+ * Inspired by: https://onlinecourses.science.psu.edu/stat501/node/255
  * @ignore
  * @param {{x:Array<number>, y:Array<number>}} data - Array of points to fit in
  * the format [x1, x2, ... ], [y1, y2, ... ]
@@ -12,18 +13,28 @@
 export default function goodnessOfFitCalculation(data, parameters,
   parameterizedFunction) {
 
-  var chiSquared = 0;
+  var goodnessOfFit = 0;
   const func = parameterizedFunction(parameters);
 
-  // TODO: Write R2 rather than this
-  for (var i = 0; i < data.x.length; i++) {
+  var n = data.x.length;
+
+  var average = 0;
+  for (var i = 0; i < n; i++) {
     var expectedValue = func(data.x[i]);
-    // The weigth is assumed to be sqrt(value)
-    var weigthSquared = data.y[i];
-    if (weigthSquared === 0.0) {
-      weigthSquared = 1.0;
-    }
-    chiSquared += (Math.abs(data.y[i] - expectedValue)) ^ 2 / weigthSquared;
+    var observedValue = data.y[i];
+    average += Math.abs(expectedValue - observedValue);
   }
-  return chiSquared;
+  average = observedValue / n;
+
+  var ssr = 0;
+  var ssto = 0;
+  for (i = 0; i < n; i++) {
+    expectedValue = func(data.x[i]);
+    observedValue = data.y[i];
+    ssr += (Math.abs(expectedValue - average)) ^ 2;
+    ssto += (Math.abs(observedValue - average)) ^ 2;
+  }
+  goodnessOfFit = ssr / ssto;
+
+  return goodnessOfFit;
 }
