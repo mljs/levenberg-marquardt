@@ -71,9 +71,8 @@ export default function step(
   gradientDifference,
   parameterizedFunction
 ) {
-  var identity = Matrix.eye(params.length).mul(
-    damping * gradientDifference * gradientDifference
-  );
+  var value = damping * gradientDifference * gradientDifference;
+  var identity = Matrix.eye(params.length, params.length, value);
 
   var l = data.x.length;
   var evaluatedData = new Array(l);
