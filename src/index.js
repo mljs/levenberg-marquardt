@@ -22,6 +22,8 @@ export default function levenbergMarquardt(
     maxIterations = 100,
     gradientDifference = 10e-2,
     damping = 0,
+    maxValue,
+    minValue,
     errorTolerance = 10e-3,
     initialValues
   } = options;
@@ -39,15 +41,18 @@ export default function levenbergMarquardt(
     throw new Error(
       'The data parameter elements must be an array with more than 2 points'
     );
-  } else {
-    let dataLen = data.x.length;
-    if (dataLen !== data.y.length) {
-      throw new Error('The data parameter elements must have the same size');
-    }
+  } else if (data.x.length !== data.y.length) {
+    throw new Error('The data parameter elements must have the same size');
   }
 
-  var parameters =
-    initialValues || new Array(parameterizedFunction.length).fill(1);
+  var parameters = initialValues || new Array(parameterizedFunction.length).fill(1);
+  let parLen = parameters.length;
+  maxValue = maxValue || new Array(parLen).fill(Number.MAX_SAFE_INTEGER);
+  minValue = minValue || new Array(parLen).fill(Number.MIN_SAFE_INTEGER);
+
+  if (maxValue.length !== minValue.length) {
+    throw new Error('coutes should has the same size');
+  }
 
   if (!Array.isArray(parameters)) {
     throw new Error('initialValues must be an array');
@@ -69,6 +74,11 @@ export default function levenbergMarquardt(
       gradientDifference,
       parameterizedFunction
     );
+
+    for (let k = 0; k < parLen; k++) {
+      parameters[k] = Math.min(Math.max(minValue[k], parameters[k]), maxValue[k]);
+    }
+
     error = errorCalculation(data, parameters, parameterizedFunction);
     if (isNaN(error)) break;
     converged = error <= errorTolerance;
