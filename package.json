@@ -1,6 +1,6 @@
 {
   "name": "ml-levenberg-marquardt",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Curve fitting method in javascript",
   "main": "./lib/index.js",
   "files": [
@@ -47,6 +47,10 @@
     "rollup": "^0.55.5"
   },
   "dependencies": {
-    "ml-matrix": "^5.0.1"
+    "ml-matrix": "^5.0.1",
+    "norm-dist": "^2.0.1"
+  },
+  "jest": {
+    "testURL": "http://localhost"
   }
 }

@@ -21,13 +21,13 @@ describe('levenberg-marquardt test', () => {
       initialValues: [3, 3]
     };
 
-    const { parameterValues, parameterError } = levenbergMarquardt(
+    const { parameterValues, residuals } = levenbergMarquardt(
       data,
       sinFunction,
       options
     );
     expect(parameterValues).toBeDeepCloseTo([2, 2], 3);
-    expect(parameterError).toBeCloseTo(0, 2);
+    expect(residuals).toBeCloseTo(0, 2);
   });
 
   it('Exceptions', () => {
@@ -75,13 +75,13 @@ describe('levenberg-marquardt test', () => {
       maxIterations: 200
     };
 
-    let { parameterValues, parameterError } = levenbergMarquardt(
+    let { parameterValues, residuals } = levenbergMarquardt(
       data,
       sigmoidFunction,
       options
     );
     expect(parameterValues).toBeDeepCloseTo([2, 2, 2], 1);
-    expect(parameterError).toBeCloseTo(0, 1);
+    expect(residuals).toBeCloseTo(0, 1);
   });
 
   it('Sum of lorentzians example', () => {

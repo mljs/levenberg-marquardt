@@ -32,8 +32,8 @@ test('bennet5 problem', () => {
     damping: 0.00001,
     maxIterations: 1000,
     errorTolerance: 1e-3,
-    maxBound: [11, 11, 11],
-    minBound: [1, 1, 1],
+    maxValues: [11, 11, 11],
+    minValues: [1, 1, 1],
     initialValues: [3.5, 3.8, 4]
   };
 
@@ -50,7 +50,7 @@ test('fourParamEq', () => {
 
   expect(levenbergMarquardt(data, fourParamEq, options)).toBeDeepCloseTo({
     iterations: 200,
-    parameterError: 374.6448,
+    residuals: 16398.0009,
     parameterValues: [-16.7697, 43.4549, 1018.8938, -4.3514]
   }, 3);
 });
@@ -64,7 +64,7 @@ test('error is NaN', () => {
 
   expect(levenbergMarquardt(data, fourParamEq, options)).toBeDeepCloseTo({
     iterations: 0,
-    parameterError: NaN,
+    residuals: NaN,
     parameterValues: [-64.298, 117.4022, -47.0851, -0.06148]
   }, 3);
 });
