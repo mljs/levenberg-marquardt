@@ -1,16 +1,20 @@
-import { initializeErrorPropagation, sumOfResiduals, sumOfSquaredResiduals } from './errorCalculation';
+import { initializeErrorPropagation, sumOfSquaredResiduals } from './errorCalculation';
 import step from './step';
 
 /**
  * Curve fitting algorithm
  * @param {{x:Array<number>, y:Array<number>, xError:Array<number>|void, yError:Array<number>|void}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
- * @param {function} parameterizedFunction - The parameters and returns a function with the independent variable as a parameter
+ * @param {(...n: number[]) => (x: number) => number} paramFunction - Takes the parameters and returns a function with the independent variable as a parameter
  * @param {object} [options] - Options object
- * @param {number} [options.damping] - Levenberg-Marquardt parameter
- * @param {number} [options.gradientDifference = 10e-2] - Adjustment for decrease the damping parameter
+ * @param {number} [options.damping = 0.1] - Levenberg-Marquardt lambda parameter
+ * @param {number} [options.dampingDrop = 0.1] - The constant used to lower the damping parameter
+ * @param {number} [options.dampingBoost = 1.5] - The constant used to increase the damping parameter
+ * @param {number} [options.maxDamping] - Maximum value for the damping parameter
+ * @param {number} [options.minDamping] - Minimum value for the damping parameter
+ * @param {number} [options.gradientDifference = 1e-6] - The "infinitesimal" value used to approximate the gradient of the parameter space
  * @param {Array<number>} [options.initialValues] - Array of initial parameter values
  * @param {number} [options.maxIterations = 100] - Maximum of allowed iterations
- * @param {number} [options.errorTolerance = 0] - Minimum change of the sum of residuals per step – if the sum of residuals changes less than this number, the algorithm will stop
+ * @param {number} [options.errorTolerance = -1] - Minimum change of the sum of residuals per step – if the sum of residuals changes less than this number, the algorithm will stop
  * @param {Array<number>} [options.maxValues] - Maximum values for the parameters
  * @param {Array<number>} [options.minValues] - Minimum values for the parameters
  * @param {{rough: number, fine: number}} [options.errorPropagation] - How many evaluations (per point per step) of the fitted function to use to approximate the error propagation through it
@@ -20,16 +24,20 @@ import step from './step';
  */
 export default function levenbergMarquardt(
   data,
-  parameterizedFunction,
+  paramFunction,
   options = {}
 ) {
   let {
     maxIterations = 100,
-    gradientDifference = 10e-2,
-    damping = 0,
+    gradientDifference = 1e-6,
+    damping = 0.1,
+    dampingDrop = 0.1,
+    dampingBoost = 1.5,
+    maxDamping = Number.MAX_SAFE_INTEGER,
+    minDamping = Number.EPSILON,
     maxValues,
     minValues,
-    errorTolerance = -1,
+    errorTolerance = 1e-6,
     initialValues,
     errorPropagation = { rough: 10, fine: 50 }
   } = options;
@@ -41,8 +49,8 @@ export default function levenbergMarquardt(
 
   if (damping <= 0) {
     throw new Error('The damping option must be a positive number');
-  } else if (!data.x || !data.y) {
-    throw new Error('The data parameter must have x and y elements');
+  } else if (!data || !data.x || !data.y) {
+    throw new Error('The data object must have x and y elements');
   } else if (
     !Array.isArray(data.x) ||
     data.x.length < 2 ||
@@ -50,30 +58,32 @@ export default function levenbergMarquardt(
     data.y.length < 2
   ) {
     throw new Error(
-      'The data parameter elements must be an array with more than 2 points'
+      'The data must have more than 2 points'
     );
   } else if (data.x.length !== data.y.length) {
-    throw new Error('The data parameter elements must have the same size');
+    throw new Error('The data object must have equal number of x and y coordinates');
   }
 
-  var parameters = initialValues || new Array(parameterizedFunction.length).fill(1);
-  let parLen = parameters.length;
+  var params = initialValues;
+  let parLen = params.length;
   maxValues = maxValues || new Array(parLen).fill(Number.MAX_SAFE_INTEGER);
   minValues = minValues || new Array(parLen).fill(Number.MIN_SAFE_INTEGER);
 
-  if (maxValues.length !== minValues.length) {
-    throw new Error('coutes should has the same size');
+  if (!Array.isArray(params)) {
+    throw new Error('initialValues must be an array');
   }
 
-  if (!Array.isArray(parameters)) {
-    throw new Error('initialValues must be an array');
+  if (maxValues.length !== minValues.length || maxValues.length !== params.length) {
+    throw new Error('coutes should has the same size');
   }
 
 
   initializeErrorPropagation(roughError);
 
-  var lastResiduals = 0;
-  var residuals = sumOfResiduals(data, parameters, parameterizedFunction);
+  /** @type Array<number> */
+  var residualDifferences = Array(10).fill(NaN);
+
+  var residuals = sumOfSquaredResiduals(data, params, paramFunction);
   var converged = false;
   var fine = false;
 
@@ -82,28 +92,39 @@ export default function levenbergMarquardt(
     iteration < maxIterations && !converged;
     iteration++
   ) {
-    parameters = step(
+    var params2 = step(
       data,
-      parameters,
+      params,
       damping,
       gradientDifference,
-      parameterizedFunction
+      paramFunction
     );
 
     for (let k = 0; k < parLen; k++) {
-      parameters[k] = Math.min(Math.max(minValues[k], parameters[k]), maxValues[k]);
+      params2[k] = Math.min(Math.max(minValues[k], params2[k]), maxValues[k]);
     }
 
-    lastResiduals = residuals;
-    residuals = sumOfResiduals(data, parameters, parameterizedFunction);
-    if (isNaN(residuals)) break;
-    converged = lastResiduals - residuals <= errorTolerance;
+    var residuals2 = sumOfSquaredResiduals(data, params2, paramFunction);
 
-    if (converged && !fine) {
-      initializeErrorPropagation(fineError);
-      converged = false;
-      fine = true;
+    if (isNaN(residuals2)) throw new Error('The function evaluates to NaN.');
+
+
+    var residualDifference = residuals2 - residuals;
+
+    if (residuals2 < residuals) {
+      params = params2;
+      residuals = residuals2;
+      damping *= dampingDrop;
+    } else {
+      damping *= dampingBoost;
     }
+
+    damping = Math.max( minDamping, Math.min(maxDamping, damping) );
+
+    residualDifferences.shift();
+    residualDifferences.push( residuals - residuals2 );
+    converged = residualDifferences.reduce((a,b)=>Math.max(a,b)) <= errorTolerance;
+
   }
 
   /**
@@ -113,8 +134,8 @@ export default function levenbergMarquardt(
    * @property {number} iterations - Number of iterations used
    */
   return {
-    parameterValues: parameters,
-    residuals: sumOfSquaredResiduals(data, parameters, parameterizedFunction),
+    parameterValues: params,
+    residuals: sumOfSquaredResiduals(data, params, paramFunction),
     iterations: iteration
   };
 }

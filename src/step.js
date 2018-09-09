@@ -49,6 +49,7 @@ function gradientFunction(
 function matrixFunction(data, evaluatedData) {
   const m = data.x.length;
 
+  /** @type Array<number> */
   var ans = new Array(m);
 
   for (var point = 0; point < m; point++) {
@@ -75,32 +76,32 @@ export default function step(
   gradientDifference,
   paramFunction
 ) {
-  var value = damping * gradientDifference * gradientDifference;
-  var identity = Matrix.eye(params.length, params.length, value);
+  var scaledDamping = damping * gradientDifference * gradientDifference;
+  var identity = Matrix.eye(params.length, params.length, scaledDamping);
 
   const func = paramFunction(params);
   var evaluatedData = data.x.map((e) => func(e));
 
-  var gradientFunc = gradientFunction(
+  var gradient = gradientFunction(
     data,
     evaluatedData,
     params,
     gradientDifference,
     paramFunction
   );
-  var matrixFunc = matrixFunction(data, evaluatedData);
+  var residuals = matrixFunction(data, evaluatedData);
   var inverseMatrix = inverse(
-    identity.add(gradientFunc.mmul(gradientFunc.transpose()))
+    identity.add(gradient.mmul(gradient.transpose()))
   );
 
-  params = new Matrix([params]);
-  params = params.sub(
+  let params2 = new Matrix([params]);
+  params2 = params2.sub(
     inverseMatrix
-      .mmul(gradientFunc)
-      .mmul(matrixFunc)
+      .mmul(gradient)
+      .mmul(residuals)
       .mul(gradientDifference)
       .transpose()
   );
 
-  return params.to1DArray();
+  return params2.to1DArray();
 }

@@ -36,20 +36,20 @@ describe('levenberg-marquardt test', () => {
       initialValues: [3, 3]
     };
 
-    expect(() => levenbergMarquardt()).toThrow(
+    expect(() => levenbergMarquardt({}, sinFunction, { damping: -1 })).toThrow(
       'The damping option must be a positive number'
     );
     expect(() => levenbergMarquardt([1, 2], sinFunction, options)).toThrow(
-      'The data parameter must have x and y elements'
+      'The data object must have x and y elements'
     );
     expect(() =>
       levenbergMarquardt({ x: 1, y: 2 }, sinFunction, options)
     ).toThrow(
-      'The data parameter elements must be an array with more than 2 points'
+      'The data must have more than 2 points'
     );
     expect(() =>
       levenbergMarquardt({ x: [1, 2], y: [1, 2, 3] }, sinFunction, options)
-    ).toThrow('The data parameter elements must have the same size');
+    ).toThrow('The data object must have equal number of x and y coordinates');
     expect(() =>
       levenbergMarquardt({ x: [1, 2], y: [1, 2] }, sumOfLorentzians, {
         damping: 0.1,

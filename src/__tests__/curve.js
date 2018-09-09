@@ -63,7 +63,7 @@ test('error is NaN', () => {
   };
 
   expect(levenbergMarquardt(data, fourParamEq, options)).toBeDeepCloseTo({
-    iterations: 0,
+    iterations: 10,
     residuals: NaN,
     parameterValues: [-64.298, 117.4022, -47.0851, -0.06148]
   }, 3);
