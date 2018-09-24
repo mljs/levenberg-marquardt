@@ -1,5 +1,13 @@
 import { initializeErrorPropagation, sumOfSquaredResiduals } from './errorCalculation';
 import step from './step';
+import * as legacy from './legacy';
+
+/**
+ * @typedef {Object} Result
+ * @property {Array<number>} parameterValues - The computed values of parameters
+ * @property {number} residuals - Sum of squared residuals of the final fit
+ * @property {number} iterations - Number of iterations used
+ */
 
 /**
  * Curve fitting algorithm
@@ -14,12 +22,10 @@ import step from './step';
  * @param {number} [options.gradientDifference = 1e-6] - The "infinitesimal" value used to approximate the gradient of the parameter space
  * @param {Array<number>} [options.initialValues] - Array of initial parameter values
  * @param {number} [options.maxIterations = 100] - Maximum of allowed iterations
- * @param {number} [options.errorTolerance = -1] - Minimum change of the sum of residuals per step – if the sum of residuals changes less than this number, the algorithm will stop
+ * @param {number} [options.residualEpsilon = 1e-6] - Minimum change of the sum of residuals per step – if the sum of residuals changes less than this number, the algorithm will stop
  * @param {Array<number>} [options.maxValues] - Maximum values for the parameters
  * @param {Array<number>} [options.minValues] - Minimum values for the parameters
- * @param {{rough: number, fine: number}} [options.errorPropagation] - How many evaluations (per point per step) of the fitted function to use to approximate the error propagation through it
- * @param {number} [options.errorPropagation.rough = 10] - Number of iterations for rough estimation
- * @param {number} [options.errorPropagation.fine = 50] - Number of iterations for fine estimation
+ * @param {number} [options.errorPropagation = 50] - How many evaluations (per point per step) of the fitted function to use to approximate the error propagation through it
  * @return {Result}
  */
 export default function levenbergMarquardt(
@@ -37,15 +43,10 @@ export default function levenbergMarquardt(
     minDamping = Number.EPSILON,
     maxValues,
     minValues,
-    errorTolerance = 1e-6,
+    residualEpsilon = 1e-6,
     initialValues,
-    errorPropagation = { rough: 10, fine: 50 }
-  } = options;
-
-  let {
-    roughError = 10,
-    fineError = 50
-  } = errorPropagation;
+    errorPropagation = 50
+  } = legacy.compatOptions(options);
 
   if (damping <= 0) {
     throw new Error('The damping option must be a positive number');
@@ -78,14 +79,13 @@ export default function levenbergMarquardt(
   }
 
 
-  initializeErrorPropagation(roughError);
+  initializeErrorPropagation(errorPropagation);
 
   /** @type Array<number> */
   var residualDifferences = Array(10).fill(NaN);
 
   var residuals = sumOfSquaredResiduals(data, params, paramFunction);
   var converged = false;
-  var fine = false;
 
   for (
     var iteration = 0;
@@ -107,9 +107,7 @@ export default function levenbergMarquardt(
     var residuals2 = sumOfSquaredResiduals(data, params2, paramFunction);
 
     if (isNaN(residuals2)) throw new Error('The function evaluates to NaN.');
-
-
-    var residualDifference = residuals2 - residuals;
+    
 
     if (residuals2 < residuals) {
       params = params2;
@@ -123,19 +121,16 @@ export default function levenbergMarquardt(
 
     residualDifferences.shift();
     residualDifferences.push( residuals - residuals2 );
-    converged = residualDifferences.reduce((a,b)=>Math.max(a,b)) <= errorTolerance;
+    converged = residualDifferences.reduce((a,b)=>Math.max(a,b)) <= residualEpsilon;
 
   }
 
-  /**
-   * @typedef {Object} Result
-   * @property {Array<number>} parameterValues - The computed values of parameters
-   * @property {number} residuals - Sum of squared residuals of the final fit
-   * @property {number} iterations - Number of iterations used
-   */
-  return {
+  /** @type {Result} */
+  let result = {
     parameterValues: params,
     residuals: sumOfSquaredResiduals(data, params, paramFunction),
     iterations: iteration
   };
+
+  return legacy.compatReturn(result);
 }

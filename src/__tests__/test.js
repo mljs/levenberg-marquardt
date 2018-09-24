@@ -109,6 +109,45 @@ describe('levenberg-marquardt test', () => {
   });
 });
 
+it('Legacy', () => {
+  const len = 20;
+  let data = {
+    x: new Array(len),
+    y: new Array(len)
+  };
+  let sampleFunction = sinFunction([2, 2]);
+  for (let i = 0; i < len; i++) {
+    data.x[i] = i;
+    data.y[i] = sampleFunction(i);
+  }
+  const options = {
+    damping: 0.1,
+    initialValues: [3, 3]
+  };
+  const options1 = {
+    ...options,
+    residualEpsilon: 1
+  };
+  const options2 = {
+    ...options,
+    errorTolerance: 1
+  };
+
+  const result1 = levenbergMarquardt(
+    data,
+    sinFunction,
+    options1
+  );
+  const result2 = levenbergMarquardt(
+    data,
+    sinFunction,
+    options2
+  );
+
+  expect(result1.parameterValues).toBeDeepCloseTo(result2.parameterValues, 0);
+  expect(result1.residuals).toBe(result1.parameterError);
+});
+
 function sinFunction([a, b]) {
   return (t) => a * Math.sin(b * t);
 }
