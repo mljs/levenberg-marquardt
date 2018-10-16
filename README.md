@@ -46,9 +46,19 @@ let initialValues = [
   /* a, b, c, ... */
 ];
 
+// Optionally, restrict parameters to minimum & maximum values
+let minValues = [
+  /* a_min, b_min, c_min, ... */    
+];
+let maxValues = [
+  /* a_max, b_max, c_max, ... */    
+];
+
 const options = {
   damping: 1.5,
-  initialValues: initialValues,
+  initialValues,
+  minValues,
+  maxValues,
   gradientDifference: 10e-2,
   maxIterations: 100,
   errorTolerance: 10e-3
