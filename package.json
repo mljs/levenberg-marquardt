@@ -3,6 +3,7 @@
   "version": "1.0.3",
   "description": "Curve fitting method in javascript",
   "main": "./lib/index.js",
+  "module": "./src/index.js",
   "files": [
     "runkit.js",
     "src",
@@ -11,10 +12,11 @@
   "scripts": {
     "eslint": "eslint src",
     "eslint-fix": "npm run eslint -- --fix",
-    "prepublish": "rollup -c",
-    "test": "npm run test-simple && npm run eslint",
-    "test-travis": "jest --coverage && codecov",
-    "test-simple": "jest"
+    "prepare": "rollup -c",
+    "test": "npm run test-only && npm run eslint",
+    "test-coverage": "npm run test-only -- --coverage",
+    "test-only": "jest",
+    "test-travis": "npm run test-coverage && npm run eslint"
   },
   "repository": {
     "type": "git",
@@ -25,7 +27,9 @@
     "learning",
     "data",
     "mining",
-    "datamining"
+    "datamining",
+    "levenberg",
+    "marquardt"
   ],
   "author": "Miguel Asencio <maasencioh@gmail.com>",
   "license": "MIT",
@@ -35,18 +39,16 @@
   "runkitExampleFilename": "./runkit.js",
   "homepage": "https://github.com/mljs/levenberg-marquardt#readme",
   "devDependencies": {
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
-    "codecov": "^2.3.1",
-    "eslint": "^4.17.0",
-    "eslint-config-cheminfo": "^1.15.1",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jest": "^21.9.0",
-    "jest": "^22.2.2",
-    "jest-matcher-deep-close-to": "^1.2.1",
-    "mocha-better-spec-reporter": "^3.1.0",
-    "rollup": "^0.55.5"
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "eslint": "^5.7.0",
+    "eslint-config-cheminfo": "^1.18.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^21.25.1",
+    "jest": "^23.6.0",
+    "jest-matcher-deep-close-to": "^1.3.0",
+    "rollup": "^0.66.6"
   },
   "dependencies": {
-    "ml-matrix": "^5.0.1"
+    "ml-matrix": "^5.2.0"
   }
 }

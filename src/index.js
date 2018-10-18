@@ -45,7 +45,8 @@ export default function levenbergMarquardt(
     throw new Error('The data parameter elements must have the same size');
   }
 
-  var parameters = initialValues || new Array(parameterizedFunction.length).fill(1);
+  var parameters =
+    initialValues || new Array(parameterizedFunction.length).fill(1);
   let parLen = parameters.length;
   maxValue = maxValue || new Array(parLen).fill(Number.MAX_SAFE_INTEGER);
   minValue = minValue || new Array(parLen).fill(Number.MIN_SAFE_INTEGER);
@@ -76,7 +77,10 @@ export default function levenbergMarquardt(
     );
 
     for (let k = 0; k < parLen; k++) {
-      parameters[k] = Math.min(Math.max(minValue[k], parameters[k]), maxValue[k]);
+      parameters[k] = Math.min(
+        Math.max(minValue[k], parameters[k]),
+        maxValue[k]
+      );
     }
 
     error = errorCalculation(data, parameters, parameterizedFunction);
