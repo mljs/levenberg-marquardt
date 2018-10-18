@@ -1,18 +1,25 @@
 import nd from 'norm-dist';
 
-/** @param {number} x */
-const sq = x => x * x;
+/**
+ * @private
+ * @param {number} x
+ * @return {number}
+ */
+const sq = (x) => x * x;
 
-/** @param {...number} n */
-const isNaN = (...n) => n.some( x => Number.isNaN(x) );
-
+/**
+ * @private
+ * @param {...number} n
+ * @return {boolean}
+ */
+const isNaN = (...n) => n.some((x) => Number.isNaN(x));
 
 /**
  * Compute equiprobable ranges in normal distribution
- * @ignore
+ * @private
  * @param {number} iterations - How many evaluations (per point per step) of the fitted function to use to approximate the error propagation through it
  */
-export function initializeErrorPropagation( iterations ) {
+export function initializeErrorPropagation(iterations) {
   if (equiprobableStops.length === iterations) return;
 
   const min = nd.cdf(-2.25);
@@ -27,20 +34,15 @@ export function initializeErrorPropagation( iterations ) {
 /** @type {number[]} */
 const equiprobableStops = [];
 
-
 /**
  * Estimate error propagation through a function
- * @ignore
+ * @private
  * @param {(x: number) => number} fn - The function to approximate, outside of the function domain return `NaN`
  * @param {number} x - The error propagation will be approximate in the neighbourhood of this point
  * @param {number} xSigma - The standard deviation of `x`
  * @return {number} The estimated standard deviation of `fn(x)`
  */
-export function errorPropagation(
-  fn,
-  x,
-  xSigma
-) {
+export function errorPropagation(fn, x, xSigma) {
   const stopCount = equiprobableStops.length;
 
   var slope = 0;
@@ -75,27 +77,19 @@ export function errorPropagation(
  * @param {(n: number[]) => (x: number) => number} paramFunction - Takes the parameters and returns a function with the independent variable as a parameter
  * @return {Array<number>} Array of point weights
  */
-export function pointWeights(
-  data,
-  params,
-  paramFunction
-) {
+export function pointWeights(data, params, paramFunction) {
   const m = data.x.length;
 
   /** @type {Array<number>} */
   const errs = new Array(m);
 
   if (!data.xError) {
-
     if (!data.yError) {
       return errs.fill(1);
-
     } else {
       errs.splice(0, m, ...data.yError);
     }
-
   } else {
-
     const fn = paramFunction(params);
     var point;
 
@@ -105,7 +99,7 @@ export function pointWeights(
 
     if (data.yError) {
       for (point = 0; point < m; point++) {
-        errs[point] = Math.sqrt( sq(errs[point]) + sq(data.yError[point]) );
+        errs[point] = Math.sqrt(sq(errs[point]) + sq(data.yError[point]));
       }
     }
   }
@@ -126,11 +120,7 @@ export function pointWeights(
  * @param {(...n: number[]) => (x: number) => number} paramFunction - The parameters and returns a function with the independent variable as a parameter
  * @return {number}
  */
-export function sumOfResiduals(
-  data,
-  parameters,
-  paramFunction
-) {
+export function sumOfResiduals(data, parameters, paramFunction) {
   var error = 0;
   const func = paramFunction(parameters);
 
@@ -149,11 +139,7 @@ export function sumOfResiduals(
  * @param {(...n: number[]) => (x: number) => number} paramFunction - The parameters and returns a function with the independent variable as a parameter
  * @return {number}
  */
-export function sumOfSquaredResiduals(
-  data,
-  parameters,
-  paramFunction
-) {
+export function sumOfSquaredResiduals(data, parameters, paramFunction) {
   var error = 0;
   const func = paramFunction(parameters);
 

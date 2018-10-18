@@ -18,7 +18,7 @@
  * @return {Result}
  */
 
- /**
+/**
   * @typedef {Object} LegacyOptions
   * @prop {number} [errorTolerance] - The old name for `residualEpsilon`
   */
@@ -28,10 +28,10 @@
  * @return {Options} The options object according to the current API
  */
 export function compatOptions(legacy) {
-    if (Object.prototype.hasOwnProperty.call(legacy, 'errorTolerance')) {
-        legacy.residualEpsilon = legacy.errorTolerance;
-    }
-    return legacy;
+  if (Object.prototype.hasOwnProperty.call(legacy, 'errorTolerance')) {
+    legacy.residualEpsilon = legacy.errorTolerance;
+  }
+  return legacy;
 }
 
 
@@ -52,8 +52,8 @@ export function compatOptions(legacy) {
  * @return {Result & LegacyResult} The result object augmented by the backwards-compatibility parameters
  */
 export function compatReturn(modern) {
-    return {
-        ...modern,
-        parameterError: modern.residuals
-    };
+  return {
+    ...modern,
+    parameterError: modern.residuals
+  };
 }

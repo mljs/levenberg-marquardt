@@ -1,4 +1,5 @@
 import { inverse, Matrix } from 'ml-matrix';
+
 import { pointWeights } from './errorCalculation';
 
 /**
@@ -33,7 +34,7 @@ function gradientFunction(
     var funcParam = paramFunction(auxParams);
 
     for (var point = 0; point < m; point++) {
-      ans[param][point] = ( evaluatedData[point] - funcParam(data.x[point]) ) * weights[point];
+      ans[param][point] = (evaluatedData[point] - funcParam(data.x[point])) * weights[point];
     }
   }
   return new Matrix(ans);
