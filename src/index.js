@@ -8,6 +8,8 @@ import step from './step';
  * @param {object} [options] - Options object
  * @param {number} [options.damping] - Levenberg-Marquardt parameter
  * @param {number} [options.gradientDifference = 10e-2] - Adjustment for decrease the damping parameter
+ * @param {Array<number>} [options.minValues] - Minimum allowed values for parameters
+ * @param {Array<number>} [options.maxValues] - Maximum allowed values for parameters
  * @param {Array<number>} [options.initialValues] - Array of initial parameter values
  * @param {number} [options.maxIterations = 100] - Maximum of allowed iterations
  * @param {number} [options.errorTolerance = 10e-3] - Minimum uncertainty allowed for each point
@@ -22,9 +24,9 @@ export default function levenbergMarquardt(
     maxIterations = 100,
     gradientDifference = 10e-2,
     damping = 0,
-    maxValue,
-    minValue,
     errorTolerance = 10e-3,
+    minValues,
+    maxValues,
     initialValues
   } = options;
 
@@ -48,11 +50,11 @@ export default function levenbergMarquardt(
   var parameters =
     initialValues || new Array(parameterizedFunction.length).fill(1);
   let parLen = parameters.length;
-  maxValue = maxValue || new Array(parLen).fill(Number.MAX_SAFE_INTEGER);
-  minValue = minValue || new Array(parLen).fill(Number.MIN_SAFE_INTEGER);
+  maxValues = maxValues || new Array(parLen).fill(Number.MAX_SAFE_INTEGER);
+  minValues = minValues || new Array(parLen).fill(Number.MIN_SAFE_INTEGER);
 
-  if (maxValue.length !== minValue.length) {
-    throw new Error('coutes should has the same size');
+  if (maxValues.length !== minValues.length) {
+    throw new Error('minValues and maxValues should have the same size');
   }
 
   if (!Array.isArray(parameters)) {
@@ -78,8 +80,8 @@ export default function levenbergMarquardt(
 
     for (let k = 0; k < parLen; k++) {
       parameters[k] = Math.min(
-        Math.max(minValue[k], parameters[k]),
-        maxValue[k]
+        Math.max(minValues[k], parameters[k]),
+        maxValues[k]
       );
     }
 
