@@ -1,5 +1,7 @@
 import { inverse, Matrix } from 'ml-matrix';
 
+import { pointWeights } from './errorCalculation';
+
 /**
  * Difference of the matrix function over the parameters
  * @ignore
@@ -7,7 +9,7 @@ import { inverse, Matrix } from 'ml-matrix';
  * @param {Array<number>} evaluatedData - Array of previous evaluated function values
  * @param {Array<number>} params - Array of previous parameter values
  * @param {number} gradientDifference - Adjustment for decrease the damping parameter
- * @param {function} paramFunction - The parameters and returns a function with the independent variable as a parameter
+ * @param {(n: number[]) => (x: number) => number} paramFunction - Takes the parameters and returns a function with the independent variable as a parameter
  * @return {Matrix}
  */
 function gradientFunction(
@@ -20,6 +22,9 @@ function gradientFunction(
   const n = params.length;
   const m = data.x.length;
 
+  const weights = pointWeights(data, params, paramFunction);
+
+  /** @type Array<Array<number>> */
   var ans = new Array(n);
 
   for (var param = 0; param < n; param++) {
@@ -29,7 +34,7 @@ function gradientFunction(
     var funcParam = paramFunction(auxParams);
 
     for (var point = 0; point < m; point++) {
-      ans[param][point] = evaluatedData[point] - funcParam(data.x[point]);
+      ans[param][point] = (evaluatedData[point] - funcParam(data.x[point])) * weights[point];
     }
   }
   return new Matrix(ans);
@@ -45,6 +50,7 @@ function gradientFunction(
 function matrixFunction(data, evaluatedData) {
   const m = data.x.length;
 
+  /** @type Array<number> */
   var ans = new Array(m);
 
   for (var point = 0; point < m; point++) {
@@ -57,11 +63,11 @@ function matrixFunction(data, evaluatedData) {
 /**
  * Iteration for Levenberg-Marquardt
  * @ignore
- * @param {{x:Array<number>, y:Array<number>}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
+ * @param {{x:Array<number>, y:Array<number>, xError:Array<number>|void, yError:Array<number>|void}} data
  * @param {Array<number>} params - Array of previous parameter values
  * @param {number} damping - Levenberg-Marquardt parameter
  * @param {number} gradientDifference - Adjustment for decrease the damping parameter
- * @param {function} parameterizedFunction - The parameters and returns a function with the independent variable as a parameter
+ * @param {(n: number[]) => (x: number) => number} paramFunction - Takes the parameters and returns a function with the independent variable as a parameter
  * @return {Array<number>}
  */
 export default function step(
@@ -69,34 +75,34 @@ export default function step(
   params,
   damping,
   gradientDifference,
-  parameterizedFunction
+  paramFunction
 ) {
-  var value = damping * gradientDifference * gradientDifference;
-  var identity = Matrix.eye(params.length, params.length, value);
+  var scaledDamping = damping * gradientDifference * gradientDifference;
+  var identity = Matrix.eye(params.length, params.length, scaledDamping);
 
-  const func = parameterizedFunction(params);
+  const func = paramFunction(params);
   var evaluatedData = data.x.map((e) => func(e));
 
-  var gradientFunc = gradientFunction(
+  var gradient = gradientFunction(
     data,
     evaluatedData,
     params,
     gradientDifference,
-    parameterizedFunction
+    paramFunction
   );
-  var matrixFunc = matrixFunction(data, evaluatedData);
+  var residuals = matrixFunction(data, evaluatedData);
   var inverseMatrix = inverse(
-    identity.add(gradientFunc.mmul(gradientFunc.transpose()))
+    identity.add(gradient.mmul(gradient.transpose()))
   );
 
-  params = new Matrix([params]);
-  params = params.sub(
+  let params2 = new Matrix([params]);
+  params2 = params2.sub(
     inverseMatrix
-      .mmul(gradientFunc)
-      .mmul(matrixFunc)
+      .mmul(gradient)
+      .mmul(residuals)
       .mul(gradientDifference)
       .transpose()
   );
 
-  return params.to1DArray();
+  return params2.to1DArray();
 }

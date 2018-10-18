@@ -21,13 +21,13 @@ describe('levenberg-marquardt test', () => {
       initialValues: [3, 3]
     };
 
-    const { parameterValues, parameterError } = levenbergMarquardt(
+    const { parameterValues, residuals } = levenbergMarquardt(
       data,
       sinFunction,
       options
     );
     expect(parameterValues).toBeDeepCloseTo([2, 2], 3);
-    expect(parameterError).toBeCloseTo(0, 2);
+    expect(residuals).toBeCloseTo(0, 2);
   });
 
   it('Exceptions', () => {
@@ -36,20 +36,20 @@ describe('levenberg-marquardt test', () => {
       initialValues: [3, 3]
     };
 
-    expect(() => levenbergMarquardt()).toThrow(
+    expect(() => levenbergMarquardt({}, sinFunction, { damping: -1 })).toThrow(
       'The damping option must be a positive number'
     );
     expect(() => levenbergMarquardt([1, 2], sinFunction, options)).toThrow(
-      'The data parameter must have x and y elements'
+      'The data object must have x and y elements'
     );
     expect(() =>
       levenbergMarquardt({ x: 1, y: 2 }, sinFunction, options)
     ).toThrow(
-      'The data parameter elements must be an array with more than 2 points'
+      'The data must have more than 2 points'
     );
     expect(() =>
       levenbergMarquardt({ x: [1, 2], y: [1, 2, 3] }, sinFunction, options)
-    ).toThrow('The data parameter elements must have the same size');
+    ).toThrow('The data object must have equal number of x and y coordinates');
     expect(() =>
       levenbergMarquardt({ x: [1, 2], y: [1, 2] }, sumOfLorentzians, {
         damping: 0.1,
@@ -75,13 +75,13 @@ describe('levenberg-marquardt test', () => {
       maxIterations: 200
     };
 
-    let { parameterValues, parameterError } = levenbergMarquardt(
+    let { parameterValues, residuals } = levenbergMarquardt(
       data,
       sigmoidFunction,
       options
     );
     expect(parameterValues).toBeDeepCloseTo([2, 2, 2], 1);
-    expect(parameterError).toBeCloseTo(0, 1);
+    expect(residuals).toBeCloseTo(0, 1);
   });
 
   it('Sum of lorentzians example', () => {
@@ -107,6 +107,45 @@ describe('levenberg-marquardt test', () => {
 
     expect(parameterValues).toBeDeepCloseTo(pTrue, 1);
   });
+});
+
+it('Legacy', () => {
+  const len = 20;
+  let data = {
+    x: new Array(len),
+    y: new Array(len)
+  };
+  let sampleFunction = sinFunction([2, 2]);
+  for (let i = 0; i < len; i++) {
+    data.x[i] = i;
+    data.y[i] = sampleFunction(i);
+  }
+  const options = {
+    damping: 0.1,
+    initialValues: [3, 3]
+  };
+  const options1 = {
+    ...options,
+    residualEpsilon: 1
+  };
+  const options2 = {
+    ...options,
+    errorTolerance: 1
+  };
+
+  const result1 = levenbergMarquardt(
+    data,
+    sinFunction,
+    options1
+  );
+  const result2 = levenbergMarquardt(
+    data,
+    sinFunction,
+    options2
+  );
+
+  expect(result1.parameterValues).toBeDeepCloseTo(result2.parameterValues, 0);
+  expect(result1.residuals).toBe(result1.parameterError);
 });
 
 function sinFunction([a, b]) {
