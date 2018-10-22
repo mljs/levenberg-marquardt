@@ -1,23 +1,25 @@
 import errorCalculation from '../errorCalculation';
 
-function sinFunction([a, b]) {
-  return (t) => a * Math.sin(b * t);
-}
-
-describe('errorCalculation test', () => {
-  it('Simple case', () => {
-    const len = 20;
-    let data = {
-      x: new Array(len),
-      y: new Array(len)
-    };
-    let sampleFunction = sinFunction([2, 2]);
-    for (let i = 0; i < len; i++) {
-      data.x[i] = i;
-      data.y[i] = sampleFunction(i);
+describe('parameterError', () => {
+  describe('Sinusoidal functions', () => {
+    function sinFunction([a, b]) {
+      return (t) => a * Math.sin(b * t);
     }
 
-    expect(errorCalculation(data, [2, 2], sinFunction)).toBeCloseTo(0, 3);
-    expect(errorCalculation(data, [4, 4], sinFunction)).toBeCloseTo(48.7, 1);
+    const sampleParameters = [2, 2];
+    const n = 20;
+    const xs = new Array(n).fill(0).map((zero, i) => i);
+    const data = {
+      x: xs,
+      y: xs.map(sinFunction(sampleParameters))
+    };
+
+    it('parameterError should be zero for an exact fit', () => {
+      expect(errorCalculation(data, sampleParameters, sinFunction)).toBeCloseTo(0, 3);
+    });
+
+    it('parameterError should be high for a bad fit', () => {
+      expect(errorCalculation(data, [4, 4], sinFunction)).toBeCloseTo(48.7, 1);
+    });
   });
 });
