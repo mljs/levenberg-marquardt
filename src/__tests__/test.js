@@ -4,33 +4,49 @@ import levenbergMarquardt from '..';
 
 expect.extend({ toBeDeepCloseTo });
 
-describe('levenberg-marquardt test', () => {
-  it('Exceptions', () => {
+describe('Handling of invalid arguments', () => {
+  describe('options', () => {
+    it('Should throw an error when no options are provided (missing damping)', () => {
+      expect(() => levenbergMarquardt()).toThrow(
+        'The damping option must be a positive number'
+      );
+    });
+
+    it('Should throw an error when initialValues is not an array', () => {
+      expect(() =>
+        levenbergMarquardt({ x: [1, 2], y: [1, 2] }, sumOfLorentzians, {
+          damping: 0.1,
+          initialValues: 2
+        })
+      ).toThrow('initialValues must be an array');
+    });
+  });
+
+  describe('data', () => {
     const options = {
       damping: 0.1,
       initialValues: [3, 3]
     };
 
-    expect(() => levenbergMarquardt()).toThrow(
-      'The damping option must be a positive number'
-    );
-    expect(() => levenbergMarquardt([1, 2], sinFunction, options)).toThrow(
-      'The data parameter must have x and y elements'
-    );
-    expect(() =>
-      levenbergMarquardt({ x: 1, y: 2 }, sinFunction, options)
-    ).toThrow(
-      'The data parameter elements must be an array with more than 2 points'
-    );
-    expect(() =>
-      levenbergMarquardt({ x: [1, 2], y: [1, 2, 3] }, sinFunction, options)
-    ).toThrow('The data parameter elements must have the same size');
-    expect(() =>
-      levenbergMarquardt({ x: [1, 2], y: [1, 2] }, sumOfLorentzians, {
-        damping: 0.1,
-        initialValues: 2
-      })
-    ).toThrow('initialValues must be an array');
+    it('Should throw an error when data is an array (should be object)', () => {
+      expect(() => levenbergMarquardt([1, 2], sinFunction, options)).toThrow(
+        'The data parameter must have x and y elements'
+      );
+    });
+
+    it('Should throw an error when data.{x,y} are numbers (should be arrays)', () => {
+      expect(() =>
+        levenbergMarquardt({ x: 1, y: 2 }, sinFunction, options)
+      ).toThrow(
+        'The data parameter elements must be an array with more than 2 points'
+      );
+    });
+
+    it('Should throw an error when data.{x,y} are not the same length', () => {
+      expect(() =>
+        levenbergMarquardt({ x: [1, 2], y: [1, 2, 3] }, sinFunction, options)
+      ).toThrow('The data parameter elements must have the same size');
+    });
   });
 });
 
