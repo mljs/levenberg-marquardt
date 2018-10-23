@@ -54,7 +54,7 @@ export default function levenbergMarquardt(
   minValues = minValues || new Array(parLen).fill(Number.MIN_SAFE_INTEGER);
 
   if (maxValues.length !== minValues.length) {
-    throw new Error('minValues and maxValues should have the same size');
+    throw new Error('minValues and maxValues must be the same size');
   }
 
   if (!Array.isArray(parameters)) {
