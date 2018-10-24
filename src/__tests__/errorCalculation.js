@@ -1,23 +1,27 @@
 import errorCalculation from '../errorCalculation';
 
-function sinFunction([a, b]) {
-  return (t) => a * Math.sin(b * t);
-}
+describe('parameterError', () => {
+  describe('Linear functions', () => {
+    const linearFunction = ([slope, intercept]) => ((x) => slope * x + intercept);
 
-describe('errorCalculation test', () => {
-  it('Simple case', () => {
-    const len = 20;
-    let data = {
-      x: new Array(len),
-      y: new Array(len)
+    const sampleParameters = [1, 1];
+    const n = 10;
+    const xs = new Array(n).fill(0).map((zero, i) => i);
+    const data = {
+      x: xs,
+      y: xs.map(linearFunction(sampleParameters))
     };
-    let sampleFunction = sinFunction([2, 2]);
-    for (let i = 0; i < len; i++) {
-      data.x[i] = i;
-      data.y[i] = sampleFunction(i);
-    }
 
-    expect(errorCalculation(data, [2, 2], sinFunction)).toBeCloseTo(0, 3);
-    expect(errorCalculation(data, [4, 4], sinFunction)).toBeCloseTo(48.7, 1);
+    it('parameterError should be zero for an exact fit', () => {
+      expect(errorCalculation(data, sampleParameters, linearFunction)).toBeCloseTo(0, 3);
+    });
+
+    it('parameterError should match the sum of absolute difference between the model and the data', () => {
+      const parameters = Array.from(sampleParameters);
+      // Offset line so that it's still parallel but differs by 1 at each point
+      // Then each point will result in a residual increase of 1
+      parameters[1] += 1;
+      expect(errorCalculation(data, parameters, linearFunction)).toBeCloseTo(n, 3);
+    });
   });
 });
