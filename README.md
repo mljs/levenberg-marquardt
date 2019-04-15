@@ -56,9 +56,9 @@ let maxValues = [
 
 const options = {
   damping: 1.5,
-  initialValues,
-  minValues,
-  maxValues,
+  initialValues: initialValues,
+  minValues: minValues,
+  maxValues: maxValues,
   gradientDifference: 10e-2,
   maxIterations: 100,
   errorTolerance: 10e-3
