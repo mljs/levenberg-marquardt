@@ -1,3 +1,23 @@
+# [2.0.0](https://github.com/mljs/levenberg-marquardt/compare/v1.0.3...v2.0.0) (2019-06-29)
+
+
+### Bug Fixes
+
+* pluralize min/maxValues parameters & update README ([#20](https://github.com/mljs/levenberg-marquardt/issues/20)) ([afbbd90](https://github.com/mljs/levenberg-marquardt/commit/afbbd90))
+* returns on NaN ([4d61879](https://github.com/mljs/levenberg-marquardt/commit/4d61879))
+
+
+### chore
+
+* update dependencies and remove support for Node.js 6 ([5f897cb](https://github.com/mljs/levenberg-marquardt/commit/5f897cb))
+
+
+### BREAKING CHANGES
+
+* Node.js 6 is no longer supported.
+
+
+
 <a name="1.0.3"></a>
 ## [1.0.3](https://github.com/mljs/levenberg-marquardt/compare/v1.0.2...v1.0.3) (2018-02-07)
 
