@@ -18,7 +18,7 @@ import step from './step';
 export default function levenbergMarquardt(
   data,
   parameterizedFunction,
-  options = {}
+  options = {},
 ) {
   let {
     maxIterations = 100,
@@ -27,7 +27,7 @@ export default function levenbergMarquardt(
     errorTolerance = 10e-3,
     minValues,
     maxValues,
-    initialValues
+    initialValues,
   } = options;
 
   if (damping <= 0) {
@@ -41,13 +41,13 @@ export default function levenbergMarquardt(
     data.y.length < 2
   ) {
     throw new Error(
-      'The data parameter elements must be an array with more than 2 points'
+      'The data parameter elements must be an array with more than 2 points',
     );
   } else if (data.x.length !== data.y.length) {
     throw new Error('The data parameter elements must have the same size');
   }
 
-  var parameters =
+  let parameters =
     initialValues || new Array(parameterizedFunction.length).fill(1);
   let parLen = parameters.length;
   maxValues = maxValues || new Array(parLen).fill(Number.MAX_SAFE_INTEGER);
@@ -61,27 +61,24 @@ export default function levenbergMarquardt(
     throw new Error('initialValues must be an array');
   }
 
-  var error = errorCalculation(data, parameters, parameterizedFunction);
+  let error = errorCalculation(data, parameters, parameterizedFunction);
 
-  var converged = error <= errorTolerance;
+  let converged = error <= errorTolerance;
 
-  for (
-    var iteration = 0;
-    iteration < maxIterations && !converged;
-    iteration++
-  ) {
+  let iteration;
+  for (iteration = 0; iteration < maxIterations && !converged; iteration++) {
     parameters = step(
       data,
       parameters,
       damping,
       gradientDifference,
-      parameterizedFunction
+      parameterizedFunction,
     );
 
     for (let k = 0; k < parLen; k++) {
       parameters[k] = Math.min(
         Math.max(minValues[k], parameters[k]),
-        maxValues[k]
+        maxValues[k],
       );
     }
 
@@ -93,6 +90,6 @@ export default function levenbergMarquardt(
   return {
     parameterValues: parameters,
     parameterError: error,
-    iterations: iteration
+    iterations: iteration,
   };
 }

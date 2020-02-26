@@ -9,12 +9,12 @@
 export default function errorCalculation(
   data,
   parameters,
-  parameterizedFunction
+  parameterizedFunction,
 ) {
-  var error = 0;
+  let error = 0;
   const func = parameterizedFunction(parameters);
 
-  for (var i = 0; i < data.x.length; i++) {
+  for (let i = 0; i < data.x.length; i++) {
     error += Math.abs(data.y[i] - func(data.x[i]));
   }
 

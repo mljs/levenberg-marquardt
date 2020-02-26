@@ -15,20 +15,20 @@ function gradientFunction(
   evaluatedData,
   params,
   gradientDifference,
-  paramFunction
+  paramFunction,
 ) {
   const n = params.length;
   const m = data.x.length;
 
-  var ans = new Array(n);
+  let ans = new Array(n);
 
-  for (var param = 0; param < n; param++) {
+  for (let param = 0; param < n; param++) {
     ans[param] = new Array(m);
-    var auxParams = params.concat();
+    let auxParams = params.concat();
     auxParams[param] += gradientDifference;
-    var funcParam = paramFunction(auxParams);
+    let funcParam = paramFunction(auxParams);
 
-    for (var point = 0; point < m; point++) {
+    for (let point = 0; point < m; point++) {
       ans[param][point] = evaluatedData[point] - funcParam(data.x[point]);
     }
   }
@@ -45,9 +45,9 @@ function gradientFunction(
 function matrixFunction(data, evaluatedData) {
   const m = data.x.length;
 
-  var ans = new Array(m);
+  let ans = new Array(m);
 
-  for (var point = 0; point < m; point++) {
+  for (let point = 0; point < m; point++) {
     ans[point] = [data.y[point] - evaluatedData[point]];
   }
 
@@ -69,24 +69,24 @@ export default function step(
   params,
   damping,
   gradientDifference,
-  parameterizedFunction
+  parameterizedFunction,
 ) {
-  var value = damping * gradientDifference * gradientDifference;
-  var identity = Matrix.eye(params.length, params.length, value);
+  let value = damping * gradientDifference * gradientDifference;
+  let identity = Matrix.eye(params.length, params.length, value);
 
   const func = parameterizedFunction(params);
-  var evaluatedData = data.x.map((e) => func(e));
+  let evaluatedData = data.x.map((e) => func(e));
 
-  var gradientFunc = gradientFunction(
+  let gradientFunc = gradientFunction(
     data,
     evaluatedData,
     params,
     gradientDifference,
-    parameterizedFunction
+    parameterizedFunction,
   );
-  var matrixFunc = matrixFunction(data, evaluatedData);
-  var inverseMatrix = inverse(
-    identity.add(gradientFunc.mmul(gradientFunc.transpose()))
+  let matrixFunc = matrixFunction(data, evaluatedData);
+  let inverseMatrix = inverse(
+    identity.add(gradientFunc.mmul(gradientFunc.transpose())),
   );
 
   params = new Matrix([params]);
@@ -95,7 +95,7 @@ export default function step(
       .mmul(gradientFunc)
       .mmul(matrixFunc)
       .mul(gradientDifference)
-      .transpose()
+      .transpose(),
   );
 
   return params.to1DArray();
