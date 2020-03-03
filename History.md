@@ -1,3 +1,17 @@
+# [2.1.0](https://github.com/mljs/levenberg-marquardt/compare/v2.0.0...v2.1.0) (2020-03-03)
+
+
+### Bug Fixes
+
+* dev dependencies ([93e4192](https://github.com/mljs/levenberg-marquardt/commit/93e41925ac11d84b8913c9bc268500a9b7bde4f5))
+
+
+### Features
+
+* allow any number array ([7b38683](https://github.com/mljs/levenberg-marquardt/commit/7b38683ff3c1133e125fdb5486ce83527f03e9e9))
+
+
+
 # [2.0.0](https://github.com/mljs/levenberg-marquardt/compare/v1.0.3...v2.0.0) (2019-06-29)
 
 
