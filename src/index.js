@@ -1,6 +1,7 @@
+import isArray from 'is-any-array';
+
 import errorCalculation from './errorCalculation';
 import step from './step';
-import isArray from 'is-any-array';
 
 /**
  * Curve fitting algorithm
