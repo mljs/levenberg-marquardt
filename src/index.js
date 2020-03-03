@@ -1,5 +1,6 @@
 import errorCalculation from './errorCalculation';
 import step from './step';
+import isArray from 'is-any-array';
 
 /**
  * Curve fitting algorithm
@@ -35,9 +36,9 @@ export default function levenbergMarquardt(
   } else if (!data.x || !data.y) {
     throw new Error('The data parameter must have x and y elements');
   } else if (
-    !Array.isArray(data.x) ||
+    !isArray(data.x) ||
     data.x.length < 2 ||
-    !Array.isArray(data.y) ||
+    !isArray(data.y) ||
     data.y.length < 2
   ) {
     throw new Error(
@@ -57,7 +58,7 @@ export default function levenbergMarquardt(
     throw new Error('minValues and maxValues must be the same size');
   }
 
-  if (!Array.isArray(parameters)) {
+  if (!isArray(parameters)) {
     throw new Error('initialValues must be an array');
   }
 
