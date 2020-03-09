@@ -24,7 +24,7 @@ function gradientFunction(
 
   for (let param = 0; param < n; param++) {
     ans[param] = new Array(m);
-    let auxParams = params.concat();
+    let auxParams = params.slice();
     auxParams[param] += gradientDifference;
     let funcParam = paramFunction(auxParams);
 
