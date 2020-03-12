@@ -75,7 +75,11 @@ export default function step(
   let identity = Matrix.eye(params.length, params.length, value);
 
   const func = parameterizedFunction(params);
-  let evaluatedData = data.x.map((e) => func(e));
+  
+  let evaluatedData = new Float64Array(data.x.length);
+  for (let i = 0; i < data.x.length; i++) {
+    evaluatedData[i] = func(data.x[i]);
+  }
 
   let gradientFunc = gradientFunction(
     data,
