@@ -168,7 +168,7 @@ describe('curve', () => {
         options: {
           damping: 0.00001,
           maxIterations: 200,
-          initialValues: [0, 100, 1, 0.1],
+          initialValues: new Float64Array([0, 100, 1, 0.1]),
         },
       },
     ];
