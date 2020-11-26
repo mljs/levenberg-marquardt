@@ -24,6 +24,7 @@ export default function levenbergMarquardt(
 ) {
   let {
     maxIterations = 100,
+    centralDifference = false,
     gradientDifference = 10e-2,
     damping = 0,
     errorTolerance = 10e-3,
@@ -63,6 +64,17 @@ export default function levenbergMarquardt(
     throw new Error('initialValues must be an array');
   }
 
+  if (
+    isArray(gradientDifference) &&
+    gradientDifference.length !== parameters.length
+  ) {
+    gradientDifference = new Array(parameters.length).fill(
+      gradientDifference[0],
+    );
+  } else if (typeof gradientDifference === 'number') {
+    gradientDifference = new Array(parameters.length).fill(gradientDifference);
+  }
+
   let error = errorCalculation(data, parameters, parameterizedFunction);
 
   let converged = error <= errorTolerance;
@@ -75,6 +87,7 @@ export default function levenbergMarquardt(
       damping,
       gradientDifference,
       parameterizedFunction,
+      centralDifference,
     );
 
     for (let k = 0; k < parLen; k++) {
