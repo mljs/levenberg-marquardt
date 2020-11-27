@@ -8,8 +8,10 @@ import step from './step';
  * @param {{x:Array<number>, y:Array<number>}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
  * @param {function} parameterizedFunction - The parameters and returns a function with the independent variable as a parameter
  * @param {object} [options] - Options object
- * @param {number} [options.damping] - Levenberg-Marquardt parameter
- * @param {number} [options.gradientDifference = 10e-2] - Adjustment for decrease the damping parameter
+ * @param {number} [options.damping = 0] - Levenberg-Marquardt parameter, small values of the damping parameter λ result in a Gauss-Newton update and large
+values of λ result in a gradient descent update
+ * @param {number|array} [options.gradientDifference = 10e-2] - The step size to approximate the jacobian matrix
+ * @param {boolean} [options.centralDifference = false] - If true the jacobian matrix is approximated by central differences otherwise by forward differences
  * @param {Array<number>} [options.minValues] - Minimum allowed values for parameters
  * @param {Array<number>} [options.maxValues] - Maximum allowed values for parameters
  * @param {Array<number>} [options.initialValues] - Array of initial parameter values

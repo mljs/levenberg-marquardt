@@ -74,6 +74,36 @@ describe('curve', () => {
         problemParameters: [1, 0.1, 0.3, 4, 0.15, 0.3],
         options: {
           damping: 0.01,
+          gradientDifference: [0.01, 0.0001, 0.0001, 0.01, 0.0001, 0.0001],
+          initialValues: [1.1, 0.15, 0.29, 4.05, 0.17, 0.28],
+          maxIterations: 500,
+          errorTolerance: 10e-5,
+        },
+        decimalsForParameterValues: 1,
+      },
+      {
+        name: 'Sum of lorentzians, central differences',
+        getFunctionFromParameters: function sumOfLorentzians(p) {
+          return (t) => {
+            let nL = p.length;
+            let factor, p2;
+            let result = 0;
+            for (let i = 0; i < nL; i += 3) {
+              p2 = Math.pow(p[i + 2] / 2, 2);
+              factor = p[i + 1] * p2;
+              result += factor / (Math.pow(t - p[i], 2) + p2);
+            }
+            return result;
+          };
+        },
+        n: 100,
+        xStart: 0,
+        xEnd: 99,
+        problemParameters: [1, 0.1, 0.3, 4, 0.15, 0.3],
+        options: {
+          damping: 0.01,
+          gradientDifference: [0.01, 0.0001, 0.0001, 0.01, 0.0001, 0.0001],
+          centralDifference: true,
           initialValues: [1.1, 0.15, 0.29, 4.05, 0.17, 0.28],
           maxIterations: 500,
           errorTolerance: 10e-5,

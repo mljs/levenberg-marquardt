@@ -5,7 +5,8 @@ import { Matrix } from 'ml-matrix';
  * @param {{x:Array<number>, y:Array<number>}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
  * @param {Array<number>} evaluatedData - Array of previous evaluated function values
  * @param {Array<number>} params - Array of previous parameter values
- * @param {number} gradientDifference - Adjustment for decrease the damping parameter
+ * @param {number|array} gradientDifference - The step size to approximate the jacobian matrix
+ * @param {boolean} centralDifference - If true the jacobian matrix is approximated by central differences otherwise by forward differences
  * @param {function} paramFunction - The parameters and returns a function with the independent variable as a parameter
  * @return {Matrix}
  */
@@ -16,42 +17,42 @@ export function gradientFunction(
   params,
   gradientDifference,
   paramFunction,
-  centralDifference = false,
+  centralDifference,
 ) {
   const nbParams = params.length;
   const nbPoints = data.x.length;
-  // console.log(' gradientDiffe', gradientDifference)
   let ans = Matrix.zeros(nbParams, nbPoints);
 
-  let columnIndex = -1;
+  let rowIndex = -1;
   for (let param = 0; param < nbParams; param++) {
-    if (gradientDifference[param] !== 0) columnIndex++;
+    if (gradientDifference[param] !== 0) rowIndex++;
 
-    let delta = gradientDifference[param]; // * (1 + Math.abs(params[param]));
+    let delta = gradientDifference[param];
     let auxParams = params.slice();
     auxParams[param] += delta;
     let funcParam = paramFunction(auxParams);
     if (!centralDifference) {
       for (let point = 0; point < nbPoints; point++) {
         ans.set(
-          columnIndex,
+          rowIndex,
           point,
           (evaluatedData[point] - funcParam(data.x[point])) / delta,
         );
       }
     } else {
-      delta *= 2;
+      auxParams = params.slice();
       auxParams[param] -= delta;
+      delta *= 2;
       let funcParam2 = paramFunction(auxParams);
       for (let point = 0; point < nbPoints; point++) {
         ans.set(
-          columnIndex,
+          rowIndex,
           point,
-          (funcParam(data.x[point]) - funcParam2(data.x[point])) / delta,
+          (funcParam2(data.x[point]) - funcParam(data.x[point])) / delta,
         );
       }
     }
   }
-  // console.log(' gradient', ans.columns, ans.rows)
+
   return ans;
 }
