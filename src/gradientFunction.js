@@ -23,10 +23,9 @@ export function gradientFunction(
   const nbPoints = data.x.length;
   let ans = Matrix.zeros(nbParams, nbPoints);
 
-  let rowIndex = -1;
+  let rowIndex = 0;
   for (let param = 0; param < nbParams; param++) {
-    if (gradientDifference[param] !== 0) rowIndex++;
-
+    if (gradientDifference[param] === 0) continue;
     let delta = gradientDifference[param];
     let auxParams = params.slice();
     auxParams[param] += delta;
@@ -52,6 +51,7 @@ export function gradientFunction(
         );
       }
     }
+    rowIndex++;
   }
 
   return ans;

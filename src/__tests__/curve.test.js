@@ -74,8 +74,8 @@ describe('curve', () => {
         problemParameters: [1, 0.1, 0.3, 4, 0.15, 0.3],
         options: {
           damping: 0.01,
-          gradientDifference: [0.01, 0.0001, 0.0001, 0.01, 0.0001, 0.0001],
-          initialValues: [1.1, 0.15, 0.29, 4.05, 0.17, 0.28],
+          gradientDifference: [0.01, 0.0001, 0.0001, 0.01, 0.0001, 0],
+          initialValues: [1.1, 0.15, 0.29, 4.05, 0.17, 0.3],
           maxIterations: 500,
           errorTolerance: 10e-5,
         },
@@ -102,7 +102,7 @@ describe('curve', () => {
         problemParameters: [1, 0.1, 0.3, 4, 0.15, 0.3],
         options: {
           damping: 0.01,
-          gradientDifference: [0.01, 0.0001, 0.0001, 0.01, 0.0001, 0.0001],
+          gradientDifference: [0.01, 0.0001, 0.0001, 0.01, 0.0001],
           centralDifference: true,
           initialValues: [1.1, 0.15, 0.29, 4.05, 0.17, 0.28],
           maxIterations: 500,
