@@ -38,6 +38,7 @@ export default function step(
   gradientDifference,
   parameterizedFunction,
   centralDifference,
+  weights,
 ) {
   let value = damping; // * gradientDifference[0] * gradientDifference[0];
   let identity = Matrix.eye(params.length, params.length, value);
@@ -57,27 +58,23 @@ export default function step(
     parameterizedFunction,
     centralDifference,
   );
-  let matrixFunc = matrixFunction(data, evaluatedData);
+
+  let residualError = matrixFunction(data, evaluatedData);
   // console.log(' identityt' , identity)
   // console.log(' gradient 2', identity.add(gradientFunc.mmul(gradientFunc.transpose())));
   let inverseMatrix = inverse(
-    identity.add(gradientFunc.mmul(gradientFunc.transpose())),
+    identity.add(gradientFunc.mmul(gradientFunc.transpose().scaleByRow(weights))), //poner weights como 1/w para que funcione esto
   );
 
-  params = new Matrix([params]);
+  let residualErrorWeighted = residualError.scaleByRow(weights);
   // console.log(
   //   inverseMatrix
   //   .mmul(gradientFunc)
-  //   .mmul(matrixFunc)
+  //   .mmul(residualError)
   //   .transpose()
   // );
-
-  params = params.sub(
-    inverseMatrix
-      .mmul(gradientFunc)
-      .mmul(matrixFunc)
-      .transpose(),
-  );
-
-  return params.to1DArray();
+  return inverseMatrix
+    .mmul(gradientFunc)
+    .mmul(residualErrorWeighted)
+    .to1DArray();
 }

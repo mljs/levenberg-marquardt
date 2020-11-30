@@ -29,10 +29,12 @@ export default function levenbergMarquardt(
     centralDifference = false,
     gradientDifference = 10e-2,
     damping = 0,
+    dampingStepDown = ,
     errorTolerance = 10e-3,
     minValues,
     maxValues,
     initialValues,
+    improvementThreshold = 1e-3,
   } = options;
 
   if (damping <= 0) {
@@ -76,14 +78,19 @@ export default function levenbergMarquardt(
   } else if (typeof gradientDifference === 'number') {
     gradientDifference = new Array(parameters.length).fill(gradientDifference);
   }
-
-  let error = errorCalculation(data, parameters, parameterizedFunction);
+  console.log(' gradient2', gradientDifference);
+  let error = errorCalculation(data, parameters, parameterizedFunction, weights);
 
   let converged = error <= errorTolerance;
 
-  let iteration;
-  for (iteration = 0; iteration < maxIterations && !converged; iteration++) {
-    parameters = step(
+  let iteration = 0;
+  for (; iteration < maxIterations && !converged; iteration++) {
+    let previusError = error;
+
+    let { 
+      perturbations,
+      jacobianWeigthResidualError,
+    } = step(
       data,
       parameters,
       damping,
@@ -92,14 +99,29 @@ export default function levenbergMarquardt(
       centralDifference,
     );
 
+    let newParameters = new Float64Array(parameters.length);
     for (let k = 0; k < parLen; k++) {
-      parameters[k] = Math.min(
-        Math.max(minValues[k], parameters[k]),
+      newParameters[k] = Math.min(
+        Math.max(minValues[k], parameters[k] - perturbations.get(0, k)),
         maxValues[k],
       );
     }
 
-    error = errorCalculation(data, parameters, parameterizedFunction);
+    error = errorCalculation(data, newParameters, parameterizedFunction, weights);
+
+    let improvementMetric = 
+    (previusError - error)
+    / perturbations.transpose()
+    .mmul(perturbations.mul(damping)
+    .add(jacobianWeigthResidualError));
+
+    if (improvementMetric > improvementThreshold) {
+      parameters = newParameters;
+      //update damping down 
+    } else {
+      //update damping up
+    }
+
     if (isNaN(error)) break;
     converged = error <= errorTolerance;
   }
