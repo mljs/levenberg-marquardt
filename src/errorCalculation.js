@@ -10,13 +10,12 @@ export default function errorCalculation(
   data,
   parameters,
   parameterizedFunction,
-  weigths,
+  weights,
 ) {
   let error = 0;
   const func = parameterizedFunction(parameters);
-
   for (let i = 0; i < data.x.length; i++) {
-    error += Math.pow((data.y[i] - func(data.x[i])) * weigths[i], 2);
+    error += Math.pow(data.y[i] - func(data.x[i]), 2) / weights[i];
   }
 
   return error;
