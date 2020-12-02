@@ -48,22 +48,29 @@ export default function checkOptions(data, parameterizedFunction, options) {
   if (!isArray(parameters)) {
     throw new Error('initialValues must be an array');
   }
-
-  if (isArray(gradientDifference) && gradientDifference.length !== parLen) {
-    gradientDifference = new Array(parLen).fill(gradientDifference[0]);
-  } else if (typeof gradientDifference === 'number') {
+  console.log(' gradientDiff', )
+  if (typeof gradientDifference === 'number') {
     gradientDifference = new Array(parameters.length).fill(gradientDifference);
+  } else if (isArray(gradientDifference)) {
+    if (gradientDifference.length !== parLen)
+      gradientDifference = new Array(parLen).fill(gradientDifference[0]);
+  } else {
+    throw new Error('gradientDifference should be a number or array with length equal to the number of parameters');
   }
 
   let filler;
   if (typeof weights === 'number') {
     let value = 1 / weights ** 2;
     filler = () => value;
-  } else if (isArray(weights) && weights.length < data.x.length) {
-    let value = 1 / weights[0] ** 2;
-    filler = () => value;
   } else if (isArray(weights)) {
-    filler = (i) => 1 / weights[i] ** 2;
+    if (weights.length < data.x.length) {
+      let value = 1 / weights[0] ** 2;
+      filler = () => value;
+    } else {
+      filler = (i) => 1 / weights[i] ** 2;
+    }
+  } else {
+    throw new Error('weights should be a number or array with length equal to the number of data points');
   }
 
   let weightSquare = new Array(data.x.length);
