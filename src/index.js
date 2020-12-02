@@ -1,5 +1,4 @@
-import isArray from 'is-any-array';
-
+import checkOptions from './checkOptions';
 import errorCalculation from './errorCalculation';
 import step from './step';
 
@@ -8,8 +7,12 @@ import step from './step';
  * @param {{x:Array<number>, y:Array<number>}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
  * @param {function} parameterizedFunction - The parameters and returns a function with the independent variable as a parameter
  * @param {object} [options] - Options object
- * @param {number} [options.damping = 0] - Levenberg-Marquardt parameter, small values of the damping parameter λ result in a Gauss-Newton update and large
+ * @param {number|array} [options.weights = 1] - weighting vector, if the length does not match with the number of data points, the vector is reconstructed with first value.
+ * @param {number} [options.damping = 1e-2] - Levenberg-Marquardt parameter, small values of the damping parameter λ result in a Gauss-Newton update and large
 values of λ result in a gradient descent update
+ * @param {number} [options.dampingStepDown = 9] - factor to reduce the damping (Levenberg-Marquardt parameter) when there is not an improvement when updating parameters.
+ * @param {number} [options.dampingStepUp = 11] - factor to increase the damping (Levenberg-Marquardt parameter) when there is an improvement when updating parameters.
+ * @param {number} [options.improvementThreshold = 1e-3] - the threshold to define an improvement through an update of parameters
  * @param {number|array} [options.gradientDifference = 10e-2] - The step size to approximate the jacobian matrix
  * @param {boolean} [options.centralDifference = false] - If true the jacobian matrix is approximated by central differences otherwise by forward differences
  * @param {Array<number>} [options.minValues] - Minimum allowed values for parameters
@@ -25,74 +28,20 @@ export default function levenbergMarquardt(
   options = {},
 ) {
   let {
-    maxIterations = 100,
-    centralDifference = false,
-    gradientDifference = 10e-2,
-    damping = 0,
-    dampingStepDown = 9,
-    dampingStepUp = 11,
-    errorTolerance = 1e-7,
     minValues,
     maxValues,
-    initialValues,
-    improvementThreshold = 1e-3,
-    weights = 1,
-  } = options;
+    parameters,
+    weightSquare,
+    damping,
+    dampingStepUp,
+    dampingStepDown,
+    maxIterations,
+    errorTolerance,
+    centralDifference,
+    gradientDifference,
+    improvementThreshold,
+  } = checkOptions(data, parameterizedFunction, options);
 
-  if (damping <= 0) {
-    throw new Error('The damping option must be a positive number');
-  } else if (!data.x || !data.y) {
-    throw new Error('The data parameter must have x and y elements');
-  } else if (
-    !isArray(data.x) ||
-    data.x.length < 2 ||
-    !isArray(data.y) ||
-    data.y.length < 2
-  ) {
-    throw new Error(
-      'The data parameter elements must be an array with more than 2 points',
-    );
-  } else if (data.x.length !== data.y.length) {
-    throw new Error('The data parameter elements must have the same size');
-  }
-
-  let parameters =
-    initialValues || new Array(parameterizedFunction.length).fill(1);
-
-  let nbPoints = data.y.length;
-  let parLen = parameters.length;
-  maxValues = maxValues || new Array(parLen).fill(Number.MAX_SAFE_INTEGER);
-  minValues = minValues || new Array(parLen).fill(Number.MIN_SAFE_INTEGER);
-
-  if (maxValues.length !== minValues.length) {
-    throw new Error('minValues and maxValues must be the same size');
-  }
-
-  if (!isArray(parameters)) {
-    throw new Error('initialValues must be an array');
-  }
-
-  if (isArray(gradientDifference) && gradientDifference.length !== parLen) {
-    gradientDifference = new Array(parLen).fill(gradientDifference[0]);
-  } else if (typeof gradientDifference === 'number') {
-    gradientDifference = new Array(parameters.length).fill(gradientDifference);
-  }
-
-  let filler;
-  if (typeof weights === 'number') {
-    let value = 1 / weights ** 2;
-    filler = () => value;
-  } else if (isArray(weights) && weights.length < data.x.length) {
-    let value = 1 / weights[0] ** 2;
-    filler = () => value;
-  }
-  if (isArray(weights)) {
-    filler = (i) => 1 / weights[i] ** 2;
-  }
-  let weightSquare = new Array(data.x.length);
-  for (let i = 0; i < nbPoints; i++) {
-    weightSquare[i] = filler(i);
-  }
   let error = errorCalculation(
     data,
     parameters,
@@ -116,7 +65,7 @@ export default function levenbergMarquardt(
       weightSquare,
     );
 
-    for (let k = 0; k < parLen; k++) {
+    for (let k = 0; k < parameters.length; k++) {
       parameters[k] = Math.min(
         Math.max(minValues[k], parameters[k] - perturbations.get(k, 0)),
         maxValues[k],

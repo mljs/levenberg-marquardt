@@ -1,6 +1,6 @@
 import { inverse, Matrix } from 'ml-matrix';
 
-import { gradientFunction } from './gradientFunction';
+import gradientFunction from './gradientFunction';
 
 /**
  * Matrix function over the samples

@@ -1,0 +1,88 @@
+import isArray from 'is-any-array';
+
+export default function checkOptions(data, parameterizedFunction, options) {
+  let {
+    minValues,
+    maxValues,
+    initialValues,
+    weights = 1,
+    damping = 1e-2,
+    dampingStepUp = 11,
+    dampingStepDown = 9,
+    maxIterations = 100,
+    errorTolerance = 1e-7,
+    centralDifference = false,
+    gradientDifference = 10e-2,
+    improvementThreshold = 1e-3,
+  } = options;
+
+  if (damping <= 0) {
+    throw new Error('The damping option must be a positive number');
+  } else if (!data.x || !data.y) {
+    throw new Error('The data parameter must have x and y elements');
+  } else if (
+    !isArray(data.x) ||
+    data.x.length < 2 ||
+    !isArray(data.y) ||
+    data.y.length < 2
+  ) {
+    throw new Error(
+      'The data parameter elements must be an array with more than 2 points',
+    );
+  } else if (data.x.length !== data.y.length) {
+    throw new Error('The data parameter elements must have the same size');
+  }
+
+  let parameters =
+    initialValues || new Array(parameterizedFunction.length).fill(1);
+
+  let nbPoints = data.y.length;
+  let parLen = parameters.length;
+  maxValues = maxValues || new Array(parLen).fill(Number.MAX_SAFE_INTEGER);
+  minValues = minValues || new Array(parLen).fill(Number.MIN_SAFE_INTEGER);
+
+  if (maxValues.length !== minValues.length) {
+    throw new Error('minValues and maxValues must be the same size');
+  }
+
+  if (!isArray(parameters)) {
+    throw new Error('initialValues must be an array');
+  }
+
+  if (isArray(gradientDifference) && gradientDifference.length !== parLen) {
+    gradientDifference = new Array(parLen).fill(gradientDifference[0]);
+  } else if (typeof gradientDifference === 'number') {
+    gradientDifference = new Array(parameters.length).fill(gradientDifference);
+  }
+
+  let filler;
+  if (typeof weights === 'number') {
+    let value = 1 / weights ** 2;
+    filler = () => value;
+  } else if (isArray(weights) && weights.length < data.x.length) {
+    let value = 1 / weights[0] ** 2;
+    filler = () => value;
+  } else if (isArray(weights)) {
+    filler = (i) => 1 / weights[i] ** 2;
+  }
+
+  let weightSquare = new Array(data.x.length);
+  for (let i = 0; i < nbPoints; i++) {
+    weightSquare[i] = filler(i);
+  }
+
+  return {
+    minValues,
+    maxValues,
+    parameters,
+    weightSquare,
+    damping,
+    dampingStepUp,
+    dampingStepDown,
+    maxIterations,
+    errorTolerance,
+    centralDifference,
+    gradientDifference,
+    improvementThreshold,
+  };
+}

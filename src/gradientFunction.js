@@ -11,7 +11,7 @@ import { Matrix } from 'ml-matrix';
  * @return {Matrix}
  */
 
-export function gradientFunction(
+export default function gradientFunction(
   data,
   evaluatedData,
   params,
