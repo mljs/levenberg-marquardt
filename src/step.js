@@ -1,39 +1,6 @@
 import { inverse, Matrix } from 'ml-matrix';
 
-/**
- * Difference of the matrix function over the parameters
- * @ignore
- * @param {{x:Array<number>, y:Array<number>}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
- * @param {Array<number>} evaluatedData - Array of previous evaluated function values
- * @param {Array<number>} params - Array of previous parameter values
- * @param {number} gradientDifference - Adjustment for decrease the damping parameter
- * @param {function} paramFunction - The parameters and returns a function with the independent variable as a parameter
- * @return {Matrix}
- */
-function gradientFunction(
-  data,
-  evaluatedData,
-  params,
-  gradientDifference,
-  paramFunction,
-) {
-  const n = params.length;
-  const m = data.x.length;
-
-  let ans = new Array(n);
-
-  for (let param = 0; param < n; param++) {
-    ans[param] = new Array(m);
-    let auxParams = params.slice();
-    auxParams[param] += gradientDifference;
-    let funcParam = paramFunction(auxParams);
-
-    for (let point = 0; point < m; point++) {
-      ans[param][point] = evaluatedData[point] - funcParam(data.x[point]);
-    }
-  }
-  return new Matrix(ans);
-}
+import gradientFunction from './gradientFunction';
 
 /**
  * Matrix function over the samples
@@ -45,13 +12,12 @@ function gradientFunction(
 function matrixFunction(data, evaluatedData) {
   const m = data.x.length;
 
-  let ans = new Array(m);
+  let ans = new Matrix(m, 1);
 
   for (let point = 0; point < m; point++) {
-    ans[point] = [data.y[point] - evaluatedData[point]];
+    ans.set(point, 0, data.y[point] - evaluatedData[point]);
   }
-
-  return new Matrix(ans);
+  return ans;
 }
 
 /**
@@ -60,7 +26,8 @@ function matrixFunction(data, evaluatedData) {
  * @param {{x:Array<number>, y:Array<number>}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
  * @param {Array<number>} params - Array of previous parameter values
  * @param {number} damping - Levenberg-Marquardt parameter
- * @param {number} gradientDifference - Adjustment for decrease the damping parameter
+ * @param {number|array} gradientDifference - The step size to approximate the jacobian matrix
+ * @param {boolean} centralDifference - If true the jacobian matrix is approximated by central differences otherwise by forward differences
  * @param {function} parameterizedFunction - The parameters and returns a function with the independent variable as a parameter
  * @return {Array<number>}
  */
@@ -70,8 +37,10 @@ export default function step(
   damping,
   gradientDifference,
   parameterizedFunction,
+  centralDifference,
+  weights,
 ) {
-  let value = damping * gradientDifference * gradientDifference;
+  let value = damping;
   let identity = Matrix.eye(params.length, params.length, value);
 
   const func = parameterizedFunction(params);
@@ -87,20 +56,26 @@ export default function step(
     params,
     gradientDifference,
     parameterizedFunction,
+    centralDifference,
   );
-  let matrixFunc = matrixFunction(data, evaluatedData);
+  let residualError = matrixFunction(data, evaluatedData);
+
   let inverseMatrix = inverse(
-    identity.add(gradientFunc.mmul(gradientFunc.transpose())),
+    identity.add(
+      gradientFunc.mmul(
+        gradientFunc.transpose().scale('row', { scale: weights }),
+      ),
+    ),
   );
 
-  params = new Matrix([params]);
-  params = params.sub(
-    inverseMatrix
-      .mmul(gradientFunc)
-      .mmul(matrixFunc)
-      .mul(gradientDifference)
-      .transpose(),
+  let jacobianWeigthResidualError = gradientFunc.mmul(
+    residualError.scale('row', { scale: weights }),
   );
 
-  return params.to1DArray();
+  let perturbations = inverseMatrix.mmul(jacobianWeigthResidualError);
+
+  return {
+    perturbations,
+    jacobianWeigthResidualError,
+  };
 }

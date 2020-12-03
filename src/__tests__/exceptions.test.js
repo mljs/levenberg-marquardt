@@ -10,8 +10,8 @@ function sinFunction([a, b]) {
 
 describe('Handling of invalid arguments', () => {
   describe('options', () => {
-    it('Should throw an error when no options are provided (missing damping)', () => {
-      expect(() => levenbergMarquardt()).toThrow(
+    it('Should throw an error when bad options are provided (negative damping)', () => {
+      expect(() => levenbergMarquardt({}, () => 1, { damping: -1 })).toThrow(
         'The damping option must be a positive number',
       );
     });
