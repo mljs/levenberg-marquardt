@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.0.1](https://www.github.com/mljs/levenberg-marquardt/compare/v3.0.0...v3.0.1) (2020-12-03)
+
+
+### Bug Fixes
+
+* rename History to CHANGELOG ([1e5a95e](https://www.github.com/mljs/levenberg-marquardt/commit/1e5a95e0341c51c49b1f15a5b8544d8baaaf485c))
+
 ## [3.0.0](https://github.com/mljs/levenberg-marquardt/compare/v2.1.1...v3.0.0) (2020-12-03)
 
 
@@ -73,6 +80,3 @@
 
 * check that the data has the correct format ([f2a2e87](https://github.com/mljs/levenberg-marquardt/commit/f2a2e87))
 * initial commit ([fdc5504](https://github.com/mljs/levenberg-marquardt/commit/fdc5504))
-
-
-
