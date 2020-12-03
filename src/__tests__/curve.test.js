@@ -1,9 +1,9 @@
 /* eslint-disable jest/no-standalone-expect */
-import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 
 import levenbergMarquardt from '..';
 
-expect.extend({ toBeDeepCloseTo });
+expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 describe('curve', () => {
   describe('Contrived problems (clean data)', () => {
@@ -227,7 +227,8 @@ describe('curve', () => {
           getFunctionFromParameters,
           options,
         );
-        expect(actual).toBeDeepCloseTo(expected, decimals);
+        actual.parameterValues = Array.from(actual.parameterValues);
+        expect(actual).toMatchCloseTo(expected, decimals);
       });
     });
   });
