@@ -48,14 +48,17 @@ export default function checkOptions(data, parameterizedFunction, options) {
   if (!isArray(parameters)) {
     throw new Error('initialValues must be an array');
   }
-  console.log(' gradientDiff', )
+
   if (typeof gradientDifference === 'number') {
     gradientDifference = new Array(parameters.length).fill(gradientDifference);
   } else if (isArray(gradientDifference)) {
-    if (gradientDifference.length !== parLen)
+    if (gradientDifference.length !== parLen) {
       gradientDifference = new Array(parLen).fill(gradientDifference[0]);
+    }
   } else {
-    throw new Error('gradientDifference should be a number or array with length equal to the number of parameters');
+    throw new Error(
+      'gradientDifference should be a number or array with length equal to the number of parameters',
+    );
   }
 
   let filler;
@@ -70,7 +73,9 @@ export default function checkOptions(data, parameterizedFunction, options) {
       filler = (i) => 1 / weights[i] ** 2;
     }
   } else {
-    throw new Error('weights should be a number or array with length equal to the number of data points');
+    throw new Error(
+      'weights should be a number or array with length equal to the number of data points',
+    );
   }
 
   let weightSquare = new Array(data.x.length);
