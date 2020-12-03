@@ -1,3 +1,10 @@
+## [3.0.0](https://github.com/mljs/levenberg-marquardt/compare/v2.1.1...v3.0.0) (2020-12-03)
+
+
+### Features
+
+* gradientDifference can now be in array ([fd9e4cb](https://github.com/mljs/levenberg-marquardt/commit/fd9e4cbfbe24d8705277b91199f4e52e829b5053)), closes [#32](https://github.com/mljs/levenberg-marquardt/issues/32)
+
 ## [2.1.1](https://github.com/mljs/levenberg-marquardt/compare/v2.1.0...v2.1.1) (2020-03-16)
 
 
