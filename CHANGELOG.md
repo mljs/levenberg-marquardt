@@ -1,3 +1,5 @@
+# Changelog
+
 ## [3.0.0](https://github.com/mljs/levenberg-marquardt/compare/v2.1.1...v3.0.0) (2020-12-03)
 
 
