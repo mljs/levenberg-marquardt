@@ -6,6 +6,7 @@ export default function checkOptions(data, parameterizedFunction, options) {
     maxValues,
     initialValues,
     weights = 1,
+    timeout = 10,
     damping = 1e-2,
     dampingStepUp = 11,
     dampingStepDown = 9,
@@ -96,5 +97,6 @@ export default function checkOptions(data, parameterizedFunction, options) {
     centralDifference,
     gradientDifference,
     improvementThreshold,
+    timeout: timeout * 1000,
   };
 }

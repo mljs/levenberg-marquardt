@@ -66,35 +66,36 @@ describe('Handling of invalid arguments', () => {
 });
 
 describe('Handling of ill-behaved functions', () => {
+  const fourParamEq = ([a, b, c, d]) => (t) =>
+    a + (b - a) / (1 + Math.pow(c, d) * Math.pow(t, -d));
+
+  const data = {
+    x: [
+      9.22e-12,
+      5.53e-11,
+      3.32e-10,
+      1.99e-9,
+      1.19e-8,
+      7.17e-8,
+      4.3e-7,
+      0.00000258,
+      0.0000155,
+      0.0000929,
+    ],
+    y: [
+      7.807,
+      -3.74,
+      21.119,
+      2.382,
+      4.269,
+      41.57,
+      73.401,
+      98.535,
+      97.059,
+      92.147,
+    ],
+  };
   it('Should stop and return parameterError=NaN if function evaluates to NaN after starting', () => {
-    const fourParamEq = ([a, b, c, d]) => (t) =>
-      a + (b - a) / (1 + Math.pow(c, d) * Math.pow(t, -d));
-    const data = {
-      x: [
-        9.22e-12,
-        5.53e-11,
-        3.32e-10,
-        1.99e-9,
-        1.19e-8,
-        7.17e-8,
-        4.3e-7,
-        0.00000258,
-        0.0000155,
-        0.0000929,
-      ],
-      y: [
-        7.807,
-        -3.74,
-        21.119,
-        2.382,
-        4.269,
-        41.57,
-        73.401,
-        98.535,
-        97.059,
-        92.147,
-      ],
-    };
     const options = {
       damping: 0.01,
       maxIterations: 200,
@@ -111,6 +112,19 @@ describe('Handling of ill-behaved functions', () => {
         parameterValues: [-64.298, 117.4022, -47.0851, -0.06148],
       },
       3,
+    );
+  });
+
+  it('Should throw because execution time is over timeout', () => {
+    const options = {
+      timeout: 0,
+      damping: 0.00001,
+      maxIterations: 200,
+      initialValues: [0, 100, 1, 0.1],
+    };
+
+    expect(() => levenbergMarquardt(data, fourParamEq, options)).toThrow(
+      `The execution time is over to 0 seconds`,
     );
   });
 });
