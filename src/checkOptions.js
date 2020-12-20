@@ -79,14 +79,15 @@ export default function checkOptions(data, parameterizedFunction, options) {
     );
   }
 
-  let checkTime;
+  let checkTimeout;
   if (timeout !== undefined) {
     if (typeof timeout !== 'number') {
       throw new Error('timeout should be a number');
     }
-    checkTime = (start) => Date.now() - start >= timeout * 1000;
+    let endTime = Date.now() + timeout * 1000;
+    checkTimeout = () => Date.now() > endTime;
   } else {
-    checkTime = () => false;
+    checkTimeout = () => false;
   }
 
   let weightSquare = new Array(data.x.length);
@@ -95,7 +96,7 @@ export default function checkOptions(data, parameterizedFunction, options) {
   }
 
   return {
-    checkTime,
+    checkTimeout,
     minValues,
     maxValues,
     parameters,

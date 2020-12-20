@@ -29,7 +29,7 @@ export default function levenbergMarquardt(
   options = {},
 ) {
   let {
-    checkTime,
+    checkTimeout,
     minValues,
     maxValues,
     parameters,
@@ -43,8 +43,6 @@ export default function levenbergMarquardt(
     gradientDifference,
     improvementThreshold,
   } = checkOptions(data, parameterizedFunction, options);
-
-  const startTime = Date.now();
 
   let error = errorCalculation(
     data,
@@ -99,7 +97,7 @@ export default function levenbergMarquardt(
       damping = Math.min(damping * dampingStepUp, 1e7);
     }
 
-    if (checkTime(startTime)) {
+    if (checkTimeout()) {
       throw new Error(
         `The execution time is over to ${options.timeout} seconds`,
       );
