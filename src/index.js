@@ -20,7 +20,7 @@ values of λ result in a gradient descent update
  * @param {Array<number>} [options.initialValues] - Array of initial parameter values
  * @param {number} [options.maxIterations = 100] - Maximum of allowed iterations
  * @param {number} [options.errorTolerance = 10e-3] - Minimum uncertainty allowed for each point.
- * @param {number} [options.timeout = 10] - maximum time running before throw in seconds.
+ * @param {number} [options.timeout] - maximum time running before throw in seconds.
  * @return {{parameterValues: Array<number>, parameterError: number, iterations: number}}
  */
 export default function levenbergMarquardt(
