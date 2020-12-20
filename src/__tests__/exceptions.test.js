@@ -127,4 +127,17 @@ describe('Handling of ill-behaved functions', () => {
       `The execution time is over to 0 seconds`,
     );
   });
+
+  it('Should throw because is not a number', () => {
+    const options = {
+      timeout: 'a',
+      damping: 0.00001,
+      maxIterations: 200,
+      initialValues: [0, 100, 1, 0.1],
+    };
+
+    expect(() => levenbergMarquardt(data, fourParamEq, options)).toThrow(
+      `timeout should be a number`,
+    );
+  });
 });

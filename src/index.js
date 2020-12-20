@@ -29,7 +29,7 @@ export default function levenbergMarquardt(
   options = {},
 ) {
   let {
-    timeout,
+    checkTime,
     minValues,
     maxValues,
     parameters,
@@ -99,9 +99,9 @@ export default function levenbergMarquardt(
       damping = Math.min(damping * dampingStepUp, 1e7);
     }
 
-    if (Date.now() - startTime >= timeout) {
+    if (checkTime(startTime)) {
       throw new Error(
-        `The execution time is over to ${timeout / 1000} seconds`,
+        `The execution time is over to ${options.timeout} seconds`,
       );
     }
 
