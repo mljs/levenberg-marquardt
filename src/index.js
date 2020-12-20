@@ -19,7 +19,8 @@ values of λ result in a gradient descent update
  * @param {Array<number>} [options.maxValues] - Maximum allowed values for parameters
  * @param {Array<number>} [options.initialValues] - Array of initial parameter values
  * @param {number} [options.maxIterations = 100] - Maximum of allowed iterations
- * @param {number} [options.errorTolerance = 10e-3] - Minimum uncertainty allowed for each point
+ * @param {number} [options.errorTolerance = 10e-3] - Minimum uncertainty allowed for each point.
+ * @param {number} [options.timeout = 10] - maximum time running before throw in seconds.
  * @return {{parameterValues: Array<number>, parameterError: number, iterations: number}}
  */
 export default function levenbergMarquardt(
@@ -28,6 +29,7 @@ export default function levenbergMarquardt(
   options = {},
 ) {
   let {
+    checkTime,
     minValues,
     maxValues,
     parameters,
@@ -41,6 +43,8 @@ export default function levenbergMarquardt(
     gradientDifference,
     improvementThreshold,
   } = checkOptions(data, parameterizedFunction, options);
+
+  const startTime = Date.now();
 
   let error = errorCalculation(
     data,
@@ -93,6 +97,12 @@ export default function levenbergMarquardt(
     } else {
       error = previousError;
       damping = Math.min(damping * dampingStepUp, 1e7);
+    }
+
+    if (checkTime(startTime)) {
+      throw new Error(
+        `The execution time is over to ${options.timeout} seconds`,
+      );
     }
 
     converged = error <= errorTolerance;

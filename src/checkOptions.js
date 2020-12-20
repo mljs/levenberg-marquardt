@@ -2,6 +2,7 @@ import isArray from 'is-any-array';
 
 export default function checkOptions(data, parameterizedFunction, options) {
   let {
+    timeout,
     minValues,
     maxValues,
     initialValues,
@@ -78,12 +79,23 @@ export default function checkOptions(data, parameterizedFunction, options) {
     );
   }
 
+  let checkTime;
+  if (timeout !== undefined) {
+    if (typeof timeout !== 'number') {
+      throw new Error('timeout should be a number');
+    }
+    checkTime = (start) => Date.now() - start >= timeout * 1000;
+  } else {
+    checkTime = () => false;
+  }
+
   let weightSquare = new Array(data.x.length);
   for (let i = 0; i < nbPoints; i++) {
     weightSquare[i] = filler(i);
   }
 
   return {
+    checkTime,
     minValues,
     maxValues,
     parameters,

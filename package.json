@@ -9,7 +9,6 @@
     "lib"
   ],
   "scripts": {
-    "testA": "jest -i src/__tests__/exceptions.test.js",
     "compile": "rollup -c",
     "eslint": "eslint src",
     "eslint-fix": "npm run eslint -- --fix",
