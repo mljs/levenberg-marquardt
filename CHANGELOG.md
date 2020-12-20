@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.1.0](https://www.github.com/mljs/levenberg-marquardt/compare/v3.0.1...v3.1.0) (2020-12-20)
+
+
+### Features
+
+* timeout option to avoid long executions ([#35](https://www.github.com/mljs/levenberg-marquardt/issues/35)) ([287051c](https://www.github.com/mljs/levenberg-marquardt/commit/287051c2dbe8a2ff6aa69553d9a75bc6ce115d65))
+
+
+### Bug Fixes
+
+* change timeout calculation ([8aa9c2d](https://www.github.com/mljs/levenberg-marquardt/commit/8aa9c2d75f1745dc94f8c495f01be0845309cf5b))
+
 ### [3.0.1](https://www.github.com/mljs/levenberg-marquardt/compare/v3.0.0...v3.0.1) (2020-12-03)
 
 
