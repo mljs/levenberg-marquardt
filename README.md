@@ -1,7 +1,7 @@
 # levenberg-marquardt
 
 [![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
+[![build status][ci-image]][ci-url]
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
 
@@ -22,9 +22,11 @@ In order to get a general idea of the problem you could also check the [Wikipedi
 Next there is some options could change the behavior of the code.
 
 ### centralDifference
+
 The jacobian matrix is approximated by finite difference; forward differences or central differences (one additional function evaluation). The option centralDifference select one of them, by default the jacobian is calculated by forward difference.
 
 ### gradientDifference
+
 The jacobian matrix is approximated as mention above, the gradientDifference option is the step size (dp) to calculate de difference between the function with the current parameter state and the perturbation added. It could be a number (same step size for all parameters) or an array with different values for each parameter, if the gradientDifference is zero the derive will be zero, and the parameter will hold fixed
 
 ## Example
@@ -47,7 +49,7 @@ let data = {
   ],
   y: [
     /* y1, y2, ... */
-  ]
+  ],
 };
 
 // array of initial parameter values
@@ -70,7 +72,7 @@ const options = {
   maxValues: maxValues,
   gradientDifference: 10e-2,
   maxIterations: 100,
-  errorTolerance: 10e-3
+  errorTolerance: 10e-3,
 };
 
 let fittedParams = LM(data, sinFunction, options);
@@ -82,11 +84,11 @@ Or test it in [Runkit](https://runkit.com/npm/ml-levenberg-marquardt)
 
 [MIT](./LICENSE)
 
-[npm-image]: https://img.shields.io/npm/v/ml-levenberg-marquardt.svg?style=flat-square
+[npm-image]: https://img.shields.io/npm/v/ml-levenberg-marquardt.svg
 [npm-url]: https://npmjs.org/package/ml-levenberg-marquardt
-[travis-image]: https://img.shields.io/travis/mljs/levenberg-marquardt/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/mljs/levenberg-marquardt
-[codecov-image]: https://img.shields.io/codecov/c/github/mljs/levenberg-marquardt.svg?style=flat-square
+[codecov-image]: https://img.shields.io/codecov/c/github/mljs/levenberg-marquardt.svg
 [codecov-url]: https://codecov.io/gh/mljs/levenberg-marquardt
-[download-image]: https://img.shields.io/npm/dm/ml-levenberg-marquardt.svg?style=flat-square
+[ci-image]: https://github.com/mljs/levenberg-marquardt/workflows/Node.js%20CI/badge.svg?branch=master
+[ci-url]: https://github.com/mljs/levenberg-marquardt/actions?query=workflow%3A%22Node.js+CI%22
+[download-image]: https://img.shields.io/npm/dm/ml-levenberg-marquardt.svg
 [download-url]: https://npmjs.org/package/ml-levenberg-marquardt
