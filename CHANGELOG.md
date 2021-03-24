@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.1.1](https://www.github.com/mljs/levenberg-marquardt/compare/v3.1.0...v3.1.1) (2021-03-24)
+
+
+### Bug Fixes
+
+* update dependencies ([1871fb2](https://www.github.com/mljs/levenberg-marquardt/commit/1871fb215bf0cee91b9b8f7e1f0e7553dee35e0d))
+
 ## [3.1.0](https://www.github.com/mljs/levenberg-marquardt/compare/v3.0.1...v3.1.0) (2020-12-20)
 
 
