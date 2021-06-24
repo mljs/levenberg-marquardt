@@ -9,6 +9,7 @@
     "lib"
   ],
   "scripts": {
+    "compileESM": "rollup -c rollup-esm.config.js",
     "compile": "rollup -c",
     "eslint": "eslint src",
     "eslint-fix": "npm run eslint -- --fix",
@@ -38,6 +39,8 @@
   "homepage": "https://github.com/mljs/levenberg-marquardt#readme",
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.13.8",
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
     "benchmark": "^2.1.4",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.22.0",
