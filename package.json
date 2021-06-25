@@ -9,8 +9,10 @@
     "lib"
   ],
   "scripts": {
+    "compileCJS": "rollup -c",
     "compileESM": "rollup -c rollup-esm.config.js",
-    "compile": "rollup -c",
+    "compileUMD": "rollup -c rollup-umd.config.js",
+    "compile": "npm run compileCJS && npm run compileESM && npm run compileUMD",
     "eslint": "eslint src",
     "eslint-fix": "npm run eslint -- --fix",
     "prepublishOnly": "npm run compile",
