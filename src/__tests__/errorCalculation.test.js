@@ -2,10 +2,9 @@ import errorCalculation from '../errorCalculation';
 
 describe('parameterError', () => {
   describe('Linear functions', () => {
-    const linearFunction =
-      ([slope, intercept]) =>
-      (x) =>
-        slope * x + intercept;
+    function linearFunction([slope, intercept]) {
+      return (x) => slope * x + intercept;
+    }
 
     const sampleParameters = [1, 1];
     const n = 10;
@@ -35,10 +34,9 @@ describe('parameterError', () => {
   });
 
   describe('Linear functions with typed array', () => {
-    const linearFunction =
-      ([slope, intercept]) =>
-      (x) =>
-        slope * x + intercept;
+    function linearFunction([slope, intercept]) {
+      return (x) => slope * x + intercept;
+    }
 
     const sampleParameters = new Float64Array([1, 1]);
     const n = 10;
