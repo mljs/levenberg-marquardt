@@ -45,11 +45,8 @@
     "url": "https://github.com/mljs/levenberg-marquardt/issues"
   },
   "homepage": "https://github.com/mljs/levenberg-marquardt#readme",
-  "jest": {
-    "preset": "ts-jest/presets/js-with-ts",
-    "testEnvironment": "node"
-  },
   "devDependencies": {
+    "@types/jest": "^27.0.2",
     "benchmark": "^2.1.4",
     "cheminfo-build": "^1.1.11",
     "cz-conventional-changelog": "^3.3.0",
