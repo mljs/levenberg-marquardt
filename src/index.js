@@ -23,11 +23,7 @@ values of λ result in a gradient descent update
  * @param {number} [options.timeout] - maximum time running before throw in seconds.
  * @return {{parameterValues: Array<number>, parameterError: number, iterations: number}}
  */
-export default function levenbergMarquardt(
-  data,
-  parameterizedFunction,
-  options = {},
-) {
+export function levenbergMarquardt(data, parameterizedFunction, options = {}) {
   let {
     checkTimeout,
     minValues,
