@@ -1,6 +1,6 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
-import levenbergMarquardt from '..';
+import { levenbergMarquardt } from '..';
 
 expect.extend({ toBeDeepCloseTo });
 
@@ -66,33 +66,18 @@ describe('Handling of invalid arguments', () => {
 });
 
 describe('Handling of ill-behaved functions', () => {
-  const fourParamEq = ([a, b, c, d]) => (t) =>
-    a + (b - a) / (1 + Math.pow(c, d) * Math.pow(t, -d));
+  const fourParamEq =
+    ([a, b, c, d]) =>
+    (t) =>
+      a + (b - a) / (1 + Math.pow(c, d) * Math.pow(t, -d));
 
   const data = {
     x: [
-      9.22e-12,
-      5.53e-11,
-      3.32e-10,
-      1.99e-9,
-      1.19e-8,
-      7.17e-8,
-      4.3e-7,
-      0.00000258,
-      0.0000155,
-      0.0000929,
+      9.22e-12, 5.53e-11, 3.32e-10, 1.99e-9, 1.19e-8, 7.17e-8, 4.3e-7,
+      0.00000258, 0.0000155, 0.0000929,
     ],
     y: [
-      7.807,
-      -3.74,
-      21.119,
-      2.382,
-      4.269,
-      41.57,
-      73.401,
-      98.535,
-      97.059,
-      92.147,
+      7.807, -3.74, 21.119, 2.382, 4.269, 41.57, 73.401, 98.535, 97.059, 92.147,
     ],
   };
   it('Should stop and return parameterError=NaN if function evaluates to NaN after starting', () => {

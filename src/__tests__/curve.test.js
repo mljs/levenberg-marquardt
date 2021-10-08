@@ -1,7 +1,7 @@
 /* eslint-disable jest/no-standalone-expect */
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 
-import levenbergMarquardt from '..';
+import { levenbergMarquardt } from '..';
 
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
@@ -11,8 +11,10 @@ describe('curve', () => {
     const contrivedProblems = [
       {
         name: 'bennet5([2, 3, 5])',
-        getFunctionFromParameters: ([b1, b2, b3]) => (t) =>
-          b1 * Math.pow(t + b2, -1 / b3),
+        getFunctionFromParameters:
+          ([b1, b2, b3]) =>
+          (t) =>
+            b1 * Math.pow(t + b2, -1 / b3),
         n: 154,
         xStart: -2.6581,
         xEnd: 49.6526,
@@ -28,7 +30,10 @@ describe('curve', () => {
       },
       {
         name: '2*sin(2*t)',
-        getFunctionFromParameters: ([a, f]) => (t) => a * Math.sin(f * t),
+        getFunctionFromParameters:
+          ([a, f]) =>
+          (t) =>
+            a * Math.sin(f * t),
         n: 20,
         xStart: 0,
         xEnd: 19,
@@ -44,8 +49,10 @@ describe('curve', () => {
       },
       {
         name: 'Sigmoid',
-        getFunctionFromParameters: ([a, b, c]) => (t) =>
-          a / (b + Math.exp(-t * c)),
+        getFunctionFromParameters:
+          ([a, b, c]) =>
+          (t) =>
+            a / (b + Math.exp(-t * c)),
         n: 20,
         xStart: 0,
         xEnd: 19,
@@ -164,32 +171,18 @@ describe('curve', () => {
     const realWorldProblems = [
       {
         name: 'fourParamEq',
-        getFunctionFromParameters: ([a, b, c, d]) => (t) =>
-          a + (b - a) / (1 + Math.pow(c, d) * Math.pow(t, -d)),
+        getFunctionFromParameters:
+          ([a, b, c, d]) =>
+          (t) =>
+            a + (b - a) / (1 + Math.pow(c, d) * Math.pow(t, -d)),
         data: {
           // Where did these values come from / why they are correct?
           x: [
-            9.22e-12,
-            5.53e-11,
-            3.32e-10,
-            1.99e-9,
-            1.19e-8,
-            7.17e-8,
-            4.3e-7,
-            0.00000258,
-            0.0000155,
-            0.0000929,
+            9.22e-12, 5.53e-11, 3.32e-10, 1.99e-9, 1.19e-8, 7.17e-8, 4.3e-7,
+            0.00000258, 0.0000155, 0.0000929,
           ],
           y: [
-            7.807,
-            -3.74,
-            21.119,
-            2.382,
-            4.269,
-            41.57,
-            73.401,
-            98.535,
-            97.059,
+            7.807, -3.74, 21.119, 2.382, 4.269, 41.57, 73.401, 98.535, 97.059,
             92.147,
           ],
         },
@@ -210,18 +203,13 @@ describe('curve', () => {
     realWorldProblems.forEach((problem) => {
       const testInvocation = problem.skip ? it.skip.bind(it) : it;
       testInvocation(`Should fit ${problem.name} to raw data`, () => {
-        const {
-          data,
-          expected,
-          getFunctionFromParameters,
-          options,
-          decimals,
-        } = Object.assign(
-          {
-            decimals: 3,
-          },
-          problem,
-        );
+        const { data, expected, getFunctionFromParameters, options, decimals } =
+          Object.assign(
+            {
+              decimals: 3,
+            },
+            problem,
+          );
         const actual = levenbergMarquardt(
           data,
           getFunctionFromParameters,
