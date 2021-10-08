@@ -11,10 +11,9 @@ describe('curve', () => {
     const contrivedProblems = [
       {
         name: 'bennet5([2, 3, 5])',
-        getFunctionFromParameters:
-          ([b1, b2, b3]) =>
-          (t) =>
-            b1 * Math.pow(t + b2, -1 / b3),
+        getFunctionFromParameters([b1, b2, b3]) {
+          return (t) => b1 * Math.pow(t + b2, -1 / b3);
+        },
         n: 154,
         xStart: -2.6581,
         xEnd: 49.6526,
@@ -30,10 +29,9 @@ describe('curve', () => {
       },
       {
         name: '2*sin(2*t)',
-        getFunctionFromParameters:
-          ([a, f]) =>
-          (t) =>
-            a * Math.sin(f * t),
+        getFunctionFromParameters([a, f]) {
+          return (t) => a * Math.sin(f * t);
+        },
         n: 20,
         xStart: 0,
         xEnd: 19,
@@ -49,10 +47,9 @@ describe('curve', () => {
       },
       {
         name: 'Sigmoid',
-        getFunctionFromParameters:
-          ([a, b, c]) =>
-          (t) =>
-            a / (b + Math.exp(-t * c)),
+        getFunctionFromParameters([a, b, c]) {
+          return (t) => a / (b + Math.exp(-t * c));
+        },
         n: 20,
         xStart: 0,
         xEnd: 19,

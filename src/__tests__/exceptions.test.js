@@ -66,10 +66,9 @@ describe('Handling of invalid arguments', () => {
 });
 
 describe('Handling of ill-behaved functions', () => {
-  const fourParamEq =
-    ([a, b, c, d]) =>
-    (t) =>
-      a + (b - a) / (1 + Math.pow(c, d) * Math.pow(t, -d));
+  function fourParamEq([a, b, c, d]) {
+    return (t) => a + (b - a) / (1 + Math.pow(c, d) * Math.pow(t, -d));
+  }
 
   const data = {
     x: [
