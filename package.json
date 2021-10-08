@@ -3,20 +3,26 @@
   "version": "3.1.1",
   "description": "Curve fitting method in javascript",
   "main": "./lib/index.js",
-  "module": "./src/index.js",
+  "module": "./lib-esm/index.js",
+  "types": "./lib/index.d.ts",
   "files": [
     "src",
-    "lib"
+    "lib",
+    "lib-esm"
   ],
   "scripts": {
-    "compile": "rollup -c",
     "build": "cheminfo-build",
+    "check-types": "tsc --noEmit",
+    "clean": "rimraf lib lib-esm",
     "eslint": "eslint src",
     "eslint-fix": "npm run eslint -- --fix",
-    "prepublishOnly": "npm run compile",
-    "test": "npm run test-coverage && npm run eslint",
+    "prepack": "npm run tsc",
+    "test": "npm run test-coverage && npm run eslint && npm run check-types",
     "test-coverage": "jest --coverage",
-    "test-only": "jest"
+    "test-only": "jest",
+    "tsc": "npm run clean && npm run tsc-cjs && npm run tsc-esm",
+    "tsc-cjs": "tsc --project tsconfig.cjs.json",
+    "tsc-esm": "tsc --project tsconfig.esm.json"
   },
   "repository": {
     "type": "git",
@@ -37,20 +43,26 @@
     "url": "https://github.com/mljs/levenberg-marquardt/issues"
   },
   "homepage": "https://github.com/mljs/levenberg-marquardt#readme",
+  "jest": {
+    "preset": "ts-jest/presets/js-with-ts",
+    "testEnvironment": "node"
+  },
   "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.13.8",
     "benchmark": "^2.1.4",
     "cheminfo-build": "^1.1.11",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.32.0",
     "eslint-config-cheminfo": "^5.5.0",
+    "eslint-config-cheminfo-typescript": "^8.0.9",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-jest": "^24.5.2",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.2.4",
     "jest-matcher-deep-close-to": "^3.0.0",
     "prettier": "^2.4.1",
-    "rollup": "^2.42.3"
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.0.5",
+    "typescript": "^4.4.3"
   },
   "dependencies": {
     "is-any-array": "^1.0.0",
