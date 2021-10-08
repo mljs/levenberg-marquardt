@@ -6,6 +6,7 @@ describe('parameterError', () => {
       return (x) => slope * x + intercept;
     }
 
+    /** @type [number, number] */
     const sampleParameters = [1, 1];
     const n = 10;
     const w = new Float64Array(n).fill(1);
@@ -38,7 +39,8 @@ describe('parameterError', () => {
       return (x) => slope * x + intercept;
     }
 
-    const sampleParameters = new Float64Array([1, 1]);
+    /** @type [number, number] */
+    const sampleParameters = [1, 1];
     const n = 10;
     const x = new Float64Array(n);
     const y = new Float64Array(n);

@@ -11,6 +11,7 @@ function sinFunction([a, b]) {
 describe('Handling of invalid arguments', () => {
   describe('options', () => {
     it('Should throw an error when bad options are provided (negative damping)', () => {
+      // @ts-expect-error
       expect(() => levenbergMarquardt({}, () => 1, { damping: -1 })).toThrow(
         'The damping option must be a positive number',
       );
@@ -20,6 +21,7 @@ describe('Handling of invalid arguments', () => {
       expect(() =>
         levenbergMarquardt({ x: [1, 2], y: [1, 2] }, sinFunction, {
           damping: 0.1,
+          // @ts-expect-error
           initialValues: 2,
         }),
       ).toThrow('initialValues must be an array');
@@ -44,6 +46,7 @@ describe('Handling of invalid arguments', () => {
     };
 
     it('Should throw an error when data is an array (should be object)', () => {
+      // @ts-expect-error
       expect(() => levenbergMarquardt([1, 2], sinFunction, options)).toThrow(
         'The data parameter must have x and y elements',
       );
@@ -51,6 +54,7 @@ describe('Handling of invalid arguments', () => {
 
     it('Should throw an error when data.{x,y} are numbers (should be arrays)', () => {
       expect(() =>
+        // @ts-expect-error
         levenbergMarquardt({ x: 1, y: 2 }, sinFunction, options),
       ).toThrow(
         'The data parameter elements must be an array with more than 2 points',
@@ -120,6 +124,7 @@ describe('Handling of ill-behaved functions', () => {
       initialValues: [0, 100, 1, 0.1],
     };
 
+    // @ts-expect-error
     expect(() => levenbergMarquardt(data, fourParamEq, options)).toThrow(
       `timeout should be a number`,
     );

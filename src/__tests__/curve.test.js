@@ -8,6 +8,7 @@ expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 describe('curve', () => {
   describe('Contrived problems (clean data)', () => {
     // In these cases we test the algorithm's ability to find an , we use some pre-selected values and generate the data set and see if the algorithm can get close the the exact solution
+    /** @type {any} */
     const contrivedProblems = [
       {
         name: 'bennet5([2, 3, 5])',
