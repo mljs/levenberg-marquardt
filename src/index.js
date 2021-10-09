@@ -53,7 +53,7 @@ export function levenbergMarquardt(data, parameterizedFunction, options = {}) {
   for (; iteration < maxIterations && !converged; iteration++) {
     let previousError = error;
 
-    let { perturbations, jacobianWeigthResidualError } = step(
+    let { perturbations, jacobianWeightResidualError } = step(
       data,
       parameters,
       damping,
@@ -83,7 +83,7 @@ export function levenbergMarquardt(data, parameterizedFunction, options = {}) {
       (previousError - error) /
       perturbations
         .transpose()
-        .mmul(perturbations.mul(damping).add(jacobianWeigthResidualError))
+        .mmul(perturbations.mul(damping).add(jacobianWeightResidualError))
         .get(0, 0);
 
     if (improvementMetric > improvementThreshold) {
