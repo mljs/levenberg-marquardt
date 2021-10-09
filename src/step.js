@@ -67,14 +67,14 @@ export default function step(
     ),
   );
 
-  let jacobianWeigthResidualError = gradientFunc.mmul(
+  let jacobianWeightResidualError = gradientFunc.mmul(
     residualError.scale('row', { scale: weights }),
   );
 
-  let perturbations = inverseMatrix.mmul(jacobianWeigthResidualError);
+  let perturbations = inverseMatrix.mmul(jacobianWeightResidualError);
 
   return {
     perturbations,
-    jacobianWeigthResidualError,
+    jacobianWeightResidualError,
   };
 }
