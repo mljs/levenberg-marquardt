@@ -1,5 +1,22 @@
 # Changelog
 
+## [4.0.0](https://www.github.com/mljs/levenberg-marquardt/compare/v3.1.1...v4.0.0) (2022-01-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* convert default export to named export
+* remove support for Node.js 10
+
+### Miscellaneous Chores
+
+* remove support for Node.js 10 ([6b20499](https://www.github.com/mljs/levenberg-marquardt/commit/6b204993283c2756618ce7b30ab88de5b2be0217))
+
+
+### Code Refactoring
+
+* convert default export to named export ([1767ee5](https://www.github.com/mljs/levenberg-marquardt/commit/1767ee520e8f53bb7ea2e6015c4992c92b3bd821))
+
 ### [3.1.1](https://www.github.com/mljs/levenberg-marquardt/compare/v3.1.0...v3.1.1) (2021-03-24)
 
 
