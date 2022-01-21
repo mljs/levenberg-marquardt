@@ -1,4 +1,4 @@
-import isArray from 'is-any-array';
+import { isAnyArray } from 'is-any-array';
 
 export default function checkOptions(data, parameterizedFunction, options) {
   let {
@@ -22,9 +22,9 @@ export default function checkOptions(data, parameterizedFunction, options) {
   } else if (!data.x || !data.y) {
     throw new Error('The data parameter must have x and y elements');
   } else if (
-    !isArray(data.x) ||
+    !isAnyArray(data.x) ||
     data.x.length < 2 ||
-    !isArray(data.y) ||
+    !isAnyArray(data.y) ||
     data.y.length < 2
   ) {
     throw new Error(
@@ -46,13 +46,13 @@ export default function checkOptions(data, parameterizedFunction, options) {
     throw new Error('minValues and maxValues must be the same size');
   }
 
-  if (!isArray(parameters)) {
+  if (!isAnyArray(parameters)) {
     throw new Error('initialValues must be an array');
   }
 
   if (typeof gradientDifference === 'number') {
     gradientDifference = new Array(parameters.length).fill(gradientDifference);
-  } else if (isArray(gradientDifference)) {
+  } else if (isAnyArray(gradientDifference)) {
     if (gradientDifference.length !== parLen) {
       gradientDifference = new Array(parLen).fill(gradientDifference[0]);
     }
@@ -66,7 +66,7 @@ export default function checkOptions(data, parameterizedFunction, options) {
   if (typeof weights === 'number') {
     let value = 1 / weights ** 2;
     filler = () => value;
-  } else if (isArray(weights)) {
+  } else if (isAnyArray(weights)) {
     if (weights.length < data.x.length) {
       let value = 1 / weights[0] ** 2;
       filler = () => value;
