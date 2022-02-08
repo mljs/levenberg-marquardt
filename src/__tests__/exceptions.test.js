@@ -93,12 +93,12 @@ describe('Handling of ill-behaved functions', () => {
       // c < 0 && d is not an integer so Math.pow(c, d) is NaN
     };
 
-    const actual = levenbergMarquardt(data, fourParamEq, options)
+    const actual = levenbergMarquardt(data, fourParamEq, options);
     expect(actual).toBeDeepCloseTo(
       {
         iterations: 0,
         parameterError: 19289.706,
-        parameterValues:  [0, 100, 1, 0.1]
+        parameterValues: [0, 100, 1, 0.1],
       },
       3,
     );
