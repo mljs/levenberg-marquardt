@@ -80,7 +80,7 @@ describe('curve', () => {
         n: 100,
         xStart: 0,
         xEnd: 99,
-        problemParameters: [1, 0.1, 0.3, 4, 0.15, 0.3],
+        problemParameters: [1.05, 0.1, 0.3, 4, 0.15, 0.3],
         options: {
           damping: 0.01,
           gradientDifference: [0.01, 0.0001, 0.0001, 0.01, 0.0001, 0],
@@ -205,7 +205,7 @@ describe('curve', () => {
         .map(sinFunction(actual.parameterValues))
         .reduce((acc, yHat, i) => acc + (data.y[i] - yHat) ** 2, 0)
       expect(actual.parameterError).toBeCloseTo(manualCalculatedError, options.errorTolerance)
-      expect(actual.parameterError).toBeCloseTo(19.6, options.errorTolerance)
+      expect(actual.parameterError).toBeCloseTo(15.5, options.errorTolerance)
     });
   });
 

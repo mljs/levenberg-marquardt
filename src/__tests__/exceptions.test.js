@@ -83,7 +83,7 @@ describe('Handling of ill-behaved functions', () => {
       7.807, -3.74, 21.119, 2.382, 4.269, 41.57, 73.401, 98.535, 97.059, 92.147,
     ],
   };
-  it('Should stop and return parameterError=NaN if function evaluates to NaN after starting', () => {
+  it('Should stop and return initialValues if function evaluates to NaN after starting', () => {
     const options = {
       damping: 0.01,
       maxIterations: 200,
@@ -93,11 +93,12 @@ describe('Handling of ill-behaved functions', () => {
       // c < 0 && d is not an integer so Math.pow(c, d) is NaN
     };
 
-    expect(levenbergMarquardt(data, fourParamEq, options)).toBeDeepCloseTo(
+    const actual = levenbergMarquardt(data, fourParamEq, options)
+    expect(actual).toBeDeepCloseTo(
       {
         iterations: 0,
-        parameterError: NaN,
-        parameterValues: [-64.298, 117.4022, -47.0851, -0.06148],
+        parameterError: 19289.706,
+        parameterValues:  [0, 100, 1, 0.1]
       },
       3,
     );
