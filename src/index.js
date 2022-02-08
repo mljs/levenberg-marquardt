@@ -46,6 +46,8 @@ export function levenbergMarquardt(data, parameterizedFunction, options = {}) {
     parameterizedFunction,
     weightSquare,
   );
+  let optimalError = error;
+  let optimalParameters = parameters.slice();
 
   let converged = error <= errorTolerance;
 
@@ -79,6 +81,11 @@ export function levenbergMarquardt(data, parameterizedFunction, options = {}) {
 
     if (isNaN(error)) break;
 
+    if (error < optimalError - errorTolerance) {
+      optimalError = error;
+      optimalParameters = parameters.slice();
+    }
+
     let improvementMetric =
       (previousError - error) /
       perturbations
@@ -102,8 +109,8 @@ export function levenbergMarquardt(data, parameterizedFunction, options = {}) {
   }
 
   return {
-    parameterValues: parameters,
-    parameterError: error,
+    parameterValues: optimalParameters,
+    parameterError: optimalError,
     iterations: iteration,
   };
 }
