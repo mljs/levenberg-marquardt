@@ -89,7 +89,6 @@ export function levenbergMarquardt(data, parameterizedFunction, options = {}) {
     if (improvementMetric > improvementThreshold) {
       damping = Math.max(damping / dampingStepDown, 1e-7);
     } else {
-      error = previousError;
       damping = Math.min(damping * dampingStepUp, 1e7);
     }
 
