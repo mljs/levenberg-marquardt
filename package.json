@@ -19,9 +19,8 @@
     "prepack": "npm run tsc",
     "prettier": "prettier --check src",
     "prettier-write": "prettier --write src",
-    "test": "npm run test-coverage && npm run eslint && npm run prettier && npm run check-types",
-    "test-coverage": "jest --coverage",
-    "test-only": "jest",
+    "test": "npm run test-only && npm run eslint && npm run prettier && npm run check-types",
+    "test-only": "jest --coverage",
     "tsc": "npm run clean && npm run tsc-cjs && npm run tsc-esm",
     "tsc-cjs": "tsc --project tsconfig.cjs.json",
     "tsc-esm": "tsc --project tsconfig.esm.json"
@@ -46,13 +45,13 @@
   },
   "homepage": "https://github.com/mljs/levenberg-marquardt#readme",
   "devDependencies": {
-    "@types/jest": "^27.4.0",
+    "@types/jest": "^27.4.1",
     "benchmark": "^2.1.4",
     "cheminfo-build": "^1.1.11",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.7.0",
+    "eslint": "^8.10.0",
     "eslint-config-cheminfo-typescript": "^10.3.0",
-    "jest": "^27.4.7",
+    "jest": "^27.5.1",
     "jest-matcher-deep-close-to": "^3.0.2",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
@@ -61,7 +60,7 @@
   },
   "dependencies": {
     "is-any-array": "^2.0.0",
-    "ml-matrix": "^6.8.2"
+    "ml-matrix": "^6.9.0"
   },
   "config": {
     "commitizen": {
