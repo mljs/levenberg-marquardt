@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.1.0](https://www.github.com/mljs/levenberg-marquardt/compare/v4.0.0...v4.1.0) (2022-02-28)
+
+
+### Features
+
+* implement checkpoint to keep optimal solution ([373f66e](https://www.github.com/mljs/levenberg-marquardt/commit/373f66e1845edf9f28602ff51ee12ef119051e76))
+
+
+### Bug Fixes
+
+* linting ([c8317bc](https://www.github.com/mljs/levenberg-marquardt/commit/c8317bc28753976e1182cf9b381080a361d56aaa))
+* return wrong parameterError ([dac435f](https://www.github.com/mljs/levenberg-marquardt/commit/dac435f91e45e21f2693634d6e2a67599b92ce0f))
+
 ## [4.0.0](https://www.github.com/mljs/levenberg-marquardt/compare/v3.1.1...v4.0.0) (2022-01-21)
 
 
