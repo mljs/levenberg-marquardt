@@ -34,8 +34,12 @@ export default function checkOptions(data, parameterizedFunction, options) {
     throw new Error('The data parameter elements must have the same size');
   }
 
-  let parameters =
-    initialValues || new Array(parameterizedFunction.length).fill(1);
+  if (!(initialValues && initialValues.length > 0)) {
+    throw new Error(
+      'The initialValues option is mandatory and must be an array',
+    );
+  }
+  let parameters = initialValues;
 
   let nbPoints = data.y.length;
   let parLen = parameters.length;
@@ -44,10 +48,6 @@ export default function checkOptions(data, parameterizedFunction, options) {
 
   if (maxValues.length !== minValues.length) {
     throw new Error('minValues and maxValues must be the same size');
-  }
-
-  if (!isAnyArray(parameters)) {
-    throw new Error('initialValues must be an array');
   }
 
   if (typeof gradientDifference === 'number') {
