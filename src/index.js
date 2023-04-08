@@ -5,7 +5,7 @@ import step from './step';
 /**
  * Curve fitting algorithm
  * @param {{x:ArrayLike<number>, y:ArrayLike<number>}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
- * @param {function} parameterizedFunction - The parameters and returns a function with the independent variable as a parameter
+ * @param {function} parameterizedFunction - Takes an array of parameters and returns a function with the independent variable as its sole argument
  * @param {object} [options] - Options object
  * @param {number|ArrayLike<number>} [options.weights = 1] - weighting vector, if the length does not match with the number of data points, the vector is reconstructed with first value.
  * @param {number} [options.damping = 1e-2] - Levenberg-Marquardt parameter, small values of the damping parameter λ result in a Gauss-Newton update and large

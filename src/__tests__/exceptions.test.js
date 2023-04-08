@@ -18,13 +18,22 @@ describe('Handling of invalid arguments', () => {
     });
 
     it('Should throw an error when initialValues is not an array', () => {
+      const expectedErrorMessage =
+        'The initialValues option is mandatory and must be an array';
+      const inputData = { x: [1, 2], y: [1, 2] };
       expect(() =>
-        levenbergMarquardt({ x: [1, 2], y: [1, 2] }, sinFunction, {
+        levenbergMarquardt(inputData, sinFunction, {
+          damping: 0.1,
+          //initialValues: undefined,
+        }),
+      ).toThrow(expectedErrorMessage);
+      expect(() =>
+        levenbergMarquardt(inputData, sinFunction, {
           damping: 0.1,
           // @ts-expect-error
           initialValues: 2,
         }),
-      ).toThrow('initialValues must be an array');
+      ).toThrow(expectedErrorMessage);
     });
 
     it('Should throw an error when minValues and maxValues are not the same length', () => {

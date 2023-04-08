@@ -52,7 +52,7 @@ let data = {
   ],
 };
 
-// array of initial parameter values
+// array of initial parameter values (must be provided)
 let initialValues = [
   /* a, b, c, ... */
 ];
