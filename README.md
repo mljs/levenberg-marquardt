@@ -88,7 +88,7 @@ Or test it in [Runkit](https://runkit.com/npm/ml-levenberg-marquardt)
 [npm-url]: https://npmjs.org/package/ml-levenberg-marquardt
 [codecov-image]: https://img.shields.io/codecov/c/github/mljs/levenberg-marquardt.svg
 [codecov-url]: https://codecov.io/gh/mljs/levenberg-marquardt
-[ci-image]: https://github.com/mljs/levenberg-marquardt/workflows/Node.js%20CI/badge.svg?branch=master
+[ci-image]: https://github.com/mljs/levenberg-marquardt/workflows/Node.js%20CI/badge.svg?branch=main
 [ci-url]: https://github.com/mljs/levenberg-marquardt/actions?query=workflow%3A%22Node.js+CI%22
 [download-image]: https://img.shields.io/npm/dm/ml-levenberg-marquardt.svg
 [download-url]: https://npmjs.org/package/ml-levenberg-marquardt
