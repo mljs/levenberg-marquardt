@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.2](https://github.com/mljs/levenberg-marquardt/compare/v4.1.1...v4.1.2) (2023-04-11)
+
+
+### Bug Fixes
+
+* **types:** make initialValues mandatory ([e84062a](https://github.com/mljs/levenberg-marquardt/commit/e84062acdd06685356d9fb3ed46e063d1f23d818))
+
 ## [4.1.1](https://github.com/mljs/levenberg-marquardt/compare/v4.1.0...v4.1.1) (2023-04-11)
 
 
