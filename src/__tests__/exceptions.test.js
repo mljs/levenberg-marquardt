@@ -22,9 +22,9 @@ describe('Handling of invalid arguments', () => {
         'The initialValues option is mandatory and must be an array';
       const inputData = { x: [1, 2], y: [1, 2] };
       expect(() =>
+        // @ts-expect-error
         levenbergMarquardt(inputData, sinFunction, {
           damping: 0.1,
-          //initialValues: undefined,
         }),
       ).toThrow(expectedErrorMessage);
       expect(() =>
