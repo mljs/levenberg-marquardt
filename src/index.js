@@ -6,7 +6,8 @@ import step from './step';
  * Curve fitting algorithm
  * @param {{x:ArrayLike<number>, y:ArrayLike<number>}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
  * @param {function} parameterizedFunction - Takes an array of parameters and returns a function with the independent variable as its sole argument
- * @param {object} [options] - Options object
+ * @param {object} options - Options object
+ * @param {ArrayLike<number>} options.initialValues - Array of initial parameter values
  * @param {number|ArrayLike<number>} [options.weights = 1] - weighting vector, if the length does not match with the number of data points, the vector is reconstructed with first value.
  * @param {number} [options.damping = 1e-2] - Levenberg-Marquardt parameter, small values of the damping parameter λ result in a Gauss-Newton update and large
 values of λ result in a gradient descent update
@@ -17,13 +18,12 @@ values of λ result in a gradient descent update
  * @param {boolean} [options.centralDifference = false] - If true the jacobian matrix is approximated by central differences otherwise by forward differences
  * @param {ArrayLike<number>} [options.minValues] - Minimum allowed values for parameters
  * @param {ArrayLike<number>} [options.maxValues] - Maximum allowed values for parameters
- * @param {ArrayLike<number>} [options.initialValues] - Array of initial parameter values
  * @param {number} [options.maxIterations = 100] - Maximum of allowed iterations
  * @param {number} [options.errorTolerance = 10e-3] - Minimum uncertainty allowed for each point.
  * @param {number} [options.timeout] - maximum time running before throw in seconds.
  * @return {{parameterValues: Array<number>, parameterError: number, iterations: number}}
  */
-export function levenbergMarquardt(data, parameterizedFunction, options = {}) {
+export function levenbergMarquardt(data, parameterizedFunction, options) {
   let {
     checkTimeout,
     minValues,
