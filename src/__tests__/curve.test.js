@@ -1,4 +1,3 @@
-/* eslint-disable jest/no-standalone-expect */
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 
 import { levenbergMarquardt } from '..';
@@ -125,6 +124,12 @@ describe('curve', () => {
     contrivedProblems.forEach((problem) => {
       const testInvocation = problem.skip ? it.skip.bind(it) : it;
       testInvocation(`Should fit ${problem.name}`, () => {
+        /** @type {any} */
+        const params = {
+          decimalsForParameterError: 2,
+          decimalsForParameterValues: 3,
+          ...problem,
+        };
         const {
           getFunctionFromParameters,
           n,
@@ -134,13 +139,7 @@ describe('curve', () => {
           options,
           decimalsForParameterError,
           decimalsForParameterValues,
-        } = Object.assign(
-          {
-            decimalsForParameterError: 2,
-            decimalsForParameterValues: 3,
-          },
-          problem,
-        );
+        } = params;
         const xs = new Array(n)
           .fill(0)
           .map((zero, i) => xStart + (i * (xEnd - xStart)) / (n - 1));
@@ -237,12 +236,10 @@ describe('curve', () => {
       const testInvocation = problem.skip ? it.skip.bind(it) : it;
       testInvocation(`Should fit ${problem.name} to raw data`, () => {
         const { data, expected, getFunctionFromParameters, options, decimals } =
-          Object.assign(
-            {
-              decimals: 3,
-            },
-            problem,
-          );
+          {
+            decimals: 3,
+            ...problem,
+          };
         const actual = levenbergMarquardt(
           data,
           getFunctionFromParameters,
