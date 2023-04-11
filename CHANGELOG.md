@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.1](https://github.com/mljs/levenberg-marquardt/compare/v4.1.0...v4.1.1) (2023-04-11)
+
+
+### Bug Fixes
+
+* throw error if initialValues missing (fix [#52](https://github.com/mljs/levenberg-marquardt/issues/52)) ([#53](https://github.com/mljs/levenberg-marquardt/issues/53)) ([a3eb308](https://github.com/mljs/levenberg-marquardt/commit/a3eb30802e628c8b4ca05ed9404ebe660927d90e))
+
 ## [4.1.0](https://www.github.com/mljs/levenberg-marquardt/compare/v4.0.0...v4.1.0) (2022-02-28)
 
 
