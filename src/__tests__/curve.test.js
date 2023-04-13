@@ -12,6 +12,7 @@ test('linear regression', () => {
   function line([a, b]) {
     return (x) => a * x + b;
   }
+
   const x = [0, 1, 2, 3, 4, 5, 6];
   const y = [-2, 0, 2, 4, 6, 8, 10];
 
