@@ -8,6 +8,19 @@ function sinFunction([a, b]) {
   return (t) => a * Math.sin(b * t);
 }
 
+test('linear regression', () => {
+  function line([a, b]) {
+    return (x) => a * x + b;
+  }
+  const x = [0, 1, 2, 3, 4, 5, 6];
+  const y = [-2, 0, 2, 4, 6, 8, 10];
+
+  const result = levenbergMarquardt({ x, y }, line, { initialValues: [1, 0] });
+
+  expect(result.parameterValues).toBeDeepCloseTo([2, -2]);
+  expect(result.parameterError).toBeCloseTo(0);
+});
+
 describe('curve', () => {
   describe('Contrived problems (clean data)', () => {
     // In these cases we test the algorithm's ability to find an , we use some pre-selected values and generate the data set and see if the algorithm can get close the the exact solution
