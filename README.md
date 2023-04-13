@@ -29,7 +29,27 @@ The jacobian matrix is approximated by finite difference; forward differences or
 
 The jacobian matrix is approximated as mention above, the gradientDifference option is the step size (dp) to calculate de difference between the function with the current parameter state and the perturbation added. It could be a number (same step size for all parameters) or an array with different values for each parameter, if the gradientDifference is zero the derive will be zero, and the parameter will hold fixed
 
-## Example
+## Examples
+
+### Linear regression
+
+```js
+// function that creates the line model (which is also) with the given parameters
+// in this case, a is the slope and b the offset
+function line([a, b]) {
+  return (x) => a * x + b;
+}
+
+// the x-coordinates of the points
+const x = [0, 1, 2, 3, 4, 5, 6];
+// the y-coordinates of the points
+const y = [-2, 0, 2, 4, 6, 8, 10];
+
+const result = levenbergMarquardt({ x, y }, line, { initialValues: [1, 0] });
+// the result is approximately: {iterations: 2, parameterError: 0, parameterValues: [2, -2s]}
+```
+
+### Exponential fit
 
 ```js
 // import library
