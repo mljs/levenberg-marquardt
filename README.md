@@ -34,19 +34,28 @@ The jacobian matrix is approximated as mention above, the gradientDifference opt
 ### Linear regression
 
 ```js
-// function that creates the line model (which is also) with the given parameters
-// in this case, a is the slope and b the offset
-function line([a, b]) {
-  return (x) => a * x + b;
+import { levenbergMarquardt } from 'ml-levenberg-marquardt';
+// const { levenbergMarquardt } = require("ml-levenberg-marquardt");
+
+// Creates linear function using the provided slope and intercept parameters
+function line([slope, intercept]) {
+  return (x) => slope * x + intercept;
 }
 
-// the x-coordinates of the points
+// Input points (x,y) 
 const x = [0, 1, 2, 3, 4, 5, 6];
-// the y-coordinates of the points
 const y = [-2, 0, 2, 4, 6, 8, 10];
 
-const result = levenbergMarquardt({ x, y }, line, { initialValues: [1, 0] });
-// the result is approximately: {iterations: 2, parameterError: 0, parameterValues: [2, -2s]}
+// Parameter values to use for first iteration
+const initialValues = [1, 0]; // i.e., y = x
+
+const result = levenbergMarquardt({ x, y }, line, { initialValues });
+console.log(result);
+// { 
+//   parameterValues: [1.9999986750084096, -1.9999943899435104]
+//   parameterError: 6.787132159723697e-11
+//   iterations: 2
+// }
 ```
 
 ### Exponential fit
