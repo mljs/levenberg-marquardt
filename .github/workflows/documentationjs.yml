@@ -4,16 +4,20 @@ on:
   workflow_dispatch:
   release:
     types: [published]
+env:
+  ENTRY_FILE: 'src/index.js'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Build documentation
         uses: zakodium/documentationjs-action@v1
+        with:
+          entry: ${{ env.ENTRY_FILE }}
       - name: Deploy to GitHub pages
-        uses: JamesIves/github-pages-deploy-action@releases/v4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.BOT_TOKEN }}
           branch: gh-pages
