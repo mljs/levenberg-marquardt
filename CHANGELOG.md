@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.3](https://github.com/mljs/levenberg-marquardt/compare/v4.1.2...v4.1.3) (2023-09-30)
+
+
+### Documentation
+
+* add linear regression example ([566796d](https://github.com/mljs/levenberg-marquardt/commit/566796d5a106ae3a56f854d88e0c013026e12d7c)), closes [#51](https://github.com/mljs/levenberg-marquardt/issues/51)
+
 ## [4.1.2](https://github.com/mljs/levenberg-marquardt/compare/v4.1.1...v4.1.2) (2023-04-11)
 
 
