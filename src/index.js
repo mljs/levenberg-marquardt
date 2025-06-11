@@ -1,6 +1,6 @@
-import checkOptions from './checkOptions';
-import errorCalculation from './errorCalculation';
-import step from './step';
+import checkOptions from './checkOptions.js';
+import errorCalculation from './errorCalculation.js';
+import step from './step.js';
 
 /**
  * Curve fitting algorithm

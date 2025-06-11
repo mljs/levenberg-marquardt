@@ -1,6 +1,6 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
-import { levenbergMarquardt } from '..';
+import { levenbergMarquardt } from '../index.js';
 
 expect.extend({ toBeDeepCloseTo });
 

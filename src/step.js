@@ -1,6 +1,6 @@
 import { inverse, Matrix } from 'ml-matrix';
 
-import gradientFunction from './gradientFunction';
+import gradientFunction from './gradientFunction.js';
 
 /**
  * Matrix function over the samples

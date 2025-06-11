@@ -1,4 +1,4 @@
-import errorCalculation from '../errorCalculation';
+import errorCalculation from '../errorCalculation.js';
 
 describe('parameterError', () => {
   describe('Linear functions', () => {
