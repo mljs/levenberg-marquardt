@@ -15,7 +15,7 @@
     "declaration": true,
     "declarationMap": true,
     "checkJs": true,
-    "noImplicitAny": false,
+    "noImplicitAny": false
   },
-  "include": ["src", "vite*.ts"],
+  "include": ["src", "vite*.ts"]
 }
