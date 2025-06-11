@@ -42,7 +42,7 @@ function line([slope, intercept]) {
   return (x) => slope * x + intercept;
 }
 
-// Input points (x,y) 
+// Input points (x,y)
 const x = [0, 1, 2, 3, 4, 5, 6];
 const y = [-2, 0, 2, 4, 6, 8, 10];
 
@@ -51,7 +51,7 @@ const initialValues = [1, 0]; // i.e., y = x
 
 const result = levenbergMarquardt({ x, y }, line, { initialValues });
 console.log(result);
-// { 
+// {
 //   parameterValues: [1.9999986750084096, -1.9999943899435104]
 //   parameterError: 6.787132159723697e-11
 //   iterations: 2

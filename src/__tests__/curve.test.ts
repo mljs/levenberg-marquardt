@@ -1,15 +1,13 @@
-import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
+import { describe, expect, it, test } from 'vitest';
 
-import { levenbergMarquardt } from '..';
+import { levenbergMarquardt } from '../index.js';
 
-expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
-
-function sinFunction([a, b]) {
+function sinFunction([a, b]: number[]) {
   return (t) => a * Math.sin(b * t);
 }
 
 test('linear regression', () => {
-  function line([a, b]) {
+  function line([a, b]: number[]) {
     return (x) => a * x + b;
   }
 
@@ -25,12 +23,11 @@ test('linear regression', () => {
 describe('curve', () => {
   describe('Contrived problems (clean data)', () => {
     // In these cases we test the algorithm's ability to find an , we use some pre-selected values and generate the data set and see if the algorithm can get close the the exact solution
-    /** @type {any} */
     const contrivedProblems = [
       {
         name: 'bennet5([2, 3, 5])',
-        getFunctionFromParameters([b1, b2, b3]) {
-          return (t) => b1 * Math.pow(t + b2, -1 / b3);
+        getFunctionFromParameters([b1, b2, b3]: number[]) {
+          return (t: number) => b1 * (t + b2) ** (-1 / b3);
         },
         n: 154,
         xStart: -2.6581,
@@ -63,8 +60,8 @@ describe('curve', () => {
       },
       {
         name: 'Sigmoid',
-        getFunctionFromParameters([a, b, c]) {
-          return (t) => a / (b + Math.exp(-t * c));
+        getFunctionFromParameters([a, b, c]: number[]) {
+          return (t: number) => a / (b + Math.exp(-t * c));
         },
         n: 20,
         xStart: 0,
@@ -79,15 +76,15 @@ describe('curve', () => {
       },
       {
         name: 'Sum of lorentzians',
-        getFunctionFromParameters: function sumOfLorentzians(p) {
-          return (t) => {
-            let nL = p.length;
-            let factor, p2;
+        getFunctionFromParameters: function sumOfLorentzians(p: number[]) {
+          return (t: number) => {
+            const nL = p.length;
+            let factor: number, p2: number;
             let result = 0;
             for (let i = 0; i < nL; i += 3) {
-              p2 = Math.pow(p[i + 2] / 2, 2);
+              p2 = (p[i + 2] / 2) ** 2;
               factor = p[i + 1] * p2;
-              result += factor / (Math.pow(t - p[i], 2) + p2);
+              result += factor / ((t - p[i]) ** 2 + p2);
             }
             return result;
           };
@@ -108,13 +105,13 @@ describe('curve', () => {
         name: 'Sum of lorentzians, central differences',
         getFunctionFromParameters: function sumOfLorentzians(p) {
           return (t) => {
-            let nL = p.length;
-            let factor, p2;
+            const nL = p.length;
+            let factor: number, p2: number;
             let result = 0;
             for (let i = 0; i < nL; i += 3) {
-              p2 = Math.pow(p[i + 2] / 2, 2);
+              p2 = (p[i + 2] / 2) ** 2;
               factor = p[i + 1] * p2;
-              result += factor / (Math.pow(t - p[i], 2) + p2);
+              result += factor / ((t - p[i]) ** 2 + p2);
             }
             return result;
           };
@@ -132,6 +129,7 @@ describe('curve', () => {
           errorTolerance: 10e-8,
         },
         decimalsForParameterValues: 1,
+        skip: false,
       },
     ];
 
@@ -145,6 +143,7 @@ describe('curve', () => {
           ...problem,
         };
         const {
+          // eslint-disable-next-line @typescript-eslint/unbound-method
           getFunctionFromParameters,
           n,
           xStart,
@@ -201,7 +200,6 @@ describe('curve', () => {
 
       const actual = levenbergMarquardt(data, sinFunction, options);
       const manualCalculatedError = data.x
-        // @ts-expect-error number[] vs [number, number]
         .map(sinFunction(actual.parameterValues))
         .reduce((acc, yHat, i) => acc + (data.y[i] - yHat) ** 2, 0);
       expect(actual.parameterError).toBeCloseTo(
@@ -218,9 +216,9 @@ describe('curve', () => {
       {
         name: 'fourParamEq',
         getFunctionFromParameters:
-          ([a, b, c, d]) =>
-          (t) =>
-            a + (b - a) / (1 + Math.pow(c, d) * Math.pow(t, -d)),
+          ([a, b, c, d]: number[]) =>
+          (t: number) =>
+            a + (b - a) / (1 + c ** d * t ** -d),
         data: {
           // Where did these values come from / why they are correct?
           x: [
@@ -243,6 +241,7 @@ describe('curve', () => {
           weights: 1,
           initialValues: new Float64Array([0, 100, 1, 0.1]),
         },
+        skip: false,
       },
     ];
 

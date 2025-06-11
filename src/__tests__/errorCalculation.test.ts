@@ -1,8 +1,10 @@
-import errorCalculation from '../errorCalculation';
+import { describe, expect, it } from 'vitest';
+
+import errorCalculation from '../errorCalculation.js';
 
 describe('parameterError', () => {
   describe('Linear functions', () => {
-    function linearFunction([slope, intercept]) {
+    function linearFunction([slope, intercept]: number[]) {
       return (x) => slope * x + intercept;
     }
 
@@ -35,7 +37,7 @@ describe('parameterError', () => {
   });
 
   describe('Linear functions with typed array', () => {
-    function linearFunction([slope, intercept]) {
+    function linearFunction([slope, intercept]: number[]) {
       return (x) => slope * x + intercept;
     }
 

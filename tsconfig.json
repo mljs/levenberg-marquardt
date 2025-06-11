@@ -1,14 +1,21 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
+    "lib": ["ES2022", "WebWorker"],
+    "target": "ES2022",
     "outDir": "lib",
-    "sourceMap": true,
+    "module": "NodeNext",
     "strict": true,
-    "noImplicitAny": false,
-    "target": "es2020"
+    "skipLibCheck": false,
+    "resolveJsonModule": false,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "checkJs": true,
+    "noImplicitAny": false
   },
-  "include": ["./src/**/*"]
+  "include": ["src", "vite*.ts"]
 }
