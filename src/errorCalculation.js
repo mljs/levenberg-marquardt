@@ -17,7 +17,7 @@ export default function errorCalculation(
   let error = 0;
   const func = parameterizedFunction(parameters);
   for (let i = 0; i < data.x.length; i++) {
-    error += Math.pow(data.y[i] - func(data.x[i]), 2) / weightSquare[i];
+    error += (data.y[i] - func(data.x[i]))**2 / weightSquare[i];
   }
 
   return error;

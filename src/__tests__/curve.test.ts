@@ -4,12 +4,12 @@ import { levenbergMarquardt } from '../index.js';
 
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
-function sinFunction([a, b]) {
+function sinFunction([a, b]: number[]) {
   return (t) => a * Math.sin(b * t);
 }
 
 test('linear regression', () => {
-  function line([a, b]) {
+  function line([a, b]: number[]) {
     return (x) => a * x + b;
   }
 
@@ -29,8 +29,8 @@ describe('curve', () => {
     const contrivedProblems = [
       {
         name: 'bennet5([2, 3, 5])',
-        getFunctionFromParameters([b1, b2, b3]) {
-          return (t) => b1 * Math.pow(t + b2, -1 / b3);
+        getFunctionFromParameters([b1, b2, b3]: number[]) {
+          return (t: number) => b1 * (t + b2)**(-1 / b3);
         },
         n: 154,
         xStart: -2.6581,
@@ -63,8 +63,8 @@ describe('curve', () => {
       },
       {
         name: 'Sigmoid',
-        getFunctionFromParameters([a, b, c]) {
-          return (t) => a / (b + Math.exp(-t * c));
+        getFunctionFromParameters([a, b, c]: number[]) {
+          return (t: number) => a / (b + Math.exp(-t * c));
         },
         n: 20,
         xStart: 0,
@@ -79,15 +79,15 @@ describe('curve', () => {
       },
       {
         name: 'Sum of lorentzians',
-        getFunctionFromParameters: function sumOfLorentzians(p) {
-          return (t) => {
-            let nL = p.length;
-            let factor, p2;
+        getFunctionFromParameters: function sumOfLorentzians(p: number[]) {
+          return (t: number) => {
+            const nL = p.length;
+            let factor: number, p2: number;
             let result = 0;
             for (let i = 0; i < nL; i += 3) {
-              p2 = Math.pow(p[i + 2] / 2, 2);
+              p2 = (p[i + 2] / 2)**2;
               factor = p[i + 1] * p2;
-              result += factor / (Math.pow(t - p[i], 2) + p2);
+              result += factor / ((t - p[i])**2 + p2);
             }
             return result;
           };
@@ -108,13 +108,13 @@ describe('curve', () => {
         name: 'Sum of lorentzians, central differences',
         getFunctionFromParameters: function sumOfLorentzians(p) {
           return (t) => {
-            let nL = p.length;
-            let factor, p2;
+            const nL = p.length;
+            let factor: number, p2: number;
             let result = 0;
             for (let i = 0; i < nL; i += 3) {
-              p2 = Math.pow(p[i + 2] / 2, 2);
+              p2 = (p[i + 2] / 2)**2;
               factor = p[i + 1] * p2;
-              result += factor / (Math.pow(t - p[i], 2) + p2);
+              result += factor / ((t - p[i])**2 + p2);
             }
             return result;
           };
@@ -145,6 +145,7 @@ describe('curve', () => {
           ...problem,
         };
         const {
+          // eslint-disable-next-line @typescript-eslint/unbound-method
           getFunctionFromParameters,
           n,
           xStart,
@@ -218,9 +219,9 @@ describe('curve', () => {
       {
         name: 'fourParamEq',
         getFunctionFromParameters:
-          ([a, b, c, d]) =>
-          (t) =>
-            a + (b - a) / (1 + Math.pow(c, d) * Math.pow(t, -d)),
+          ([a, b, c, d]: number[]) =>
+          (t: number) =>
+            a + (b - a) / (1 + c**d * t**-d),
         data: {
           // Where did these values come from / why they are correct?
           x: [
