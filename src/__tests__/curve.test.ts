@@ -26,7 +26,7 @@ describe('curve', () => {
       {
         name: 'bennet5([2, 3, 5])',
         getFunctionFromParameters([b1, b2, b3]: number[]) {
-          return (t: number) => b1 * (t + b2)**(-1 / b3);
+          return (t: number) => b1 * (t + b2) ** (-1 / b3);
         },
         n: 154,
         xStart: -2.6581,
@@ -81,9 +81,9 @@ describe('curve', () => {
             let factor: number, p2: number;
             let result = 0;
             for (let i = 0; i < nL; i += 3) {
-              p2 = (p[i + 2] / 2)**2;
+              p2 = (p[i + 2] / 2) ** 2;
               factor = p[i + 1] * p2;
-              result += factor / ((t - p[i])**2 + p2);
+              result += factor / ((t - p[i]) ** 2 + p2);
             }
             return result;
           };
@@ -108,9 +108,9 @@ describe('curve', () => {
             let factor: number, p2: number;
             let result = 0;
             for (let i = 0; i < nL; i += 3) {
-              p2 = (p[i + 2] / 2)**2;
+              p2 = (p[i + 2] / 2) ** 2;
               factor = p[i + 1] * p2;
-              result += factor / ((t - p[i])**2 + p2);
+              result += factor / ((t - p[i]) ** 2 + p2);
             }
             return result;
           };
@@ -217,7 +217,7 @@ describe('curve', () => {
         getFunctionFromParameters:
           ([a, b, c, d]: number[]) =>
           (t: number) =>
-            a + (b - a) / (1 + c**d * t**-d),
+            a + (b - a) / (1 + c ** d * t ** -d),
         data: {
           // Where did these values come from / why they are correct?
           x: [
