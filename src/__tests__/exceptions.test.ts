@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { levenbergMarquardt } from '../index.js';
 
 function sinFunction([a, b]) {

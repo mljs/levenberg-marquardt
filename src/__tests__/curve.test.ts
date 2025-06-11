@@ -1,3 +1,5 @@
+import { describe, expect, it, test } from 'vitest';
+
 import { levenbergMarquardt } from '../index.js';
 
 function sinFunction([a, b]: number[]) {
@@ -21,7 +23,6 @@ test('linear regression', () => {
 describe('curve', () => {
   describe('Contrived problems (clean data)', () => {
     // In these cases we test the algorithm's ability to find an , we use some pre-selected values and generate the data set and see if the algorithm can get close the the exact solution
-    /** @type {any} */
     const contrivedProblems = [
       {
         name: 'bennet5([2, 3, 5])',
@@ -128,6 +129,7 @@ describe('curve', () => {
           errorTolerance: 10e-8,
         },
         decimalsForParameterValues: 1,
+        skip: false,
       },
     ];
 
@@ -198,7 +200,6 @@ describe('curve', () => {
 
       const actual = levenbergMarquardt(data, sinFunction, options);
       const manualCalculatedError = data.x
-        // @ts-expect-error number[] vs [number, number]
         .map(sinFunction(actual.parameterValues))
         .reduce((acc, yHat, i) => acc + (data.y[i] - yHat) ** 2, 0);
       expect(actual.parameterError).toBeCloseTo(
@@ -240,6 +241,7 @@ describe('curve', () => {
           weights: 1,
           initialValues: new Float64Array([0, 100, 1, 0.1]),
         },
+        skip: false,
       },
     ];
 
