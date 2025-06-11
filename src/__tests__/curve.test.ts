@@ -1,8 +1,4 @@
-import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
-
 import { levenbergMarquardt } from '../index.js';
-
-expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 function sinFunction([a, b]: number[]) {
   return (t) => a * Math.sin(b * t);

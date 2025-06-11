@@ -4,7 +4,6 @@
   "description": "Curve fitting method in javascript",
   "type": "module",
   "exports": "./lib/index.js",
-  "types": "./lib/index.d.ts",
   "files": [
     "src",
     "lib"
@@ -19,7 +18,7 @@
     "prettier": "prettier --check src",
     "prettier-write": "prettier --write src",
     "test": "npm run test-only && npm run eslint && npm run prettier && npm run check-types",
-    "test-only": "vitest --globals --coverage",
+    "test-only": "vitest --run --globals --coverage",
     "tsc": "npm run clean && npm run tsc-build",
     "tsc-build": "tsc --project tsconfig.build.json"
   },
@@ -62,8 +61,5 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "volta": {
-    "node": "22.16.0"
   }
 }

@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "lib": ["ES2022", "WebWorker"],
-    "types": ["@types/jest"],
     "target": "ES2022",
     "outDir": "lib",
     "module": "NodeNext",
