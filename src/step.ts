@@ -1,6 +1,6 @@
 import { inverse, Matrix } from 'ml-matrix';
 
-import gradientFunction from './gradientFunction.js';
+import gradientFunction from './gradient_function.js';
 
 /**
  * Matrix function over the samples
@@ -12,7 +12,7 @@ import gradientFunction from './gradientFunction.js';
 function matrixFunction(data, evaluatedData) {
   const m = data.x.length;
 
-  let ans = new Matrix(m, 1);
+  const ans = new Matrix(m, 1);
 
   for (let point = 0; point < m; point++) {
     ans.set(point, 0, data.y[point] - evaluatedData[point]);
@@ -39,17 +39,17 @@ export default function step(
   centralDifference,
   weights,
 ) {
-  let value = damping;
-  let identity = Matrix.eye(params.length, params.length, value);
+  const value = damping;
+  const identity = Matrix.eye(params.length, params.length, value);
 
   const func = parameterizedFunction(params);
 
-  let evaluatedData = new Float64Array(data.x.length);
+  const evaluatedData = new Float64Array(data.x.length);
   for (let i = 0; i < data.x.length; i++) {
     evaluatedData[i] = func(data.x[i]);
   }
 
-  let gradientFunc = gradientFunction(
+  const gradientFunc = gradientFunction(
     data,
     evaluatedData,
     params,
@@ -57,9 +57,9 @@ export default function step(
     parameterizedFunction,
     centralDifference,
   );
-  let residualError = matrixFunction(data, evaluatedData);
+  const residualError = matrixFunction(data, evaluatedData);
 
-  let inverseMatrix = inverse(
+  const inverseMatrix = inverse(
     identity.add(
       gradientFunc.mmul(
         gradientFunc.transpose().scale('row', { scale: weights }),
@@ -67,11 +67,11 @@ export default function step(
     ),
   );
 
-  let jacobianWeightResidualError = gradientFunc.mmul(
+  const jacobianWeightResidualError = gradientFunc.mmul(
     residualError.scale('row', { scale: weights }),
   );
 
-  let perturbations = inverseMatrix.mmul(jacobianWeightResidualError);
+  const perturbations = inverseMatrix.mmul(jacobianWeightResidualError);
 
   return {
     perturbations,

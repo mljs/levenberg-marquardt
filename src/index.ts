@@ -1,5 +1,5 @@
-import checkOptions from './checkOptions.js';
-import errorCalculation from './errorCalculation.js';
+import checkOptions from './check_options.js';
+import errorCalculation from './error_calculation.js';
 import step from './step.js';
 
 /**
@@ -24,13 +24,13 @@ values of λ result in a gradient descent update
  * @return {{parameterValues: Array<number>, parameterError: number, iterations: number}}
  */
 export function levenbergMarquardt(data, parameterizedFunction, options) {
-  let {
+  const checkedOptions = checkOptions(data, parameterizedFunction, options);
+  const {
     checkTimeout,
     minValues,
     maxValues,
     parameters,
     weightSquare,
-    damping,
     dampingStepUp,
     dampingStepDown,
     maxIterations,
@@ -38,7 +38,8 @@ export function levenbergMarquardt(data, parameterizedFunction, options) {
     centralDifference,
     gradientDifference,
     improvementThreshold,
-  } = checkOptions(data, parameterizedFunction, options);
+  } = checkedOptions;
+  let damping = checkedOptions.damping;
 
   let error = errorCalculation(
     data,
@@ -53,9 +54,9 @@ export function levenbergMarquardt(data, parameterizedFunction, options) {
 
   let iteration = 0;
   for (; iteration < maxIterations && !converged; iteration++) {
-    let previousError = error;
+    const previousError = error;
 
-    let { perturbations, jacobianWeightResidualError } = step(
+    const { perturbations, jacobianWeightResidualError } = step(
       data,
       parameters,
       damping,
@@ -86,7 +87,7 @@ export function levenbergMarquardt(data, parameterizedFunction, options) {
       optimalParameters = parameters.slice();
     }
 
-    let improvementMetric =
+    const improvementMetric =
       (previousError - error) /
       perturbations
         .transpose()

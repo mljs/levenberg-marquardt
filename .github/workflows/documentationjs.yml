@@ -5,7 +5,7 @@ on:
   release:
     types: [published]
 env:
-  ENTRY_FILE: 'src/index.js'
+  ENTRY_FILE: 'src/index.ts'
 
 jobs:
   deploy:

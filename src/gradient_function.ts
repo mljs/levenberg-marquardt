@@ -2,26 +2,24 @@ import { Matrix } from 'ml-matrix';
 
 /**
  * Difference of the matrix function over the parameters
- * @ignore
- * @param {{x:ArrayLike<number>, y:ArrayLike<number>}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
- * @param {ArrayLike<number>} evaluatedData - Array of previous evaluated function values
- * @param {Array<number>} params - Array of previous parameter values
- * @param {number|array} gradientDifference - The step size to approximate the jacobian matrix
- * @param {boolean} centralDifference - If true the jacobian matrix is approximated by central differences otherwise by forward differences
- * @param {function} paramFunction - The parameters and returns a function with the independent variable as a parameter
- * @return {Matrix}
+ * @param data Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
+ * @param evaluatedData - Array of previous evaluated function values
+ * @param params - Array of previous parameter values
+ * @param gradientDifference - The step size to approximate the jacobian matrix
+ * @param centralDifference - If true the jacobian matrix is approximated by central differences otherwise by forward differences
+ * @param paramFunction - The parameters and returns a function with the independent variable as a parameter
  */
 export default function gradientFunction(
-  data,
-  evaluatedData,
-  params,
-  gradientDifference,
-  paramFunction,
-  centralDifference,
-) {
+  data: { x: ArrayLike<number>; y: ArrayLike<number> },
+  evaluatedData: ArrayLike<number>,
+  params: number[],
+  gradientDifference: number[],
+  paramFunction: (params: number[]) => (x: number) => number,
+  centralDifference: boolean,
+): Matrix {
   const nbParams = params.length;
   const nbPoints = data.x.length;
-  let ans = Matrix.zeros(nbParams, nbPoints);
+  const ans = Matrix.zeros(nbParams, nbPoints);
 
   let rowIndex = 0;
   for (let param = 0; param < nbParams; param++) {
@@ -29,7 +27,7 @@ export default function gradientFunction(
     let delta = gradientDifference[param];
     let auxParams = params.slice();
     auxParams[param] += delta;
-    let funcParam = paramFunction(auxParams);
+    const funcParam = paramFunction(auxParams);
     if (!centralDifference) {
       for (let point = 0; point < nbPoints; point++) {
         ans.set(
@@ -42,7 +40,7 @@ export default function gradientFunction(
       auxParams = params.slice();
       auxParams[param] -= delta;
       delta *= 2;
-      let funcParam2 = paramFunction(auxParams);
+      const funcParam2 = paramFunction(auxParams);
       for (let point = 0; point < nbPoints; point++) {
         ans.set(
           rowIndex,
