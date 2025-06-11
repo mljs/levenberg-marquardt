@@ -1,3 +1,5 @@
+import * as os from 'node:os';
+
 import { describe, expect, it, test } from 'vitest';
 
 import { levenbergMarquardt } from '../index.js';
@@ -177,37 +179,45 @@ describe('curve', () => {
       });
     });
 
-    it('should return solution with lowest error', () => {
-      const data = {
-        x: [
-          0, 0.6283185307179586, 1.2566370614359172, 1.8849555921538759,
-          2.5132741228718345, 3.141592653589793, 3.7699111843077517,
-          4.39822971502571, 5.026548245743669, 5.654866776461628,
-        ],
-        y: [
-          0, 1.902113032590307, 1.1755705045849465, -1.175570504584946,
-          -1.9021130325903073, -4.898587196589413e-16, 1.902113032590307,
-          1.1755705045849467, -1.1755705045849456, -1.9021130325903075,
-        ],
-      };
-      const options = {
-        damping: 1.5,
-        initialValues: [0.594398586701882, 0.3506424963635226],
-        gradientDifference: 1e-2,
-        maxIterations: 100,
-        errorTolerance: 1e-2,
-      };
+    it(
+      'should return solution with lowest error',
+      {
+        // On macOS, `Math.sin` gives different results for some values.
+        // Refs: https://issues.chromium.org/issues/333194604
+        fails: os.platform() === 'darwin',
+      },
+      () => {
+        const data = {
+          x: [
+            0, 0.6283185307179586, 1.2566370614359172, 1.8849555921538759,
+            2.5132741228718345, 3.141592653589793, 3.7699111843077517,
+            4.39822971502571, 5.026548245743669, 5.654866776461628,
+          ],
+          y: [
+            0, 1.902113032590307, 1.1755705045849465, -1.175570504584946,
+            -1.9021130325903073, -4.898587196589413e-16, 1.902113032590307,
+            1.1755705045849467, -1.1755705045849456, -1.9021130325903075,
+          ],
+        };
+        const options = {
+          damping: 1.5,
+          initialValues: [0.594398586701882, 0.3506424963635226],
+          gradientDifference: 1e-2,
+          maxIterations: 100,
+          errorTolerance: 1e-2,
+        };
 
-      const actual = levenbergMarquardt(data, sinFunction, options);
-      const manualCalculatedError = data.x
-        .map(sinFunction(actual.parameterValues))
-        .reduce((acc, yHat, i) => acc + (data.y[i] - yHat) ** 2, 0);
-      expect(actual.parameterError).toBeCloseTo(
-        manualCalculatedError,
-        options.errorTolerance,
-      );
-      expect(actual.parameterError).toBeCloseTo(15.5, options.errorTolerance);
-    });
+        const actual = levenbergMarquardt(data, sinFunction, options);
+        const manualCalculatedError = data.x
+          .map(sinFunction(actual.parameterValues))
+          .reduce((acc, yHat, i) => acc + (data.y[i] - yHat) ** 2, 0);
+        expect(actual.parameterError).toBeCloseTo(
+          manualCalculatedError,
+          options.errorTolerance,
+        );
+        expect(actual.parameterError).toBeCloseTo(15.5, options.errorTolerance);
+      },
+    );
   });
 
   describe('"Real-world" problems (noisy data)', () => {
