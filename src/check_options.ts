@@ -110,11 +110,11 @@ function getGradientDifferenceArray(
       return new Array(parLen).fill(gradientDifference[0]);
     }
     return Array.from(gradientDifference);
-  } else {
-    throw new Error(
-      'gradientDifference should be a number or array with length equal to the number of parameters',
-    );
   }
+
+  throw new Error(
+    'gradientDifference should be a number or array with length equal to the number of parameters',
+  );
 }
 
 function getFiller(
@@ -128,14 +128,14 @@ function getFiller(
     if (weights.length < dataLength) {
       const value = 1 / weights[0] ** 2;
       return () => value;
-    } else {
-      return (i: number) => 1 / weights[i] ** 2;
     }
-  } else {
-    throw new Error(
-      'weights should be a number or array with length equal to the number of data points',
-    );
+
+    return (i: number) => 1 / weights[i] ** 2;
   }
+
+  throw new Error(
+    'weights should be a number or array with length equal to the number of data points',
+  );
 }
 
 function getCheckTimeout(timeout: number | undefined): () => boolean {

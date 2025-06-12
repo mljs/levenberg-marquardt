@@ -44,6 +44,28 @@ describe('Handling of invalid arguments', () => {
         }),
       ).toThrow('minValues and maxValues must be the same size');
     });
+
+    it('Should throw an error when weights is not a number or an array', () => {
+      expect(() => {
+        levenbergMarquardt({ x: [0, 0, 0], y: [0, 0, 0] }, sinFunction, {
+          initialValues: [0, 0, 0],
+          weights: { length: 3 },
+        });
+      }).toThrow(
+        'weights should be a number or array with length equal to the number of data points',
+      );
+    });
+
+    it('Should throw an error when gradientDifference is not a number or an array', () => {
+      expect(() => {
+        levenbergMarquardt({ x: [0, 0, 0], y: [0, 0, 0] }, sinFunction, {
+          initialValues: [0, 0, 0],
+          gradientDifference: { length: 3 },
+        });
+      }).toThrow(
+        'gradientDifference should be a number or array with length equal to the number of parameters',
+      );
+    });
   });
 
   describe('data', () => {
