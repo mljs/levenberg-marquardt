@@ -2,16 +2,19 @@ import { describe, expect, it } from 'vitest';
 
 import { levenbergMarquardt } from '../index.js';
 
-function sinFunction([a, b]) {
-  return (t) => a * Math.sin(b * t);
+function sinFunction([a, b]: number[]) {
+  return (t: number) => a * Math.sin(b * t);
 }
 
 describe('Handling of invalid arguments', () => {
   describe('options', () => {
     it('Should throw an error when bad options are provided (negative damping)', () => {
-      expect(() => levenbergMarquardt({}, () => 1, { damping: -1 })).toThrow(
-        'The damping option must be a positive number',
-      );
+      expect(() =>
+        levenbergMarquardt({ x: [], y: [] }, () => () => 1, {
+          damping: -1,
+          initialValues: [],
+        }),
+      ).toThrow('The damping option must be a positive number');
     });
 
     it('Should throw an error when initialValues is not an array', () => {
@@ -21,12 +24,12 @@ describe('Handling of invalid arguments', () => {
       expect(() =>
         levenbergMarquardt(inputData, sinFunction, {
           damping: 0.1,
-        }),
+        } as never),
       ).toThrow(expectedErrorMessage);
       expect(() =>
         levenbergMarquardt(inputData, sinFunction, {
           damping: 0.1,
-          initialValues: 2,
+          initialValues: 2 as never,
         }),
       ).toThrow(expectedErrorMessage);
     });
@@ -50,14 +53,14 @@ describe('Handling of invalid arguments', () => {
     };
 
     it('Should throw an error when data is an array (should be object)', () => {
-      expect(() => levenbergMarquardt([1, 2], sinFunction, options)).toThrow(
-        'The data parameter must have x and y elements',
-      );
+      expect(() =>
+        levenbergMarquardt([1, 2] as never, sinFunction, options),
+      ).toThrow('The data parameter must have x and y elements');
     });
 
     it('Should throw an error when data.{x,y} are numbers (should be arrays)', () => {
       expect(() =>
-        levenbergMarquardt({ x: 1, y: 2 }, sinFunction, options),
+        levenbergMarquardt({ x: 1, y: 2 } as never, sinFunction, options),
       ).toThrow(
         'The data parameter elements must be an array with more than 2 points',
       );
@@ -121,7 +124,7 @@ describe('Handling of ill-behaved functions', () => {
 
   it('Should throw because is not a number', () => {
     const options = {
-      timeout: 'a',
+      timeout: 'a' as never,
       damping: 0.00001,
       maxIterations: 200,
       initialValues: [0, 100, 1, 0.1],

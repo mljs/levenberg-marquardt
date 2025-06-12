@@ -1,10 +1,29 @@
 import { isAnyArray } from 'is-any-array';
 
-export default function checkOptions(data, parameterizedFunction, options) {
-  let {
+import type { Data2D, LevenbergMarquardtOptions } from './types.js';
+
+export interface CheckedOptions {
+  checkTimeout: () => boolean;
+  minValues: ArrayLike<number>;
+  maxValues: ArrayLike<number>;
+  parameters: number[];
+  weightSquare: number[];
+  damping: number;
+  dampingStepUp: number;
+  dampingStepDown: number;
+  maxIterations: number;
+  errorTolerance: number;
+  centralDifference: boolean;
+  gradientDifference: number[];
+  improvementThreshold: number;
+}
+
+export default function checkOptions(
+  data: Data2D,
+  options: LevenbergMarquardtOptions,
+): CheckedOptions {
+  const {
     timeout,
-    minValues,
-    maxValues,
     initialValues,
     weights = 1,
     damping = 1e-2,
@@ -16,6 +35,7 @@ export default function checkOptions(data, parameterizedFunction, options) {
     gradientDifference = 10e-2,
     improvementThreshold = 1e-3,
   } = options;
+  let { minValues, maxValues } = options;
 
   if (damping <= 0) {
     throw new Error('The damping option must be a positive number');
@@ -39,10 +59,9 @@ export default function checkOptions(data, parameterizedFunction, options) {
       'The initialValues option is mandatory and must be an array',
     );
   }
-  let parameters = initialValues;
+  const parameters = Array.from(initialValues);
 
-  let nbPoints = data.y.length;
-  let parLen = parameters.length;
+  const parLen = parameters.length;
   maxValues = maxValues || new Array(parLen).fill(Number.MAX_SAFE_INTEGER);
   minValues = minValues || new Array(parLen).fill(Number.MIN_SAFE_INTEGER);
 
@@ -50,50 +69,17 @@ export default function checkOptions(data, parameterizedFunction, options) {
     throw new Error('minValues and maxValues must be the same size');
   }
 
-  if (typeof gradientDifference === 'number') {
-    gradientDifference = new Array(parameters.length).fill(gradientDifference);
-  } else if (isAnyArray(gradientDifference)) {
-    if (gradientDifference.length !== parLen) {
-      gradientDifference = new Array(parLen).fill(gradientDifference[0]);
-    }
-  } else {
-    throw new Error(
-      'gradientDifference should be a number or array with length equal to the number of parameters',
-    );
-  }
+  const gradientDifferenceArray = getGradientDifferenceArray(
+    gradientDifference,
+    parameters,
+  );
 
-  let filler;
-  if (typeof weights === 'number') {
-    let value = 1 / weights ** 2;
-    filler = () => value;
-  } else if (isAnyArray(weights)) {
-    if (weights.length < data.x.length) {
-      let value = 1 / weights[0] ** 2;
-      filler = () => value;
-    } else {
-      filler = (i) => 1 / weights[i] ** 2;
-    }
-  } else {
-    throw new Error(
-      'weights should be a number or array with length equal to the number of data points',
-    );
-  }
+  const filler = getFiller(weights, data.x.length);
+  const checkTimeout = getCheckTimeout(timeout);
 
-  let checkTimeout;
-  if (timeout !== undefined) {
-    if (typeof timeout !== 'number') {
-      throw new Error('timeout should be a number');
-    }
-    let endTime = Date.now() + timeout * 1000;
-    checkTimeout = () => Date.now() > endTime;
-  } else {
-    checkTimeout = () => false;
-  }
-
-  let weightSquare = new Array(data.x.length);
-  for (let i = 0; i < nbPoints; i++) {
-    weightSquare[i] = filler(i);
-  }
+  const weightSquare = Array.from({ length: data.x.length }, (_, i) =>
+    filler(i),
+  );
 
   return {
     checkTimeout,
@@ -107,7 +93,59 @@ export default function checkOptions(data, parameterizedFunction, options) {
     maxIterations,
     errorTolerance,
     centralDifference,
-    gradientDifference,
+    gradientDifference: gradientDifferenceArray,
     improvementThreshold,
   };
+}
+
+function getGradientDifferenceArray(
+  gradientDifference: number | ArrayLike<number>,
+  parameters: number[],
+): number[] {
+  if (typeof gradientDifference === 'number') {
+    return new Array(parameters.length).fill(gradientDifference);
+  } else if (isAnyArray(gradientDifference)) {
+    const parLen = parameters.length;
+    if (gradientDifference.length !== parLen) {
+      return new Array(parLen).fill(gradientDifference[0]);
+    }
+    return Array.from(gradientDifference);
+  } else {
+    throw new Error(
+      'gradientDifference should be a number or array with length equal to the number of parameters',
+    );
+  }
+}
+
+function getFiller(
+  weights: number | ArrayLike<number>,
+  dataLength: number,
+): (i: number) => number {
+  if (typeof weights === 'number') {
+    const value = 1 / weights ** 2;
+    return () => value;
+  } else if (isAnyArray(weights)) {
+    if (weights.length < dataLength) {
+      const value = 1 / weights[0] ** 2;
+      return () => value;
+    } else {
+      return (i: number) => 1 / weights[i] ** 2;
+    }
+  } else {
+    throw new Error(
+      'weights should be a number or array with length equal to the number of data points',
+    );
+  }
+}
+
+function getCheckTimeout(timeout: number | undefined): () => boolean {
+  if (timeout !== undefined) {
+    if (typeof timeout !== 'number') {
+      throw new Error('timeout should be a number');
+    }
+    const endTime = Date.now() + timeout * 1000;
+    return () => Date.now() > endTime;
+  } else {
+    return () => false;
+  }
 }

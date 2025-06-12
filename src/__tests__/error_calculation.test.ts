@@ -11,7 +11,7 @@ describe('parameterError', () => {
     /** @type [number, number] */
     const sampleParameters = [1, 1];
     const n = 10;
-    const w = new Float64Array(n).fill(1);
+    const w = new Array(n).fill(1);
     const xs = new Array(n).fill(0).map((zero, i) => i);
     const data = {
       x: xs,
@@ -46,7 +46,7 @@ describe('parameterError', () => {
     const n = 10;
     const x = new Float64Array(n);
     const y = new Float64Array(n);
-    const w = new Float64Array(n);
+    const w = new Array(n);
     const fct = linearFunction(sampleParameters);
     for (let i = 0; i < n; i++) {
       x[i] = i;

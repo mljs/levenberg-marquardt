@@ -1,15 +1,15 @@
 import { inverse, Matrix } from 'ml-matrix';
 
 import gradientFunction from './gradient_function.js';
+import type { Data2D, ParameterizedFunction } from './types.js';
 
 /**
  * Matrix function over the samples
- * @ignore
- * @param {{x:ArrayLike<number>, y:ArrayLike<number>}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
- * @param {ArrayLike<number>} evaluatedData - Array of previous evaluated function values
- * @return {Matrix}
+ *
+ * @param data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
+ * @param evaluatedData - Array of previous evaluated function values
  */
-function matrixFunction(data, evaluatedData) {
+function matrixFunction(data: Data2D, evaluatedData: Float64Array): Matrix {
   const m = data.x.length;
 
   const ans = new Matrix(m, 1);
@@ -22,25 +22,25 @@ function matrixFunction(data, evaluatedData) {
 
 /**
  * Iteration for Levenberg-Marquardt
- * @ignore
- * @param {{x:ArrayLike<number>, y:ArrayLike<number>}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
- * @param {Array<number>} params - Array of previous parameter values
- * @param {number} damping - Levenberg-Marquardt parameter
- * @param {number|array} gradientDifference - The step size to approximate the jacobian matrix
- * @param {boolean} centralDifference - If true the jacobian matrix is approximated by central differences otherwise by forward differences
- * @param {function} parameterizedFunction - The parameters and returns a function with the independent variable as a parameter
+ *
+ * @param data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
+ * @param params - Array of previous parameter values
+ * @param damping - Levenberg-Marquardt parameter
+ * @param gradientDifference - The step size to approximate the jacobian matrix
+ * @param centralDifference - If true the jacobian matrix is approximated by central differences otherwise by forward differences
+ * @param parameterizedFunction - The parameters and returns a function with the independent variable as a parameter
+ * @param weights - scale the gradient and residual error by weights
  */
 export default function step(
-  data,
-  params,
-  damping,
-  gradientDifference,
-  parameterizedFunction,
-  centralDifference,
-  weights,
+  data: Data2D,
+  params: number[],
+  damping: number,
+  gradientDifference: number[],
+  parameterizedFunction: ParameterizedFunction,
+  centralDifference: boolean,
+  weights?: ArrayLike<number>,
 ) {
-  const value = damping;
-  const identity = Matrix.eye(params.length, params.length, value);
+  const identity = Matrix.eye(params.length, params.length, damping);
 
   const func = parameterizedFunction(params);
 

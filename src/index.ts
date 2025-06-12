@@ -1,30 +1,39 @@
 import checkOptions from './check_options.js';
 import errorCalculation from './error_calculation.js';
 import step from './step.js';
+import type {
+  Data2D,
+  LevenbergMarquardtOptions,
+  LevenbergMarquardtReturn,
+  ParameterizedFunction,
+} from './types.js';
 
 /**
  * Curve fitting algorithm
- * @param {{x:ArrayLike<number>, y:ArrayLike<number>}} data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
- * @param {function} parameterizedFunction - Takes an array of parameters and returns a function with the independent variable as its sole argument
- * @param {object} options - Options object
- * @param {ArrayLike<number>} options.initialValues - Array of initial parameter values
- * @param {number|ArrayLike<number>} [options.weights = 1] - weighting vector, if the length does not match with the number of data points, the vector is reconstructed with first value.
- * @param {number} [options.damping = 1e-2] - Levenberg-Marquardt parameter, small values of the damping parameter λ result in a Gauss-Newton update and large
+ * @param data - Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
+ * @param parameterizedFunction - Takes an array of parameters and returns a function with the independent variable as its sole argument
+ * @param options - Options object
+ * @param options.initialValues - Array of initial parameter values
+ * @param [options.weights = 1] - weighting vector, if the length does not match with the number of data points, the vector is reconstructed with first value.
+ * @param [options.damping = 1e-2] - Levenberg-Marquardt parameter, small values of the damping parameter λ result in a Gauss-Newton update and large
 values of λ result in a gradient descent update
- * @param {number} [options.dampingStepDown = 9] - factor to reduce the damping (Levenberg-Marquardt parameter) when there is not an improvement when updating parameters.
- * @param {number} [options.dampingStepUp = 11] - factor to increase the damping (Levenberg-Marquardt parameter) when there is an improvement when updating parameters.
- * @param {number} [options.improvementThreshold = 1e-3] - the threshold to define an improvement through an update of parameters
- * @param {number|ArrayLike<number>} [options.gradientDifference = 10e-2] - The step size to approximate the jacobian matrix
- * @param {boolean} [options.centralDifference = false] - If true the jacobian matrix is approximated by central differences otherwise by forward differences
- * @param {ArrayLike<number>} [options.minValues] - Minimum allowed values for parameters
- * @param {ArrayLike<number>} [options.maxValues] - Maximum allowed values for parameters
- * @param {number} [options.maxIterations = 100] - Maximum of allowed iterations
- * @param {number} [options.errorTolerance = 10e-3] - Minimum uncertainty allowed for each point.
- * @param {number} [options.timeout] - maximum time running before throw in seconds.
- * @return {{parameterValues: Array<number>, parameterError: number, iterations: number}}
+ * @param [options.dampingStepDown = 9] - factor to reduce the damping (Levenberg-Marquardt parameter) when there is not an improvement when updating parameters.
+ * @param [options.dampingStepUp = 11] - factor to increase the damping (Levenberg-Marquardt parameter) when there is an improvement when updating parameters.
+ * @param [options.improvementThreshold = 1e-3] - the threshold to define an improvement through an update of parameters
+ * @param [options.gradientDifference = 10e-2] - The step size to approximate the jacobian matrix
+ * @param [options.centralDifference = false] - If true the jacobian matrix is approximated by central differences otherwise by forward differences
+ * @param [options.minValues] - Minimum allowed values for parameters
+ * @param [options.maxValues] - Maximum allowed values for parameters
+ * @param [options.maxIterations = 100] - Maximum of allowed iterations
+ * @param [options.errorTolerance = 10e-3] - Minimum uncertainty allowed for each point.
+ * @param [options.timeout] - maximum time running before throw in seconds.
  */
-export function levenbergMarquardt(data, parameterizedFunction, options) {
-  const checkedOptions = checkOptions(data, parameterizedFunction, options);
+export function levenbergMarquardt(
+  data: Data2D,
+  parameterizedFunction: ParameterizedFunction,
+  options: LevenbergMarquardtOptions,
+): LevenbergMarquardtReturn {
+  const checkedOptions = checkOptions(data, options);
   const {
     checkTimeout,
     minValues,
@@ -115,3 +124,5 @@ export function levenbergMarquardt(data, parameterizedFunction, options) {
     iterations: iteration,
   };
 }
+
+export type * from './types.js';

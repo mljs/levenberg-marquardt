@@ -1,5 +1,7 @@
 import { Matrix } from 'ml-matrix';
 
+import type { Data2D, ParameterizedFunction } from './types.js';
+
 /**
  * Difference of the matrix function over the parameters
  * @param data Array of points to fit in the format [x1, x2, ... ], [y1, y2, ... ]
@@ -10,11 +12,11 @@ import { Matrix } from 'ml-matrix';
  * @param paramFunction - The parameters and returns a function with the independent variable as a parameter
  */
 export default function gradientFunction(
-  data: { x: ArrayLike<number>; y: ArrayLike<number> },
-  evaluatedData: ArrayLike<number>,
+  data: Data2D,
+  evaluatedData: Float64Array,
   params: number[],
   gradientDifference: number[],
-  paramFunction: (params: number[]) => (x: number) => number,
+  paramFunction: ParameterizedFunction,
   centralDifference: boolean,
 ): Matrix {
   const nbParams = params.length;
