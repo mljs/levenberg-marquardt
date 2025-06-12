@@ -10,7 +10,7 @@ function sinFunction([a, b]: number[]) {
 
 test('linear regression', () => {
   function line([a, b]: number[]) {
-    return (x) => a * x + b;
+    return (x: number) => a * x + b;
   }
 
   const x = [0, 1, 2, 3, 4, 5, 6];
