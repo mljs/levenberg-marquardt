@@ -3,6 +3,9 @@ export interface Data2D {
   y: ArrayLike<number>;
 }
 
+/**
+ * `params` comes from `LevenbergMarquardtOptions.initialValues`
+ */
 export type ParameterizedFunction = (params: number[]) => (x: number) => number;
 
 export interface LevenbergMarquardtOptions {
