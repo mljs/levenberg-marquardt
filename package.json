@@ -48,14 +48,14 @@
     "eslint": "^9.28.0",
     "eslint-config-cheminfo-typescript": "^18.0.1",
     "jest-matcher-deep-close-to": "^3.0.2",
-    "prettier": "^2.8.7",
-    "rimraf": "^5.0.0",
-    "typescript": "^5.0.4",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.3",
     "vitest": "^3.2.3"
   },
   "dependencies": {
-    "is-any-array": "^2.0.0",
-    "ml-matrix": "^6.10.4"
+    "is-any-array": "^2.0.1",
+    "ml-matrix": "^6.12.1"
   },
   "config": {
     "commitizen": {
