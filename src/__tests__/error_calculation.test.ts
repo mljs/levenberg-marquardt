@@ -5,7 +5,7 @@ import errorCalculation from '../error_calculation.js';
 describe('parameterError', () => {
   describe('Linear functions', () => {
     function linearFunction([slope, intercept]: number[]) {
-      return (x) => slope * x + intercept;
+      return (x: number) => slope * x + intercept;
     }
 
     /** @type [number, number] */
@@ -38,7 +38,7 @@ describe('parameterError', () => {
 
   describe('Linear functions with typed array', () => {
     function linearFunction([slope, intercept]: number[]) {
-      return (x) => slope * x + intercept;
+      return (x: number) => slope * x + intercept;
     }
 
     /** @type [number, number] */
