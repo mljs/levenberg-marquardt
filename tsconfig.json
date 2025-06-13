@@ -1,6 +1,7 @@
 {
   "extends": "@zakodium/tsconfig",
   "compilerOptions": {
+    "types": ["node"],
     "outDir": "lib",
     "noUncheckedIndexedAccess": false
   },
