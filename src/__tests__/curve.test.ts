@@ -5,7 +5,7 @@ import { describe, expect, it, test } from 'vitest';
 import { levenbergMarquardt } from '../index.js';
 
 function sinFunction([a, b]: number[]) {
-  return (t) => a * Math.sin(b * t);
+  return (t: number) => a * Math.sin(b * t);
 }
 
 test('linear regression', () => {
@@ -105,8 +105,8 @@ describe('curve', () => {
       },
       {
         name: 'Sum of lorentzians, central differences',
-        getFunctionFromParameters: function sumOfLorentzians(p) {
-          return (t) => {
+        getFunctionFromParameters: function sumOfLorentzians(p: number[]) {
+          return (t: number) => {
             const nL = p.length;
             let factor: number, p2: number;
             let result = 0;
