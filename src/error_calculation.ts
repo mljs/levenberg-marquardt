@@ -1,4 +1,4 @@
-import type { Data2D, ParameterizedFunction } from './types.js';
+import type { Data2D, ParameterizedFunction } from './types.ts';
 
 /**
  * the sum of the weighted squares of the errors (or weighted residuals) between the data.y

@@ -1,6 +1,6 @@
 import { Matrix } from 'ml-matrix';
 
-import type { Data2D, ParameterizedFunction } from './types.js';
+import type { Data2D, ParameterizedFunction } from './types.ts';
 
 /**
  * Difference of the matrix function over the parameters

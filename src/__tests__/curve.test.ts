@@ -2,7 +2,7 @@ import * as os from 'node:os';
 
 import { describe, expect, it, test } from 'vitest';
 
-import { levenbergMarquardt } from '../index.js';
+import { levenbergMarquardt } from '../index.ts';
 
 function sinFunction([a, b]: number[]) {
   return (t: number) => a * Math.sin(b * t);
