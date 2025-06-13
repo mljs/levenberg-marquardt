@@ -1,9 +1,9 @@
-# levenberg-marquardt
+# ml-levenberg-marquardt
 
-[![NPM version][npm-image]][npm-url]
-[![build status][ci-image]][ci-url]
-[![Test coverage][codecov-image]][codecov-url]
-[![npm download][download-image]][download-url]
+[![NPM version](https://img.shields.io/npm/v/ml-levenberg-marquardt.svg)](https://www.npmjs.com/package/ml-levenberg-marquardt)
+[![npm download](https://img.shields.io/npm/dm/ml-levenberg-marquardt.svg)](https://www.npmjs.com/package/ml-levenberg-marquardt)
+[![test coverage](https://img.shields.io/codecov/c/github/mljs/levenberg-marquardt.svg)](https://codecov.io/gh/mljs/levenberg-marquardt)
+[![license](https://img.shields.io/npm/l/ml-levenberg-marquardt.svg)](https://github.com/mljs/levenberg-marquardt/blob/main/LICENSE)
 
 Curve fitting method in javascript.
 
@@ -11,15 +11,17 @@ Curve fitting method in javascript.
 
 This algorithm is based on the article [Brown, Kenneth M., and J. E. Dennis. "Derivative free analogues of the Levenberg-Marquardt and Gauss algorithms for nonlinear least squares approximation." Numerische Mathematik 18.4 (1971): 289-297.](https://doi.org/10.1007/BF01404679) and [http://people.duke.edu/~hpgavin/ce281/lm.pdf](http://people.duke.edu/~hpgavin/ce281/lm.pdf)
 
-In order to get a general idea of the problem you could also check the [Wikipedia article](https://en.wikipedia.org/wiki/Levenberg%E2%80%93Marquardt_algorithm).
+To get a general idea of the problem, you could also check the [Wikipedia article](https://en.wikipedia.org/wiki/Levenberg%E2%80%93Marquardt_algorithm).
 
 ## Installation
 
-`$ npm i ml-levenberg-marquardt`
+```console
+npm i ml-levenberg-marquardt
+```
 
 ## Options
 
-Next there is some options could change the behavior of the code.
+Next, there are some options could change the behaviour of the code.
 
 ### centralDifference
 
@@ -27,7 +29,7 @@ The jacobian matrix is approximated by finite difference; forward differences or
 
 ### gradientDifference
 
-The jacobian matrix is approximated as mention above, the gradientDifference option is the step size (dp) to calculate de difference between the function with the current parameter state and the perturbation added. It could be a number (same step size for all parameters) or an array with different values for each parameter, if the gradientDifference is zero the derive will be zero, and the parameter will hold fixed
+The jacobian matrix is approximated as mentioned above, the gradientDifference option is the step size (dp) to calculate the difference between the function with the current parameter state and the perturbation added. It could be a number (same step size for all parameters) or an array with different values for each parameter, if the gradientDifference is zero, the derive will be zero, and the parameter will hold fixed
 
 ## Examples
 
@@ -107,17 +109,6 @@ const options = {
 let fittedParams = LM(data, sinFunction, options);
 ```
 
-Or test it in [Runkit](https://runkit.com/npm/ml-levenberg-marquardt)
-
 ## License
 
 [MIT](./LICENSE)
-
-[npm-image]: https://img.shields.io/npm/v/ml-levenberg-marquardt.svg
-[npm-url]: https://npmjs.org/package/ml-levenberg-marquardt
-[codecov-image]: https://img.shields.io/codecov/c/github/mljs/levenberg-marquardt.svg
-[codecov-url]: https://codecov.io/gh/mljs/levenberg-marquardt
-[ci-image]: https://github.com/mljs/levenberg-marquardt/workflows/Node.js%20CI/badge.svg?branch=main
-[ci-url]: https://github.com/mljs/levenberg-marquardt/actions?query=workflow%3A%22Node.js+CI%22
-[download-image]: https://img.shields.io/npm/dm/ml-levenberg-marquardt.svg
-[download-url]: https://npmjs.org/package/ml-levenberg-marquardt
