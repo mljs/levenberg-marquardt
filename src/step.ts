@@ -1,7 +1,7 @@
 import { inverse, Matrix } from 'ml-matrix';
 
-import gradientFunction from './gradient_function.js';
-import type { Data2D, ParameterizedFunction } from './types.js';
+import gradientFunction from './gradient_function.ts';
+import type { Data2D, ParameterizedFunction } from './types.ts';
 
 /**
  * Matrix function over the samples

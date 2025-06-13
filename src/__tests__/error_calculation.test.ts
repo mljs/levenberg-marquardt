@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import errorCalculation from '../error_calculation.js';
+import errorCalculation from '../error_calculation.ts';
 
 describe('parameterError', () => {
   describe('Linear functions', () => {

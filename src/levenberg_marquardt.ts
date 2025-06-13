@@ -1,12 +1,12 @@
-import checkOptions from './check_options.js';
-import errorCalculation from './error_calculation.js';
-import step from './step.js';
+import checkOptions from './check_options.ts';
+import errorCalculation from './error_calculation.ts';
+import step from './step.ts';
 import type {
   Data2D,
   LevenbergMarquardtOptions,
   LevenbergMarquardtReturn,
   ParameterizedFunction,
-} from './types.js';
+} from './types.ts';
 
 /**
  * Curve fitting algorithm

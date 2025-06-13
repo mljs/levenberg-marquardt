@@ -1,6 +1,6 @@
 import { isAnyArray } from 'is-any-array';
 
-import type { Data2D, LevenbergMarquardtOptions } from './types.js';
+import type { Data2D, LevenbergMarquardtOptions } from './types.ts';
 
 export interface CheckedOptions {
   checkTimeout: () => boolean;
