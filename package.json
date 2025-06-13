@@ -44,7 +44,6 @@
   "devDependencies": {
     "@vitest/coverage-v8": "^3.2.3",
     "benchmark": "^2.1.4",
-    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.28.0",
     "eslint-config-cheminfo-typescript": "^18.0.1",
     "jest-matcher-deep-close-to": "^3.0.2",
@@ -56,10 +55,5 @@
   "dependencies": {
     "is-any-array": "^2.0.1",
     "ml-matrix": "^6.12.1"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   }
 }
