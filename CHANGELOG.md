@@ -1,5 +1,16 @@
 # Changelog
 
+## [5.0.0](https://github.com/mljs/levenberg-marquardt/compare/v4.1.3...v5.0.0) (2025-06-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate to TypeScript and ESM ([#65](https://github.com/mljs/levenberg-marquardt/issues/65))
+
+### Code Refactoring
+
+* migrate to TypeScript and ESM ([#65](https://github.com/mljs/levenberg-marquardt/issues/65)) ([086dbb9](https://github.com/mljs/levenberg-marquardt/commit/086dbb9fc15f605d84f4165e34bf1da13ec607b7))
+
 ## [4.1.3](https://github.com/mljs/levenberg-marquardt/compare/v4.1.2...v4.1.3) (2023-09-30)
 
 
