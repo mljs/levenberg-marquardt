@@ -3,7 +3,9 @@
   "version": "5.0.0",
   "description": "Curve fitting method in javascript",
   "type": "module",
-  "exports": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js"
+  },
   "files": [
     "src",
     "lib"
