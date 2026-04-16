@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.0.1](https://github.com/mljs/levenberg-marquardt/compare/v5.0.0...v5.0.1) (2026-04-16)
+
+
+### Bug Fixes
+
+* update is-any-array ([#70](https://github.com/mljs/levenberg-marquardt/issues/70)) ([9f894d0](https://github.com/mljs/levenberg-marquardt/commit/9f894d0dccfd72a1e433f8241f56828c5f22e2ad))
+
 ## [5.0.0](https://github.com/mljs/levenberg-marquardt/compare/v4.1.3...v5.0.0) (2025-06-13)
 
 
