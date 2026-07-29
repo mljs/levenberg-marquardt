@@ -92,12 +92,10 @@ export default function step(
       );
   const residualError = matrixFunction(data, evaluatedData);
 
-  const identity = Matrix.eye(params.length, params.length, damping);
-  const hessianApproximation = identity.add(
-    gradientFunc.mmul(
-      gradientFunc.transpose().scale('row', { scale: weights }),
-    ),
-  );
+  const hessianApproximation = gradientFunc.mmulByTranspose(weights);
+  for (let i = 0; i < params.length; i++) {
+    hessianApproximation.set(i, i, hessianApproximation.get(i, i) + damping);
+  }
   const jacobianWeightResidualError = gradientFunc.mmul(
     residualError.scale('row', { scale: weights }),
   );

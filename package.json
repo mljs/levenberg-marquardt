@@ -58,6 +58,6 @@
   },
   "dependencies": {
     "is-any-array": "^3.0.0",
-    "ml-matrix": "^6.12.2"
+    "ml-matrix": "^6.14.0"
   }
 }
