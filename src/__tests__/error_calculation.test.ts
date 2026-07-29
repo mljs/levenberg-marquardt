@@ -1,73 +1,71 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, test } from 'vitest';
 
 import errorCalculation from '../error_calculation.ts';
 
-describe('parameterError', () => {
-  describe('Linear functions', () => {
-    function linearFunction([slope, intercept]: number[]) {
-      return (x: number) => slope * x + intercept;
-    }
+describe('Linear functions', () => {
+  function linearFunction([slope, intercept]: number[]) {
+    return (x: number) => slope * x + intercept;
+  }
 
-    /** @type [number, number] */
-    const sampleParameters = [1, 1];
-    const n = 10;
-    const w = new Array(n).fill(1);
-    const xs = new Array(n).fill(0).map((zero, i) => i);
-    const data = {
-      x: xs,
-      y: xs.map(linearFunction(sampleParameters)),
-    };
+  /** @type [number, number] */
+  const sampleParameters = [1, 1];
+  const n = 10;
+  const w = new Array(n).fill(1);
+  const xs = new Array(n).fill(0).map((zero, i) => i);
+  const data = {
+    x: xs,
+    y: xs.map(linearFunction(sampleParameters)),
+  };
 
-    it('parameterError should be zero for an exact fit', () => {
-      expect(
-        errorCalculation(data, sampleParameters, linearFunction, w),
-      ).toBeCloseTo(0, 3);
-    });
-
-    it('parameterError should match the sum of absolute difference between the model and the data', () => {
-      const parameters = Array.from(sampleParameters);
-      // Offset line so that it's still parallel but differs by 1 at each point
-      // Then each point will result in a residual increase of 1
-      parameters[1] += 1;
-      expect(errorCalculation(data, parameters, linearFunction, w)).toBeCloseTo(
-        n,
-        3,
-      );
-    });
+  test('parameterError should be zero for an exact fit', () => {
+    expect(
+      errorCalculation(data, sampleParameters, linearFunction, w),
+    ).toBeCloseTo(0, 3);
   });
 
-  describe('Linear functions with typed array', () => {
-    function linearFunction([slope, intercept]: number[]) {
-      return (x: number) => slope * x + intercept;
-    }
+  test('parameterError should match the sum of absolute difference between the model and the data', () => {
+    const parameters = Array.from(sampleParameters);
+    // Offset line so that it's still parallel but differs by 1 at each point
+    // Then each point will result in a residual increase of 1
+    parameters[1] += 1;
+    expect(errorCalculation(data, parameters, linearFunction, w)).toBeCloseTo(
+      n,
+      3,
+    );
+  });
+});
 
-    /** @type [number, number] */
-    const sampleParameters = [1, 1];
-    const n = 10;
-    const x = new Float64Array(n);
-    const y = new Float64Array(n);
-    const w = new Array(n);
-    const fct = linearFunction(sampleParameters);
-    for (let i = 0; i < n; i++) {
-      x[i] = i;
-      w[i] = 1;
-      y[i] = fct(i);
-    }
+describe('Linear functions with typed array', () => {
+  function linearFunction([slope, intercept]: number[]) {
+    return (x: number) => slope * x + intercept;
+  }
 
-    it('parameterError should be zero for an exact fit', () => {
-      expect(
-        errorCalculation({ x, y }, sampleParameters, linearFunction, w),
-      ).toBeCloseTo(0, 3);
-    });
+  /** @type [number, number] */
+  const sampleParameters = [1, 1];
+  const n = 10;
+  const x = new Float64Array(n);
+  const y = new Float64Array(n);
+  const w = new Array(n);
+  const fct = linearFunction(sampleParameters);
+  for (let i = 0; i < n; i++) {
+    x[i] = i;
+    w[i] = 1;
+    y[i] = fct(i);
+  }
 
-    it('parameterError should match the sum of absolute difference between the model and the data', () => {
-      const parameters = Array.from(sampleParameters);
-      // Offset line so that it's still parallel but differs by 1 at each point
-      // Then each point will result in a residual increase of 1
-      parameters[1] += 1;
-      expect(
-        errorCalculation({ x, y }, parameters, linearFunction, w),
-      ).toBeCloseTo(n, 3);
-    });
+  test('parameterError should be zero for an exact fit', () => {
+    expect(
+      errorCalculation({ x, y }, sampleParameters, linearFunction, w),
+    ).toBeCloseTo(0, 3);
+  });
+
+  test('parameterError should match the sum of absolute difference between the model and the data', () => {
+    const parameters = Array.from(sampleParameters);
+    // Offset line so that it's still parallel but differs by 1 at each point
+    // Then each point will result in a residual increase of 1
+    parameters[1] += 1;
+    expect(
+      errorCalculation({ x, y }, parameters, linearFunction, w),
+    ).toBeCloseTo(n, 3);
   });
 });

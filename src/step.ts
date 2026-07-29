@@ -1,4 +1,4 @@
-import { CholeskyDecomposition, inverse, Matrix } from 'ml-matrix';
+import { CholeskyDecomposition, Matrix, inverse } from 'ml-matrix';
 
 import gradientFunction from './gradient_function.ts';
 import type {
