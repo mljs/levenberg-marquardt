@@ -35,6 +35,7 @@ export function levenbergMarquardt(
     improvementThreshold,
   } = checkedOptions;
   let damping = checkedOptions.damping;
+  const { jacobianFunction } = options;
 
   let error = errorCalculation(
     data,
@@ -59,6 +60,7 @@ export function levenbergMarquardt(
       parameterizedFunction,
       centralDifference,
       weightSquare,
+      jacobianFunction,
     );
 
     for (let k = 0; k < parameters.length; k++) {
