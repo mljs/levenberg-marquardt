@@ -1,2 +1,4 @@
+__benchmarks__
 __tests__
+.DS_Store
 .npmignore
