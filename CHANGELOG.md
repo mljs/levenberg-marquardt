@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.1.0](https://github.com/mljs/levenberg-marquardt/compare/v5.0.1...v5.1.0) (2026-07-31)
+
+
+### Features
+
+* add jacobianFunction option for an analytical Jacobian ([#72](https://github.com/mljs/levenberg-marquardt/issues/72)) ([b455287](https://github.com/mljs/levenberg-marquardt/commit/b45528779d68578a79b90069fe0ce2066ca6fbff))
+
 ## [5.0.1](https://github.com/mljs/levenberg-marquardt/compare/v5.0.0...v5.0.1) (2026-04-16)
 
 
