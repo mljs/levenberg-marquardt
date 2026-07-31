@@ -8,6 +8,17 @@ export interface Data2D {
  */
 export type ParameterizedFunction = (params: number[]) => (x: number) => number;
 
+/**
+ * Optional analytical Jacobian.
+ * Given the parameter vector, it returns a function that, for an x value,
+ * yields the partial derivatives of the model with respect to every parameter
+ * (an array of length `params.length`, in the same order as `params`).
+ * When provided, it replaces the finite-difference approximation of the
+ * Jacobian, which is both faster (no extra model evaluation per parameter)
+ * and more accurate (so the optimizer usually needs fewer iterations).
+ */
+export type JacobianFunction = (params: number[]) => (x: number) => number[];
+
 export interface LevenbergMarquardtOptions {
   /**
    * Array of initial parameter values
@@ -72,6 +83,14 @@ export interface LevenbergMarquardtOptions {
    * maximum time running before throw in seconds.
    */
   timeout?: number;
+  /**
+   * Analytical Jacobian of the model. When provided, the Jacobian is computed
+   * exactly instead of being approximated by finite differences, which avoids
+   * the extra model evaluations per parameter and usually converges in fewer
+   * iterations. `centralDifference` and `gradientDifference` are ignored when
+   * this option is set.
+   */
+  jacobianFunction?: JacobianFunction;
 }
 
 export interface LevenbergMarquardtReturn {

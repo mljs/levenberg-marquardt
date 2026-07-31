@@ -19,9 +19,38 @@ To get a general idea of the problem, you could also check the [Wikipedia articl
 npm i ml-levenberg-marquardt
 ```
 
+## Usage
+
+```js
+import { levenbergMarquardt } from 'ml-levenberg-marquardt';
+
+const result = levenbergMarquardt(data, parameterizedFunction, options);
+```
+
+- `data` — an object `{ x, y }` where `x` and `y` are arrays (or typed arrays) of the same length.
+- `parameterizedFunction` — takes an array of parameters and returns a function of the independent variable.
+- `options` — see below. `initialValues` is mandatory.
+
+The returned object has `parameterValues` (the fitted parameters), `parameterError` (the sum of squared weighted residuals) and `iterations` (the number of iterations performed).
+
 ## Options
 
-Next, there are some options could change the behaviour of the code.
+| Option                 | Default | Description                                                                                                       |
+| ---------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
+| `initialValues`        | —       | Array of initial parameter values. Mandatory.                                                                     |
+| `weights`              | `1`     | Weighting vector. If its length does not match the number of data points, it is rebuilt from the first value.     |
+| `damping`              | `1e-2`  | Levenberg-Marquardt parameter λ; small values give a Gauss-Newton update, large values a gradient descent update. |
+| `dampingStepDown`      | `9`     | Factor used to reduce the damping when an update improves the fit.                                                |
+| `dampingStepUp`        | `11`    | Factor used to increase the damping when an update does not improve the fit.                                      |
+| `improvementThreshold` | `1e-3`  | Threshold defining what counts as an improvement.                                                                 |
+| `gradientDifference`   | `10e-2` | Step size used to approximate the jacobian. See below.                                                            |
+| `centralDifference`    | `false` | Approximate the jacobian by central differences instead of forward differences. See below.                        |
+| `jacobianFunction`     | —       | Analytical jacobian of the model. See below.                                                                      |
+| `minValues`            | —       | Minimum allowed values for the parameters.                                                                        |
+| `maxValues`            | —       | Maximum allowed values for the parameters.                                                                        |
+| `maxIterations`        | `100`   | Maximum number of iterations.                                                                                     |
+| `errorTolerance`       | `10e-3` | Stop as soon as the error drops below this value.                                                                 |
+| `timeout`              | —       | Maximum running time in seconds; throws when exceeded.                                                            |
 
 ### centralDifference
 
@@ -31,13 +60,46 @@ The jacobian matrix is approximated by finite difference; forward differences or
 
 The jacobian matrix is approximated as mentioned above, the gradientDifference option is the step size (dp) to calculate the difference between the function with the current parameter state and the perturbation added. It could be a number (same step size for all parameters) or an array with different values for each parameter, if the gradientDifference is zero, the derive will be zero, and the parameter will hold fixed
 
+### jacobianFunction
+
+Instead of approximating the jacobian by finite differences, you can provide it analytically. Like `parameterizedFunction`, it takes the parameter array and returns a function of the independent variable, but that function returns the partial derivatives of the model with respect to every parameter, in the same order as the parameters.
+
+Providing it avoids the extra model evaluation per parameter and is more accurate, so the fit usually converges in fewer iterations. When it is set, `centralDifference` and `gradientDifference` are ignored.
+
+```js
+import { levenbergMarquardt } from 'ml-levenberg-marquardt';
+
+// y = slope * x + intercept
+function line([slope, intercept]) {
+  return (x) => slope * x + intercept;
+}
+
+// [dy/dslope, dy/dintercept]
+function lineJacobian() {
+  return (x) => [x, 1];
+}
+
+const x = [0, 1, 2, 3, 4, 5, 6];
+const y = [-2, 0, 2, 4, 6, 8, 10];
+
+const result = levenbergMarquardt({ x, y }, line, {
+  initialValues: [1, 0],
+  jacobianFunction: lineJacobian,
+});
+console.log(result);
+// {
+//   parameterValues: [1.9999986750084098, -1.9999943899435104],
+//   parameterError: 6.78713215849927e-11,
+//   iterations: 2
+// }
+```
+
 ## Examples
 
 ### Linear regression
 
 ```js
 import { levenbergMarquardt } from 'ml-levenberg-marquardt';
-// const { levenbergMarquardt } = require("ml-levenberg-marquardt");
 
 // Creates linear function using the provided slope and intercept parameters
 function line([slope, intercept]) {
@@ -60,12 +122,10 @@ console.log(result);
 // }
 ```
 
-### Exponential fit
+### Sine fit
 
 ```js
-// import library
-import LM from 'ml-levenberg-marquardt';
-// const LM = require('ml-levenberg-marquardt').default;
+import { levenbergMarquardt } from 'ml-levenberg-marquardt';
 
 // function that receives the parameters and returns
 // a function with the independent variable as a parameter
@@ -74,39 +134,29 @@ function sinFunction([a, b]) {
 }
 
 // array of points to fit
-let data = {
-  x: [
-    /* x1, x2, ... */
-  ],
-  y: [
-    /* y1, y2, ... */
-  ],
+const data = {
+  x: [/* x1, x2, ... */],
+  y: [/* y1, y2, ... */],
 };
 
 // array of initial parameter values (must be provided)
-let initialValues = [
-  /* a, b, c, ... */
-];
+const initialValues = [/* a, b, c, ... */];
 
 // Optionally, restrict parameters to minimum & maximum values
-let minValues = [
-  /* a_min, b_min, c_min, ... */
-];
-let maxValues = [
-  /* a_max, b_max, c_max, ... */
-];
+const minValues = [/* a_min, b_min, c_min, ... */];
+const maxValues = [/* a_max, b_max, c_max, ... */];
 
 const options = {
   damping: 1.5,
-  initialValues: initialValues,
-  minValues: minValues,
-  maxValues: maxValues,
+  initialValues,
+  minValues,
+  maxValues,
   gradientDifference: 10e-2,
   maxIterations: 100,
   errorTolerance: 10e-3,
 };
 
-let fittedParams = LM(data, sinFunction, options);
+const result = levenbergMarquardt(data, sinFunction, options);
 ```
 
 ## License

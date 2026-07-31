@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, test } from 'vitest';
 
 import { levenbergMarquardt } from '../index.ts';
 
@@ -8,7 +8,7 @@ function sinFunction([a, b]: number[]) {
 
 describe('Handling of invalid arguments', () => {
   describe('options', () => {
-    it('Should throw an error when bad options are provided (negative damping)', () => {
+    test('Should throw an error when bad options are provided (negative damping)', () => {
       expect(() =>
         levenbergMarquardt({ x: [], y: [] }, () => () => 1, {
           damping: -1,
@@ -17,7 +17,7 @@ describe('Handling of invalid arguments', () => {
       ).toThrow('The damping option must be a positive number');
     });
 
-    it('Should throw an error when initialValues is not an array', () => {
+    test('Should throw an error when initialValues is not an array', () => {
       const expectedErrorMessage =
         'The initialValues option is mandatory and must be an array';
       const inputData = { x: [1, 2], y: [1, 2] };
@@ -34,7 +34,7 @@ describe('Handling of invalid arguments', () => {
       ).toThrow(expectedErrorMessage);
     });
 
-    it('Should throw an error when minValues and maxValues are not the same length', () => {
+    test('Should throw an error when minValues and maxValues are not the same length', () => {
       expect(() =>
         levenbergMarquardt({ x: [1, 2], y: [1, 2] }, sinFunction, {
           damping: 0.1,
@@ -45,7 +45,7 @@ describe('Handling of invalid arguments', () => {
       ).toThrow('minValues and maxValues must be the same size');
     });
 
-    it('Should throw an error when weights is not a number or an array', () => {
+    test('Should throw an error when weights is not a number or an array', () => {
       expect(() => {
         levenbergMarquardt({ x: [0, 0, 0], y: [0, 0, 0] }, sinFunction, {
           initialValues: [0, 0, 0],
@@ -56,7 +56,7 @@ describe('Handling of invalid arguments', () => {
       );
     });
 
-    it('Should throw an error when gradientDifference is not a number or an array', () => {
+    test('Should throw an error when gradientDifference is not a number or an array', () => {
       expect(() => {
         levenbergMarquardt({ x: [0, 0, 0], y: [0, 0, 0] }, sinFunction, {
           initialValues: [0, 0, 0],
@@ -74,13 +74,13 @@ describe('Handling of invalid arguments', () => {
       initialValues: [3, 3],
     };
 
-    it('Should throw an error when data is an array (should be object)', () => {
+    test('Should throw an error when data is an array (should be object)', () => {
       expect(() =>
         levenbergMarquardt([1, 2] as never, sinFunction, options),
       ).toThrow('The data parameter must have x and y elements');
     });
 
-    it('Should throw an error when data.{x,y} are numbers (should be arrays)', () => {
+    test('Should throw an error when data.{x,y} are numbers (should be arrays)', () => {
       expect(() =>
         levenbergMarquardt({ x: 1, y: 2 } as never, sinFunction, options),
       ).toThrow(
@@ -88,7 +88,7 @@ describe('Handling of invalid arguments', () => {
       );
     });
 
-    it('Should throw an error when data.{x,y} are not the same length', () => {
+    test('Should throw an error when data.{x,y} are not the same length', () => {
       expect(() =>
         levenbergMarquardt({ x: [1, 2], y: [1, 2, 3] }, sinFunction, options),
       ).toThrow('The data parameter elements must have the same size');
@@ -110,7 +110,7 @@ describe('Handling of ill-behaved functions', () => {
       7.807, -3.74, 21.119, 2.382, 4.269, 41.57, 73.401, 98.535, 97.059, 92.147,
     ],
   };
-  it('Should stop and return initialValues if function evaluates to NaN after starting', () => {
+  test('Should stop and return initialValues if function evaluates to NaN after starting', () => {
     const options = {
       damping: 0.01,
       maxIterations: 200,
@@ -131,7 +131,7 @@ describe('Handling of ill-behaved functions', () => {
     );
   });
 
-  it('Should throw because execution time is over timeout', () => {
+  test('Should throw because execution time is over timeout', () => {
     const options = {
       timeout: 0,
       damping: 0.00001,
@@ -144,7 +144,7 @@ describe('Handling of ill-behaved functions', () => {
     );
   });
 
-  it('Should throw because is not a number', () => {
+  test('Should throw because is not a number', () => {
     const options = {
       timeout: 'a' as never,
       damping: 0.00001,

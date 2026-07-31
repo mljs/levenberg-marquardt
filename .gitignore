@@ -38,3 +38,5 @@ jspm_packages
 
 lib
 lib-esm
+
+.claude

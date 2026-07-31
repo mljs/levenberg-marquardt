@@ -1,6 +1,6 @@
 import * as os from 'node:os';
 
-import { describe, expect, it, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 
 import { levenbergMarquardt } from '../index.ts';
 
@@ -22,255 +22,252 @@ test('linear regression', () => {
   expect(result.parameterError).toBeCloseTo(0);
 });
 
-describe('curve', () => {
-  describe('Contrived problems (clean data)', () => {
-    // In these cases we test the algorithm's ability to find an , we use some pre-selected values and generate the data set and see if the algorithm can get close the the exact solution
-    const contrivedProblems = [
-      {
-        name: 'bennet5([2, 3, 5])',
-        getFunctionFromParameters([b1, b2, b3]: number[]) {
-          return (t: number) => b1 * (t + b2) ** (-1 / b3);
-        },
-        n: 154,
-        xStart: -2.6581,
-        xEnd: 49.6526,
-        problemParameters: [2, 3, 5],
-        options: {
-          damping: 0.00001,
-          maxIterations: 1000,
-          errorTolerance: 1e-7,
-          maxValues: [11, 11, 11],
-          minValues: [1, 2.7, 1],
-          initialValues: [3.5, 3.8, 4],
-        },
+describe('Contrived problems (clean data)', () => {
+  // In these cases we test the algorithm's ability to find an , we use some pre-selected values and generate the data set and see if the algorithm can get close the the exact solution
+  const contrivedProblems = [
+    {
+      name: 'bennet5([2, 3, 5])',
+      getFunctionFromParameters([b1, b2, b3]: number[]) {
+        return (t: number) => b1 * (t + b2) ** (-1 / b3);
       },
-      {
-        name: '2*sin(2*t)',
-        getFunctionFromParameters: sinFunction,
-        n: 20,
-        xStart: 0,
-        xEnd: 19,
-        problemParameters: [2, 2],
-        options: {
-          maxIterations: 100,
-          gradientDifference: 10e-2,
-          damping: 0.1,
-          dampingStepDown: 1,
-          dampingStepUp: 1,
-          initialValues: [3, 3],
-        },
+      n: 154,
+      xStart: -2.6581,
+      xEnd: 49.6526,
+      problemParameters: [2, 3, 5],
+      options: {
+        damping: 0.00001,
+        maxIterations: 1000,
+        errorTolerance: 1e-7,
+        maxValues: [11, 11, 11],
+        minValues: [1, 2.7, 1],
+        initialValues: [3.5, 3.8, 4],
       },
-      {
-        name: 'Sigmoid',
-        getFunctionFromParameters([a, b, c]: number[]) {
-          return (t: number) => a / (b + Math.exp(-t * c));
-        },
-        n: 20,
-        xStart: 0,
-        xEnd: 19,
-        problemParameters: [2, 2, 2],
-        options: {
-          damping: 0.1,
-          initialValues: [3, 3, 3],
-          maxIterations: 200,
-        },
-        decimalsForParameterValues: 1,
+    },
+    {
+      name: '2*sin(2*t)',
+      getFunctionFromParameters: sinFunction,
+      n: 20,
+      xStart: 0,
+      xEnd: 19,
+      problemParameters: [2, 2],
+      options: {
+        maxIterations: 100,
+        gradientDifference: 10e-2,
+        damping: 0.1,
+        dampingStepDown: 1,
+        dampingStepUp: 1,
+        initialValues: [3, 3],
       },
-      {
-        name: 'Sum of lorentzians',
-        getFunctionFromParameters: function sumOfLorentzians(p: number[]) {
-          return (t: number) => {
-            const nL = p.length;
-            let factor: number, p2: number;
-            let result = 0;
-            for (let i = 0; i < nL; i += 3) {
-              p2 = (p[i + 2] / 2) ** 2;
-              factor = p[i + 1] * p2;
-              result += factor / ((t - p[i]) ** 2 + p2);
-            }
-            return result;
-          };
-        },
-        n: 100,
-        xStart: 0,
-        xEnd: 99,
-        problemParameters: [1.05, 0.1, 0.3, 4, 0.15, 0.3],
-        options: {
-          damping: 0.01,
-          gradientDifference: [0.01, 0.0001, 0.0001, 0.01, 0.0001, 0],
-          initialValues: [1.1, 0.15, 0.29, 4.05, 0.17, 0.3],
-          maxIterations: 500,
-        },
-        decimalsForParameterValues: 1,
+    },
+    {
+      name: 'Sigmoid',
+      getFunctionFromParameters([a, b, c]: number[]) {
+        return (t: number) => a / (b + Math.exp(-t * c));
       },
-      {
-        name: 'Sum of lorentzians, central differences',
-        getFunctionFromParameters: function sumOfLorentzians(p: number[]) {
-          return (t: number) => {
-            const nL = p.length;
-            let factor: number, p2: number;
-            let result = 0;
-            for (let i = 0; i < nL; i += 3) {
-              p2 = (p[i + 2] / 2) ** 2;
-              factor = p[i + 1] * p2;
-              result += factor / ((t - p[i]) ** 2 + p2);
-            }
-            return result;
-          };
-        },
-        n: 100,
-        xStart: 0,
-        xEnd: 99,
-        problemParameters: [1, 0.1, 0.3, 4, 0.15, 0.3],
-        options: {
-          damping: 0.01,
-          gradientDifference: [0.01, 0.0001, 0.0001, 0.01, 0.0001],
-          centralDifference: true,
-          initialValues: [1.1, 0.15, 0.29, 4.05, 0.17, 0.28],
-          maxIterations: 500,
-          errorTolerance: 10e-8,
-        },
-        decimalsForParameterValues: 1,
-        skip: false,
+      n: 20,
+      xStart: 0,
+      xEnd: 19,
+      problemParameters: [2, 2, 2],
+      options: {
+        damping: 0.1,
+        initialValues: [3, 3, 3],
+        maxIterations: 200,
       },
-    ];
-
-    contrivedProblems.forEach((problem) => {
-      const testInvocation = problem.skip ? it.skip.bind(it) : it;
-      testInvocation(`Should fit ${problem.name}`, () => {
-        /** @type {any} */
-        const params = {
-          decimalsForParameterError: 2,
-          decimalsForParameterValues: 3,
-          ...problem,
+      decimalsForParameterValues: 1,
+    },
+    {
+      name: 'Sum of lorentzians',
+      getFunctionFromParameters: function sumOfLorentzians(p: number[]) {
+        return (t: number) => {
+          const nL = p.length;
+          let factor: number, p2: number;
+          let result = 0;
+          for (let i = 0; i < nL; i += 3) {
+            p2 = (p[i + 2] / 2) ** 2;
+            factor = p[i + 1] * p2;
+            result += factor / ((t - p[i]) ** 2 + p2);
+          }
+          return result;
         };
-        const {
-          // eslint-disable-next-line @typescript-eslint/unbound-method
-          getFunctionFromParameters,
-          n,
-          xStart,
-          xEnd,
-          problemParameters,
-          options,
-          decimalsForParameterError,
-          decimalsForParameterValues,
-        } = params;
-        const xs = new Array(n)
-          .fill(0)
-          .map((zero, i) => xStart + (i * (xEnd - xStart)) / (n - 1));
-        const data = {
-          x: xs,
-          y: xs.map(getFunctionFromParameters(problemParameters)),
+      },
+      n: 100,
+      xStart: 0,
+      xEnd: 99,
+      problemParameters: [1.05, 0.1, 0.3, 4, 0.15, 0.3],
+      options: {
+        damping: 0.01,
+        gradientDifference: [0.01, 0.0001, 0.0001, 0.01, 0.0001, 0],
+        initialValues: [1.1, 0.15, 0.29, 4.05, 0.17, 0.3],
+        maxIterations: 500,
+      },
+      decimalsForParameterValues: 1,
+    },
+    {
+      name: 'Sum of lorentzians, central differences',
+      getFunctionFromParameters: function sumOfLorentzians(p: number[]) {
+        return (t: number) => {
+          const nL = p.length;
+          let factor: number, p2: number;
+          let result = 0;
+          for (let i = 0; i < nL; i += 3) {
+            p2 = (p[i + 2] / 2) ** 2;
+            factor = p[i + 1] * p2;
+            result += factor / ((t - p[i]) ** 2 + p2);
+          }
+          return result;
         };
+      },
+      n: 100,
+      xStart: 0,
+      xEnd: 99,
+      problemParameters: [1, 0.1, 0.3, 4, 0.15, 0.3],
+      options: {
+        damping: 0.01,
+        gradientDifference: [0.01, 0.0001, 0.0001, 0.01, 0.0001],
+        centralDifference: true,
+        initialValues: [1.1, 0.15, 0.29, 4.05, 0.17, 0.28],
+        maxIterations: 500,
+        errorTolerance: 10e-8,
+      },
+      decimalsForParameterValues: 1,
+      skip: false,
+    },
+  ];
 
-        const actual = levenbergMarquardt(
-          data,
-          getFunctionFromParameters,
-          options,
-        );
-        expect(actual.parameterValues).toBeDeepCloseTo(
-          problemParameters,
-          decimalsForParameterValues,
-        );
-        expect(actual.parameterError).toBeDeepCloseTo(
-          0,
-          decimalsForParameterError,
-        );
-      });
+  contrivedProblems.forEach((problem) => {
+    const testInvocation = problem.skip ? test.skip.bind(test) : test;
+    testInvocation(`Should fit ${problem.name}`, () => {
+      /** @type {any} */
+      const params = {
+        decimalsForParameterError: 2,
+        decimalsForParameterValues: 3,
+        ...problem,
+      };
+      const {
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        getFunctionFromParameters,
+        n,
+        xStart,
+        xEnd,
+        problemParameters,
+        options,
+        decimalsForParameterError,
+        decimalsForParameterValues,
+      } = params;
+      const xs = new Array(n)
+        .fill(0)
+        .map((zero, i) => xStart + (i * (xEnd - xStart)) / (n - 1));
+      const data = {
+        x: xs,
+        y: xs.map(getFunctionFromParameters(problemParameters)),
+      };
+
+      const actual = levenbergMarquardt(
+        data,
+        getFunctionFromParameters,
+        options,
+      );
+      expect(actual.parameterValues).toBeDeepCloseTo(
+        problemParameters,
+        decimalsForParameterValues,
+      );
+      expect(actual.parameterError).toBeDeepCloseTo(
+        0,
+        decimalsForParameterError,
+      );
     });
-
-    it(
-      'should return solution with lowest error',
-      {
-        // On macOS, `Math.sin` gives different results for some values.
-        // Refs: https://issues.chromium.org/issues/333194604
-        fails: os.platform() === 'darwin',
-      },
-      () => {
-        const data = {
-          x: [
-            0, 0.6283185307179586, 1.2566370614359172, 1.8849555921538759,
-            2.5132741228718345, 3.141592653589793, 3.7699111843077517,
-            4.39822971502571, 5.026548245743669, 5.654866776461628,
-          ],
-          y: [
-            0, 1.902113032590307, 1.1755705045849465, -1.175570504584946,
-            -1.9021130325903073, -4.898587196589413e-16, 1.902113032590307,
-            1.1755705045849467, -1.1755705045849456, -1.9021130325903075,
-          ],
-        };
-        const options = {
-          damping: 1.5,
-          initialValues: [0.594398586701882, 0.3506424963635226],
-          gradientDifference: 1e-2,
-          maxIterations: 100,
-          errorTolerance: 1e-2,
-        };
-
-        const actual = levenbergMarquardt(data, sinFunction, options);
-        const manualCalculatedError = data.x
-          .map(sinFunction(actual.parameterValues))
-          .reduce((acc, yHat, i) => acc + (data.y[i] - yHat) ** 2, 0);
-        expect(actual.parameterError).toBeCloseTo(
-          manualCalculatedError,
-          options.errorTolerance,
-        );
-        expect(actual.parameterError).toBeCloseTo(15.5, options.errorTolerance);
-      },
-    );
   });
 
-  describe('"Real-world" problems (noisy data)', () => {
-    // In these problems, an imperfect/noisy set of data points is provided, so no "perfect fit" exists; we just get as close as we can
-    const realWorldProblems = [
-      {
-        name: 'fourParamEq',
-        getFunctionFromParameters:
-          ([a, b, c, d]: number[]) =>
-          (t: number) =>
-            a + (b - a) / (1 + c ** d * t ** -d),
-        data: {
-          // Where did these values come from / why they are correct?
-          x: [
-            9.22e-12, 5.53e-11, 3.32e-10, 1.99e-9, 1.19e-8, 7.17e-8, 4.3e-7,
-            0.00000258, 0.0000155, 0.0000929,
-          ],
-          y: [
-            7.807, -3.74, 21.119, 2.382, 4.269, 41.57, 73.401, 98.535, 97.059,
-            92.147,
-          ],
-        },
-        expected: {
-          iterations: 200,
-          parameterError: 16398.0009709,
-          parameterValues: [-16.7697, 43.4549, 1018.8938, -4.3514],
-        },
-        options: {
-          damping: 0.00001,
-          maxIterations: 200,
-          weights: 1,
-          initialValues: new Float64Array([0, 100, 1, 0.1]),
-        },
-        skip: false,
-      },
-    ];
+  test(
+    'should return solution with lowest error',
+    {
+      // On macOS, `Math.sin` gives different results for some values.
+      // Refs: https://issues.chromium.org/issues/333194604
+      fails: os.platform() === 'darwin',
+    },
+    () => {
+      const data = {
+        x: [
+          0, 0.6283185307179586, 1.2566370614359172, 1.8849555921538759,
+          2.5132741228718345, 3.141592653589793, 3.7699111843077517,
+          4.39822971502571, 5.026548245743669, 5.654866776461628,
+        ],
+        y: [
+          0, 1.902113032590307, 1.1755705045849465, -1.175570504584946,
+          -1.9021130325903073, -4.898587196589413e-16, 1.902113032590307,
+          1.1755705045849467, -1.1755705045849456, -1.9021130325903075,
+        ],
+      };
+      const options = {
+        damping: 1.5,
+        initialValues: [0.594398586701882, 0.3506424963635226],
+        gradientDifference: 1e-2,
+        maxIterations: 100,
+        errorTolerance: 1e-2,
+      };
 
-    realWorldProblems.forEach((problem) => {
-      const testInvocation = problem.skip ? it.skip.bind(it) : it;
-      testInvocation(`Should fit ${problem.name} to raw data`, () => {
-        const { data, expected, getFunctionFromParameters, options, decimals } =
-          {
-            decimals: 3,
-            ...problem,
-          };
-        const actual = levenbergMarquardt(
-          data,
-          getFunctionFromParameters,
-          options,
-        );
-        actual.parameterValues = Array.from(actual.parameterValues);
-        expect(actual).toMatchCloseTo(expected, decimals);
-      });
+      const actual = levenbergMarquardt(data, sinFunction, options);
+      const manualCalculatedError = data.x
+        .map(sinFunction(actual.parameterValues))
+        .reduce((acc, yHat, i) => acc + (data.y[i] - yHat) ** 2, 0);
+      expect(actual.parameterError).toBeCloseTo(
+        manualCalculatedError,
+        options.errorTolerance,
+      );
+      expect(actual.parameterError).toBeCloseTo(15.5, options.errorTolerance);
+    },
+  );
+});
+
+describe('"Real-world" problems (noisy data)', () => {
+  // In these problems, an imperfect/noisy set of data points is provided, so no "perfect fit" exists; we just get as close as we can
+  const realWorldProblems = [
+    {
+      name: 'fourParamEq',
+      getFunctionFromParameters:
+        ([a, b, c, d]: number[]) =>
+        (t: number) =>
+          a + (b - a) / (1 + c ** d * t ** -d),
+      data: {
+        // Where did these values come from / why they are correct?
+        x: [
+          9.22e-12, 5.53e-11, 3.32e-10, 1.99e-9, 1.19e-8, 7.17e-8, 4.3e-7,
+          0.00000258, 0.0000155, 0.0000929,
+        ],
+        y: [
+          7.807, -3.74, 21.119, 2.382, 4.269, 41.57, 73.401, 98.535, 97.059,
+          92.147,
+        ],
+      },
+      expected: {
+        iterations: 200,
+        parameterError: 16398.0009709,
+        parameterValues: [-16.7697, 43.4549, 1018.8938, -4.3514],
+      },
+      options: {
+        damping: 0.00001,
+        maxIterations: 200,
+        weights: 1,
+        initialValues: new Float64Array([0, 100, 1, 0.1]),
+      },
+      skip: false,
+    },
+  ];
+
+  realWorldProblems.forEach((problem) => {
+    const testInvocation = problem.skip ? test.skip.bind(test) : test;
+    testInvocation(`Should fit ${problem.name} to raw data`, () => {
+      const { data, expected, getFunctionFromParameters, options, decimals } = {
+        decimals: 3,
+        ...problem,
+      };
+      const actual = levenbergMarquardt(
+        data,
+        getFunctionFromParameters,
+        options,
+      );
+      actual.parameterValues = Array.from(actual.parameterValues);
+      expect(actual).toMatchCloseTo(expected, decimals);
     });
   });
 });

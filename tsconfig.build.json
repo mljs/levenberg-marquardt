@@ -1,4 +1,14 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["**/__tests__", "**/*.test.ts", "vite*.ts"]
+  "compilerOptions": {
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": [
+    "**/__tests__",
+    "**/benchmarks",
+    "**/*.test.*",
+    "**/*.bench.*",
+    "vite*.ts"
+  ]
 }
