@@ -35,22 +35,23 @@ The returned object has `parameterValues` (the fitted parameters), `parameterErr
 
 ## Options
 
-| Option                 | Default | Description                                                                                                       |
-| ---------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
-| `initialValues`        | —       | Array of initial parameter values. Mandatory.                                                                     |
-| `weights`              | `1`     | Weighting vector. If its length does not match the number of data points, it is rebuilt from the first value.     |
-| `damping`              | `1e-2`  | Levenberg-Marquardt parameter λ; small values give a Gauss-Newton update, large values a gradient descent update. |
-| `dampingStepDown`      | `9`     | Factor used to reduce the damping when an update improves the fit.                                                |
-| `dampingStepUp`        | `11`    | Factor used to increase the damping when an update does not improve the fit.                                      |
-| `improvementThreshold` | `1e-3`  | Threshold defining what counts as an improvement.                                                                 |
-| `gradientDifference`   | `10e-2` | Step size used to approximate the jacobian. See below.                                                            |
-| `centralDifference`    | `false` | Approximate the jacobian by central differences instead of forward differences. See below.                        |
-| `jacobianFunction`     | —       | Analytical jacobian of the model. See below.                                                                      |
-| `minValues`            | —       | Minimum allowed values for the parameters.                                                                        |
-| `maxValues`            | —       | Maximum allowed values for the parameters.                                                                        |
-| `maxIterations`        | `100`   | Maximum number of iterations.                                                                                     |
-| `errorTolerance`       | `10e-3` | Stop as soon as the error drops below this value.                                                                 |
-| `timeout`              | —       | Maximum running time in seconds; throws when exceeded.                                                            |
+| Option                  | Default | Description                                                                                                       |
+| ----------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
+| `initialValues`         | —       | Array of initial parameter values. Mandatory.                                                                     |
+| `weights`               | `1`     | Weighting vector. If its length does not match the number of data points, it is rebuilt from the first value.     |
+| `damping`               | `1e-2`  | Levenberg-Marquardt parameter λ; small values give a Gauss-Newton update, large values a gradient descent update. |
+| `dampingStepDown`       | `9`     | Factor used to reduce the damping when an update improves the fit.                                                |
+| `dampingStepUp`         | `11`    | Factor used to increase the damping when an update does not improve the fit.                                      |
+| `improvementThreshold`  | `1e-3`  | Threshold defining what counts as an improvement.                                                                 |
+| `gradientDifference`    | `10e-2` | Step size used to approximate the jacobian. See below.                                                            |
+| `centralDifference`     | `false` | Approximate the jacobian by central differences instead of forward differences. See below.                        |
+| `jacobianFunction`      | —       | Analytical jacobian of the model. See below.                                                                      |
+| `minValues`             | —       | Minimum allowed values for the parameters.                                                                        |
+| `maxValues`             | —       | Maximum allowed values for the parameters.                                                                        |
+| `maxIterations`         | `100`   | Maximum number of iterations.                                                                                     |
+| `errorTolerance`        | `10e-3` | Stop as soon as the error drops below this value.                                                                 |
+| `relativeStepTolerance` | `1e-12` | Stop as soon as an iteration barely moves the parameters. See below.                                              |
+| `timeout`               | —       | Maximum running time in seconds; throws when exceeded.                                                            |
 
 ### centralDifference
 
@@ -59,6 +60,16 @@ The jacobian matrix is approximated by finite difference; forward differences or
 ### gradientDifference
 
 The jacobian matrix is approximated as mentioned above, the gradientDifference option is the step size (dp) to calculate the difference between the function with the current parameter state and the perturbation added. It could be a number (same step size for all parameters) or an array with different values for each parameter, if the gradientDifference is zero, the derive will be zero, and the parameter will hold fixed
+
+### relativeStepTolerance
+
+`errorTolerance` compares the **sum** of the squared residuals, so its scale grows with the number of points. A large dataset fitted as well as double precision allows can stay above the threshold forever, and the fit then runs until `maxIterations` while the parameters no longer move.
+
+`relativeStepTolerance` is a second stopping criterion: the fit also stops once an iteration moves the parameter vector by less than this fraction of its own norm (measured after the `minValues` / `maxValues` clamping, so a parameter pinned to a bound counts as not moving).
+
+Stopping there returns the same parameters as running on: a negligible step leaves the error unchanged, which makes the damping grow, which makes every later step smaller still, so the search cannot recover on its own. The package's own `fourParamEq` regression case goes from 200 iterations to 5 with bit-identical `parameterValues` and `parameterError`.
+
+Set it to `0` to disable the criterion and keep iterating until `errorTolerance` or `maxIterations`.
 
 ### jacobianFunction
 

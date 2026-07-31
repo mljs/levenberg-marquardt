@@ -30,6 +30,7 @@ export function levenbergMarquardt(
     dampingStepDown,
     maxIterations,
     errorTolerance,
+    relativeStepTolerance,
     centralDifference,
     gradientDifference,
     improvementThreshold,
@@ -63,12 +64,23 @@ export function levenbergMarquardt(
       jacobianFunction,
     );
 
+    // measured after clamping, so a parameter pinned to its bound counts as not
+    // moving even when the raw perturbation is large
+    let squaredStep = 0;
+    let squaredParameters = 0;
     for (let k = 0; k < parameters.length; k++) {
-      parameters[k] = Math.min(
-        Math.max(minValues[k], parameters[k] - perturbations.get(k, 0)),
+      const previousValue = parameters[k];
+      const value = Math.min(
+        Math.max(minValues[k], previousValue - perturbations.get(k, 0)),
         maxValues[k],
       );
+      parameters[k] = value;
+      squaredStep += (value - previousValue) ** 2;
+      squaredParameters += value ** 2;
     }
+    const relativeStep =
+      Math.sqrt(squaredStep) /
+      Math.max(Math.sqrt(squaredParameters), Number.MIN_VALUE);
 
     error = errorCalculation(
       data,
@@ -103,7 +115,9 @@ export function levenbergMarquardt(
       );
     }
 
-    converged = error <= errorTolerance;
+    converged =
+      error <= errorTolerance ||
+      (relativeStepTolerance > 0 && relativeStep <= relativeStepTolerance);
   }
 
   return {

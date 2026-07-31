@@ -240,7 +240,9 @@ describe('"Real-world" problems (noisy data)', () => {
         ],
       },
       expected: {
-        iterations: 200,
+        // The parameters stop moving after 5 iterations. The remaining 195 used
+        // to run and return exactly these same values, see relativeStepTolerance.
+        iterations: 5,
         parameterError: 16398.0009709,
         parameterValues: [-16.7697, 43.4549, 1018.8938, -4.3514],
       },

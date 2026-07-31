@@ -80,6 +80,24 @@ export interface LevenbergMarquardtOptions {
    */
   errorTolerance?: number;
   /**
+   * Stop as soon as an iteration moves the parameters by less than this fraction
+   * of their own magnitude.
+   *
+   * `errorTolerance` compares the *sum* of the squared residuals, so it grows
+   * with the number of points: a large dataset that is fitted as well as double
+   * precision allows can still sit above the threshold and keep iterating until
+   * `maxIterations` while the parameters no longer move at all.
+   *
+   * Stopping there returns the same result as running on, because a negligible
+   * step leaves the error unchanged, which makes the damping grow, which makes
+   * every later step smaller still — the search cannot recover on its own.
+   *
+   * Set it to `0` to disable this criterion and always iterate until either
+   * `errorTolerance` is reached or `maxIterations` is exhausted.
+   * @default 1e-12
+   */
+  relativeStepTolerance?: number;
+  /**
    * maximum time running before throw in seconds.
    */
   timeout?: number;
