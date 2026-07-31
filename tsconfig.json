@@ -5,5 +5,5 @@
     "outDir": "lib",
     "noUncheckedIndexedAccess": false
   },
-  "include": ["src", "vite*.ts"]
+  "include": ["src", "benchmarks", "vite*.ts"]
 }

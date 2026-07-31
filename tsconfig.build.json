@@ -6,7 +6,7 @@
   "include": ["src"],
   "exclude": [
     "**/__tests__",
-    "**/__benchmarks__",
+    "**/benchmarks",
     "**/*.test.*",
     "**/*.bench.*",
     "vite*.ts"

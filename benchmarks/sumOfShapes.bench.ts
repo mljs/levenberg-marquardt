@@ -1,9 +1,9 @@
 import type { Shape1D } from 'ml-peak-shape-generator';
 import { bench, describe } from 'vitest';
 
-import type { ShapePeak } from '../__tests__/sumOfShapesModel.ts';
-import { buildSumOfShapes, sample } from '../__tests__/sumOfShapesModel.ts';
-import { levenbergMarquardt } from '../index.ts';
+import type { ShapePeak } from '../src/__tests__/sumOfShapesModel.ts';
+import { buildSumOfShapes, sample } from '../src/__tests__/sumOfShapesModel.ts';
+import { levenbergMarquardt } from '../src/index.ts';
 
 const kinds: Shape1D[] = [
   { kind: 'gaussian', fwhm: 0.3 },
