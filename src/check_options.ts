@@ -13,6 +13,7 @@ export interface CheckedOptions {
   dampingStepDown: number;
   maxIterations: number;
   errorTolerance: number;
+  relativeStepTolerance: number;
   centralDifference: boolean;
   gradientDifference: number[];
   improvementThreshold: number;
@@ -31,6 +32,7 @@ export default function checkOptions(
     dampingStepDown = 9,
     maxIterations = 100,
     errorTolerance = 1e-7,
+    relativeStepTolerance = 1e-12,
     centralDifference = false,
     gradientDifference = 10e-2,
     improvementThreshold = 1e-3,
@@ -92,6 +94,7 @@ export default function checkOptions(
     dampingStepDown,
     maxIterations,
     errorTolerance,
+    relativeStepTolerance,
     centralDifference,
     gradientDifference: gradientDifferenceArray,
     improvementThreshold,

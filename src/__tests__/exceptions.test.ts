@@ -137,6 +137,9 @@ describe('Handling of ill-behaved functions', () => {
       damping: 0.00001,
       maxIterations: 200,
       initialValues: [0, 100, 1, 0.1],
+      // this fit stops moving after a few iterations, so the criterion has to be
+      // disabled for the run to last long enough to reach the timeout
+      relativeStepTolerance: 0,
     };
 
     expect(() => levenbergMarquardt(data, fourParamEq, options)).toThrow(
