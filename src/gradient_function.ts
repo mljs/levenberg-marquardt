@@ -23,7 +23,6 @@ export default function gradientFunction(
   const nbPoints = data.x.length;
   const ans = Matrix.zeros(nbParams, nbPoints);
 
-  let rowIndex = 0;
   for (let param = 0; param < nbParams; param++) {
     if (gradientDifference[param] === 0) continue;
     let delta = gradientDifference[param];
@@ -33,7 +32,7 @@ export default function gradientFunction(
     if (!centralDifference) {
       for (let point = 0; point < nbPoints; point++) {
         ans.set(
-          rowIndex,
+          param,
           point,
           (evaluatedData[point] - funcParam(data.x[point])) / delta,
         );
@@ -45,13 +44,12 @@ export default function gradientFunction(
       const funcParam2 = paramFunction(auxParams);
       for (let point = 0; point < nbPoints; point++) {
         ans.set(
-          rowIndex,
+          param,
           point,
           (funcParam2(data.x[point]) - funcParam(data.x[point])) / delta,
         );
       }
     }
-    rowIndex++;
   }
 
   return ans;
