@@ -22,6 +22,44 @@ test('linear regression', () => {
   expect(result.parameterError).toBeCloseTo(0);
 });
 
+describe.each([false, true])('centralDifference=%s', (centralDifference) => {
+  test.each([
+    {
+      name: 'first parameter fixed',
+      initialValues: [1, 0, 0],
+      gradientDifference: [0, 0.1, 0.1],
+    },
+    {
+      name: 'middle parameter fixed',
+      initialValues: [0, 2, 0],
+      gradientDifference: [0.1, 0, 0.1],
+    },
+    {
+      name: 'all parameters free',
+      initialValues: [0, 0, 0],
+      gradientDifference: [0.1, 0.1, 0.1],
+    },
+  ])('$name', ({ initialValues, gradientDifference }) => {
+    function quadratic([a, b, c]: number[]) {
+      return (x: number) => a + b * x + c * x ** 2;
+    }
+
+    const result = levenbergMarquardt(
+      { x: [-2, -1, 0, 1, 2], y: [9, 2, 1, 6, 17] },
+      quadratic,
+      { initialValues, gradientDifference, centralDifference },
+    );
+
+    expect(result.parameterValues).toBeDeepCloseTo([1, 2, 3]);
+    expect(result.parameterError).toBeCloseTo(0);
+    for (let i = 0; i < gradientDifference.length; i++) {
+      if (gradientDifference[i] === 0) {
+        expect(result.parameterValues[i]).toBe(initialValues[i]);
+      }
+    }
+  });
+});
+
 describe('Contrived problems (clean data)', () => {
   // In these cases we test the algorithm's ability to find an , we use some pre-selected values and generate the data set and see if the algorithm can get close the the exact solution
   const contrivedProblems = [
